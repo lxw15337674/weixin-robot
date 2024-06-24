@@ -1,11 +1,12 @@
 import { getStockData } from './stock';
 import { getWeiboData } from './weibo';
+import { getKimiData } from './kimi';
 import { expect, test } from '@jest/globals';
 
 test(' test getWeiboData', async () => {
     const data = await getWeiboData();
     expect(data).not.toBeNull();
- });
+});
 
 
 test('test stock query', async () => {
@@ -17,5 +18,10 @@ test('test stock query', async () => {
 
 test('test getSuggestStock', async () => {
     const data = await getStockData('gzmt');
+    expect(data).not.toBeNull();
+})
+
+test('test getKimiData', async () => {
+    const data = await getKimiData('test');
     expect(data).not.toBeNull();
 })

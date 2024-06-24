@@ -1,3 +1,4 @@
+import { getKimiData } from "./kimi";
 import { getStockData } from "./stock";
 import { getWeiboData } from "./weibo";
 
@@ -11,6 +12,11 @@ const commandMap = [
         key: '-s',
         callback: getStockData,
         msg: '-s 股票代码 获取股票信息 例如 -s gzmt 获取贵州茅台股票信息'
+    },
+    {
+        key: '-a',
+        callback: getKimiData,
+        msg: '-a 获取Kimi的回答'
     },
     {
         key: '-h',
@@ -27,7 +33,6 @@ export function parseCommand(msg: string): Promise<string> {
             // 解析后面的参数
             const args = msg.slice(command.key.length).trim()
             return command.callback(args)
-            break
         }
     }
 }
