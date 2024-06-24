@@ -36,6 +36,9 @@ export async function getSuggestStock(q: string) {
 
 export async function getStockData(symbol: string): Promise<string> {
     try {
+        if (!symbol) {
+            symbol = 'szzs'
+        }
         // 如果symbol不是纯数字，说明是股票代码，需要转换为股票代码
         if (!/^\d+$/.test(symbol)) {
             symbol = await getSuggestStock(symbol);
