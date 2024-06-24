@@ -1,4 +1,4 @@
-import { getKimiData } from "./kimi";
+import { getKimiData } from "./ai";
 import { getStockData } from "./stock";
 import { getWeiboData } from "./weibo";
 

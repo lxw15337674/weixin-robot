@@ -1,6 +1,6 @@
 import { getStockData } from './stock';
 import { getWeiboData } from './weibo';
-import { getKimiData } from './kimi';
+import { getKimiData } from './ai';
 import { expect, test } from '@jest/globals';
 
 test(' test getWeiboData', async () => {

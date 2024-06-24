@@ -2,7 +2,7 @@ import { log } from 'wechaty'
 import type { Message, Room } from 'wechaty'
 import { sendContactMsg, sendRoomMsg } from '../services/sendMessage.ts'
 import { parseCommand } from '../services/actions.ts'
-import { getKimiData } from '../services/kimi.ts'
+import { getKimiData } from '../services/ai.ts'
 
 const startTime = new Date()
 export async function onMessage(msg: Message) {
