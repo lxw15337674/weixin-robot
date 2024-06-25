@@ -1,6 +1,6 @@
 import { getStockData } from './stock';
 import { getWeiboData } from './weibo';
-import { getKimiData } from './ai';
+import { getAIData } from './ai';
 import { expect, test } from '@jest/globals';
 
 test(' test getWeiboData', async () => {
@@ -21,7 +21,7 @@ test('test getSuggestStock', async () => {
     expect(data).not.toBeNull();
 })
 
-test('test getKimiData', async () => {
-    const data = await getKimiData('test');
+test('test getAIData', async () => {
+    const data = await getAIData('test');
     expect(data).not.toBeNull();
 })

@@ -2,7 +2,7 @@ import { log } from 'wechaty'
 import type { Message, Room } from 'wechaty'
 import { sendContactMsg, sendRoomMsg } from '../services/sendMessage.ts'
 import { parseCommand } from '../services/actions.ts'
-import { getKimiData } from '../services/ai.ts'
+import { getAIData } from '../services/ai.ts'
 
 const startTime = new Date()
 export async function onMessage(msg: Message) {
@@ -93,7 +93,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   // }
   // 判断是否在群聊中被 @
   if (room && await msg.mentionSelf()) {
-    const msg = await getKimiData(content)
+    const msg = await getAIData(content)
     await sendRoomMsg(bot, msg, topic)
     return
   }

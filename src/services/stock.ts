@@ -16,7 +16,20 @@ interface StockData {
 const STOCK_API_URL = 'https://stock.xueqiu.com/v5/stock/quote.json'; // Replace with your actual API URL
 const SUGGESTION_API_URL = 'https://xueqiu.com/query/v1/suggest_stock.json'; // Replace with your actual API URL
 // 读取环境变量
-const COOKIE = process.env.COOKIE;
+let COOKIE = '';
+
+export async function getToken(): Promise < string > {
+    if(COOKIE) return COOKIE;
+
+    const res = await axios.get('https://xueqiu.com/');
+    const cookies: string[] = res.headers['set-cookie'];
+
+    const param: string = cookies.filter((key) => key.includes('xq_a_token'))[0] || '';
+    const token = param.split(';')[0] || '';
+    COOKIE = token
+    return token
+}
+
 
 // https://xueqiu.com/query/v1/suggest_stock.json?q=gzmt
 export async function getSuggestStock(q: string) {
@@ -25,12 +38,12 @@ export async function getSuggestStock(q: string) {
             q,
         },
         headers: {
-            Cookie: COOKIE
+            Cookie: await getToken()
         },
     });
 
     if (response.status === 200) {
-        return response.data.data[0].code
+        return response.data?.data?.[0]?.code
     }
 }
 
@@ -52,7 +65,7 @@ export async function getStockData(symbol: string): Promise<string> {
                 symbol,
             },
             headers: {
-                Cookie: COOKIE
+                Cookie: await getToken()
             },
         });
 

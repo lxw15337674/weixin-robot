@@ -1,4 +1,4 @@
-import { getKimiData } from "./ai";
+import { getAIData } from "./ai";
 import { getStockData } from "./stock";
 import { getWeiboData } from "./weibo";
 
@@ -15,8 +15,8 @@ const commandMap = [
     },
     {
         key: '-a',
-        callback: getKimiData,
-        msg: '-a 获取Kimi的回答'
+        callback: getAIData,
+        msg: '-a 或艾特坤哥，向坤哥提问 例如 -a 鲁迅与周树人的关系是什么？'
     },
     {
         key: '-h',

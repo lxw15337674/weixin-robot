@@ -1,12 +1,12 @@
 import OpenAI from "openai";
 
-const apiKey = process.env.API_KEY;
+const apiKey = process.env.API_KEY ??'4FHRTzjJtu5DvYhs0UhLwWlaWYuJ0gXy1ONXrwZUjcbGNgREcROROSFgJ018HIEF4'
 const client = new OpenAI({
     apiKey,
     baseURL: "https://api.stepfun.com/v1"
 });
 
-async function getKimiData(content: string) {
+async function getAIData(content: string) {
     try {
         const completion = await client.chat.completions.create({
             model: "step-1-8k",
@@ -22,4 +22,4 @@ async function getKimiData(content: string) {
         return '哎呦 你干嘛！坤哥累了，不想回答了！';
     }
 }
-export { getKimiData };
+export { getAIData };
