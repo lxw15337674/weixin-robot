@@ -30,7 +30,7 @@ export async function getWeiboData(): Promise<string> {
             `https://raw.githubusercontent.com/lxw15337674/weibo-trending-hot-history/master/api/${date}/summary.json`
         );
         const data: SavedWeibo[] = res.data;
-        const promises = data.slice(0, 10).map(async (cur, index) => {
+        const promises = data.slice(0, 20).map(async (cur, index) => {
             // const shortUrl = getWeiboSearchCoreUrl(cur.title);
             return `${index + 1}.${cur.title}  ${cur.hot}🔥`
         });

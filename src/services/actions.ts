@@ -21,7 +21,7 @@ const commandMap = [
     {
         key: '-h',
         callback: getHelp,
-        msg: '-h 获取帮助'
+        msg: '-h 获取命令帮助'
     }
 ]
 

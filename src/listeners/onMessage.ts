@@ -6,10 +6,10 @@ import { getAIData } from '../services/ai.ts'
 
 const startTime = new Date()
 export async function onMessage(msg: Message) {
-  // 屏蔽接收历史消息
-  if (msg.date() < startTime)
+  // 屏蔽接收历史消息,允许5分钟内的消息
+  if (msg.date().getTime() < startTime.getTime() - 2 * 60 * 1000) {
     return
-
+  }
   const room = msg.room()
   if (room) {
     // const topic = await room.topic()
@@ -121,7 +121,10 @@ async function dispatchFriendTextMsg(msg: Message) {
   if (func) {
     const msg = await func
     await sendContactMsg(bot, msg, alias, name)
+    return
   }
+  await sendContactMsg(bot, await getAIData(content), alias, name)
+  return
 }
 
 
