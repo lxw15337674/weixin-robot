@@ -8,29 +8,32 @@ import { onReady } from './listeners/onReady.ts'
 import { sendContactMsg, sendRoomMsg } from './services/sendMessage.ts'
 import { string2utf8 } from './utils/string2utf8.ts'
 
+
+let bot = null
+const runRobot = async () => {
+  bot = WechatyBuilder.build({
+    name: 'wechat-bot',
+    puppet: 'wechaty-puppet-wechat4u',
+    // puppetOptions: {
+    //   uos: true,
+    // },
+  })
+
+  bot
+    .on('scan', onScan)
+    .on('login', onLogin)
+    .on('ready', onReady)
+    .on('logout', onLogout)
+    .on('message', onMessage)
+
+  await bot
+    .start()
+    .then(() => log.info('开始运行...'))
+    .catch(e => log.error('StarterBot', e))
+}
+runRobot()
+
 const app = express()
-
-const bot = WechatyBuilder.build({
-  name: 'test-bot',
-  puppet: 'wechaty-puppet-wechat',
-  puppetOptions: {
-    uos: true,
-  },
-})
-
-bot
-  .on('scan', onScan)
-  .on('login', onLogin)
-  .on('ready', onReady)
-  .on('logout', onLogout)
-  .on('message', onMessage)
-
-bot
-  .start()
-  .then(() => log.info('开始运行...'))
-  .catch(e => log.error('StarterBot', e))
-
-
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
@@ -69,5 +72,4 @@ app.get('/1', async (req, res) => {
     res.send('缺少群名')
   }
 })
-
 app.listen(3000)

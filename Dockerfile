@@ -23,11 +23,7 @@ FROM base as build
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 wget \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update && apt-get -y install google-chrome-stable chromium xvfb \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo "Chrome: " && google-chrome --version
+    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add 
 
 # Install node modules
 COPY --link package.json pnpm-lock.yaml ./
