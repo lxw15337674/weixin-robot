@@ -30,6 +30,11 @@ bot
   .then(() => log.info('开始运行...'))
   .catch(e => log.error('StarterBot', e))
 
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 app.get('/0', async (req, res) => {
   if (req.query.name || req.query.alias) {
     if (req.query.content) {

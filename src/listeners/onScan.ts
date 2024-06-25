@@ -1,13 +1,10 @@
 import { ScanStatus, log } from 'wechaty'
-import QrTerminal from 'qrcode-terminal'
+import QRCode from "qrcode";
 
-export function onScan(qrcode: string, status: ScanStatus) {
-  if (status === ScanStatus.Waiting && qrcode) {
-    QrTerminal.generate(qrcode, { small: true })
-    const qrCodeImageUrl = ['https://wechaty.js.org/qrcode/', encodeURIComponent(qrcode)].join('')
-    log.info('StarterBot', 'onScan: %s(%s) - %s', ScanStatus[status], status, qrCodeImageUrl)
-  }
-  else {
-    log.info('StarterBot', 'onScan: %s(%s)', ScanStatus[status], status)
-  }
+export async function onScan(qrcode: string, status: ScanStatus) {
+  const url = `https://wechaty.js.org/qrcode/${encodeURIComponent(qrcode)}`;
+  console.log(`Scan QR Code to login: ${status}\n${url}`);
+  console.log(
+    await QRCode.toString(qrcode, { type: "terminal", small: true })
+  );
 }
