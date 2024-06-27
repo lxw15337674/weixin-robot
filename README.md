@@ -11,6 +11,9 @@
 ```
 
 
+
+
+
 ##pnpm 安装
 ```bash
 npm install -g pnpm
@@ -30,3 +33,5 @@ pnpm dev
 ```
 ## deploy
 推荐使用fly.io部署，直接docker部署即可。
+
+
