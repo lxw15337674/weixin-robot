@@ -14,6 +14,12 @@ test('test stock query', async () => {
     expect(data).not.toBeNull();
 });
 
+test('test stock code query', async () => {
+    const data = await getStockData('300888');
+    expect(data).not.toBeNull();
+});
+
+
 
 
 test('test getSuggestStock', async () => {
