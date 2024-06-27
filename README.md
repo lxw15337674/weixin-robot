@@ -25,11 +25,8 @@ npm install -g pnpm
 ```bash
 # install dependencies
 pnpm i
-
 # start the service
 pnpm dev
-
-# 
 ```
 ## deploy
 推荐使用fly.io部署，直接docker部署即可。
