@@ -1,48 +1,60 @@
-# syntax = docker/dockerfile:1
+ARG APT_SOURCE="default"
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.11.1
-FROM node:${NODE_VERSION}-slim as base
+FROM node:19 as builder-default
+ENV NPM_REGISTRY="https://registry.npmjs.org"
 
-LABEL fly_launch_runtime="Node.js"
+FROM node:19 as builder-aliyun
 
-# Node.js app lives here
-WORKDIR /app
+ENV NPM_REGISTRY="https://registry.npmmirror.com"
+RUN sed -i s/deb.debian.org/mirrors.aliyun.com/g /etc/apt/sources.list \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 
-# Set production environment
-ENV NODE_ENV="production"
-
-# Install pnpm
+FROM builder-${APT_SOURCE} AS builder
+# Instal the 'apt-utils' package to solve the error 'debconf: delaying package configuration, since apt-utils is not installed'
+# https://peteris.rocks/blog/quiet-and-unattended-installation-with-apt-get/
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    apt-utils \
+    autoconf \
+    automake \
+    bash \
+    build-essential \
+    ca-certificates \
+    chromium \
+    coreutils \
+    curl \
+    ffmpeg \
+    figlet \
+    git \
+    gnupg2 \
+    jq \
+    libgconf-2-4 \
+    libtool \
+    libxtst6 \
+    moreutils \
+    python-dev \
+    shellcheck \
+    sudo \
+    tzdata \
+    vim \
+    wget \
+  && apt-get purge --auto-remove \
+  && rm -rf /tmp/* /var/lib/apt/lists/*
 ARG PNPM_VERSION=9.4.0
 RUN npm install -g pnpm@$PNPM_VERSION
 
+FROM builder
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+ENV CHROME_BIN="/usr/bin/chromium" \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 wget \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add 
+RUN mkdir -p /app
+WORKDIR /app
 
-# Install node modules
-COPY --link package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json ./
+RUN  pnpm i
 
-# 设置环境变量WECHATY_PUPPET=wechaty-puppet-wechat
-ENV WECHATY_PUPPET=wechaty-puppet-wechat
+COPY *.js ./
+COPY src/ ./src/
 
-# Copy application code
-COPY --link . .
-
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD pnpm start
+CMD ["pnpm", "run", "dev"]

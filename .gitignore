@@ -3,3 +3,5 @@ node_modules
 .DS_Store
 .vercel
 test-bot.memory-card.json
+*.memory-card.json
+.env
