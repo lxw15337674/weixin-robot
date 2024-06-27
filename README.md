@@ -17,6 +17,8 @@ npm install -g pnpm
 ```
 
 ## 🚀 Development
+1. 配置环境变量：API_KEY，用于AI对话功能。
+2. 
 ```bash
 # install dependencies
 pnpm i
