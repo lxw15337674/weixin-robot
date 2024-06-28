@@ -1,4 +1,4 @@
-import { ScanStatus, log } from 'wechaty'
+import { ScanStatus } from 'wechaty'
 import QRCode from "qrcode";
 
 export async function onScan(qrcode: string, status: ScanStatus) {

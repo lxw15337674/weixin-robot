@@ -14,7 +14,7 @@ const CHROME_BIN = process.env.CHROME_BIN ?? {}
 const runRobot = async () => {
   const bot = WechatyBuilder.build({
     name: 'wechat-bot',
-    puppet: 'wechaty-puppet-wechat4u', 
+    puppet: 'wechaty-puppet-wechat', 
     puppetOptions: {
       uos: true,
       ...CHROME_BIN,

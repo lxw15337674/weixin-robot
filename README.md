@@ -10,10 +10,6 @@
 2. pnpm version 7.x
 ```
 
-
-
-
-
 ##pnpm 安装
 ```bash
 npm install -g pnpm
