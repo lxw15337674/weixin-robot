@@ -1,9 +1,9 @@
 ARG APT_SOURCE="default"
-
-FROM node:19 as builder-default
+# https://github.com/wechaty/puppet-wechat4u/issues/59
+FROM node:18  as builder-default
 ENV NPM_REGISTRY="https://registry.npmjs.org"
 
-FROM node:19 as builder-aliyun
+FROM node:18 as builder-aliyun
 
 ENV NPM_REGISTRY="https://registry.npmmirror.com"
 RUN sed -i s/deb.debian.org/mirrors.aliyun.com/g /etc/apt/sources.list \
@@ -32,7 +32,7 @@ RUN apt-get update \
     libtool \
     libxtst6 \
     moreutils \
-    python-dev \
+    python3-dev \
     shellcheck \
     sudo \
     tzdata \

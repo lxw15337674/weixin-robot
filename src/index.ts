@@ -14,9 +14,6 @@ const runRobot = async () => {
   bot = WechatyBuilder.build({
     name: 'wechat-bot',
     puppet: 'wechaty-puppet-wechat4u',
-    // puppetOptions: {
-    //   uos: true,
-    // },
   })
 
   bot
