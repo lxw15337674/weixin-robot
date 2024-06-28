@@ -10,10 +10,15 @@ import { string2utf8 } from './utils/string2utf8.ts'
 
 
 let bot = null
+const CHROME_BIN = process.env.CHROME_BIN ?? {}
 const runRobot = async () => {
-  bot = WechatyBuilder.build({
+  const bot = WechatyBuilder.build({
     name: 'wechat-bot',
-    puppet: 'wechaty-puppet-wechat4u',
+    puppet: 'wechaty-puppet-wechat4u', 
+    puppetOptions: {
+      uos: true,
+      ...CHROME_BIN,
+    },
   })
 
   bot
