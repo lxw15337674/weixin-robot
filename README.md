@@ -21,14 +21,14 @@ npm install -g pnpm
 
 ## 🚀 Development
 1. 配置环境变量：API_KEY，用于AI对话功能。
-2. 
+2. 执行以下命令：
 ```bash
 # install dependencies
 pnpm i
 # start the service
 pnpm dev
 ```
-## deploy
+## Deploy
 推荐使用fly.io部署，直接docker部署即可。
 
 
