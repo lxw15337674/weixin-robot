@@ -1,3 +1,4 @@
+import { formatAmount } from '@/utils/convertToNumber';
 import axios from 'axios'
 
 interface Quote {
@@ -162,22 +163,27 @@ const keyMap = [
     {
         label: '年初至今涨跌幅',
         key:'current_year_percent',
+        callback: (value: number) => `${value}%`
     },
     {
         label: '振幅',
         key: 'amplitude',
+        callback: (value: number) => `${value}%`,
     },
     {
         label: '成交额',
         key: 'amount',
+        callback: (value: number) => `${formatAmount(value)}`,
     },
     {
         label: '成交量',
         key: 'volume',
+        callback: (value: number) => `${formatAmount(value)}手`,
     },
     {
         label: '换手率',
         key: 'turnover_rate',
+        callback: (value: number) => `${value}%`,
     },
 ];
 export async function getStockDetailData(symbol: string): Promise<string> {

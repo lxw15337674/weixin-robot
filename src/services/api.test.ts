@@ -1,8 +1,9 @@
 import { getStockData, getStockDetailData } from './stock';
 import { getWeiboData } from './weibo';
 import { getAIData } from './ai';
-import { expect, test } from '@jest/globals';
+import { describe, expect, it, test } from '@jest/globals';
 import { parseCommand } from './actions';
+import { formatAmount } from '../utils/convertToNumber';
 
 test(' test getWeiboData', async () => {
     const data = await getWeiboData();
@@ -45,3 +46,24 @@ test('test parseCommand', async () => {
     const data = await parseCommand('-sd tx');
     expect(data).not.toBeNull();
 })
+
+describe('test formatAmount', () => {
+    it('should format billions correctly', () => {
+        const amount = 1817000000;
+        const formattedAmount = formatAmount(amount);
+        expect(formattedAmount).toEqual('18.17亿');
+    });
+
+    it('should format ten thousands correctly', () => {
+        const amount = 1234567;
+        const formattedAmount = formatAmount(amount);
+        expect(formattedAmount).toEqual('123.46万');
+    });
+
+
+    it('should format thousands correctly', () => {
+        const amount = 1234;
+        const formattedAmount = formatAmount(amount);
+        expect(formattedAmount).toEqual('1234');
+    });
+});
