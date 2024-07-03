@@ -50,8 +50,21 @@ describe('test parseCommand', () => {
 
     it('should return null if command is not found', async () => {
         const data = await parseCommand('sd');
-        expect(data).not.toBeNull();
+        expect(data).toBeUndefined();
     });
+    it('should return null if command is not found', async () => {
+        const data = await parseCommand('s');
+        expect(data).toBeUndefined();
+    });
+    it('should return detail stock data', async () => {
+        const data = await parseCommand('sd ');
+        expect(data).not.toBeNull();
+    })
+    it('should return stock data', async () => {
+        const data = await parseCommand('s ');
+        expect(data).not.toBeNull();
+    })
+
 })
 
 
