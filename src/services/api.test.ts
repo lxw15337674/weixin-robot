@@ -2,6 +2,7 @@ import { getStockData, getStockDetailData } from './stock';
 import { getWeiboData } from './weibo';
 import { getAIData } from './ai';
 import { expect, test } from '@jest/globals';
+import { parseCommand } from './actions';
 
 test(' test getWeiboData', async () => {
     const data = await getWeiboData();
@@ -36,5 +37,11 @@ test('test getAIData', async () => {
 
 test('test getStockDetailData', async () => {
     const data = await getStockDetailData('SH600519');
+    expect(data).not.toBeNull();
+})
+
+
+test('test parseCommand', async () => {
+    const data = await parseCommand('-sd tx');
     expect(data).not.toBeNull();
 })

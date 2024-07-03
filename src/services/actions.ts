@@ -1,5 +1,5 @@
 import { getAIData } from './ai'
-import { getStockData } from './stock'
+import { getStockData, getStockDetailData } from './stock'
 import { getWeiboData } from './weibo'
 
 const commandMap = [
@@ -10,7 +10,7 @@ const commandMap = [
   },
   {
     key: '-sd',
-    callback: getStockData,
+    callback: getStockDetailData,
     msg: '-sd 股票代码 获取股票详细数据 例如 -sd gzmt 获取贵州茅台股票详细数据',
   },
   {
