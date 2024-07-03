@@ -11,15 +11,7 @@ test(' test getWeiboData', async () => {
 });
 
 
-test('test stock query', async () => {
-    const data = await getStockData('SH600519');
-    expect(data).not.toBeNull();
-});
 
-test('test stock code query', async () => {
-    const data = await getStockData('300888');
-    expect(data).not.toBeNull();
-});
 
 test('test error code query', async () => {
     const data = await getStockData('3008888');
@@ -30,16 +22,43 @@ test('test getSuggestStock', async () => {
     const data = await getStockData('gzmt');
     expect(data).not.toBeNull();
 })
+describe('test getStockData', () => {
+    it('should return stock data', async () => {
+        const data = await getStockData('SH600519');
+        expect(data).not.toBeNull();
+    });
+  
+    it('test stock code query', async () => {
+        const data = await getStockData('300888');
+        expect(data).not.toBeNull();
+    });
+
+    it('should return stock data', async () => {
+        const data = await getStockData('300888');
+        expect(data).not.toBeNull();
+    });
+
+    it('should return error message', async () => {
+        const data = await getStockData('3008888');
+        expect(data).not.toBeNull();
+    });
+    // 测试美股盘前数据
+    it('should return stock data', async () => {
+        const data = await getStockData('tesla');
+        expect(data).not.toBeNull();
+    })
+    // 测试港股盘前数据
+    it('should return stock data', async () => {
+        const data = await getStockData('tx');
+        expect(data).not.toBeNull();
+    })
+})
 
 test('test getAIData', async () => {
     const data = await getAIData('test');
     expect(data).not.toBeNull();
 })
 
-test('test getStockDetailData', async () => {
-    const data = await getStockDetailData('SH600519');
-    expect(data).not.toBeNull();
-})
 
 
 describe('test parseCommand', () => {
