@@ -42,10 +42,19 @@ test('test getStockDetailData', async () => {
 })
 
 
-test('test parseCommand', async () => {
-    const data = await parseCommand('-sd tx');
-    expect(data).not.toBeNull();
+describe('test parseCommand', () => {
+    it('should return null if command is not found', async () => {
+        const data = await parseCommand('test');
+        expect(data).toBeNull();
+    });
+
+    it('should return null if command is not found', async () => {
+        const data = await parseCommand('sd');
+        expect(data).not.toBeNull();
+    });
 })
+
+
 
 describe('test formatAmount', () => {
     it('should format billions correctly', () => {
