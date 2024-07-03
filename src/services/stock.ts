@@ -161,11 +161,6 @@ const keyMap = [
         key:'avg_price'
     },
     {
-        label: '年初至今涨跌幅',
-        key:'current_year_percent',
-        callback: (value: number) => `${value}%`
-    },
-    {
         label: '振幅',
         key: 'amplitude',
         callback: (value: number) => `${value}%`,
@@ -185,6 +180,16 @@ const keyMap = [
         key: 'turnover_rate',
         callback: (value: number) => `${value}%`,
     },
+    {
+        label: '年初至今涨跌幅',
+        key: 'current_year_percent',
+        callback: (value: number) => `${value}%`
+    },
+    {
+        label:'总市值',
+        key:'market_capital',
+        callback:(value:number)=>`${formatAmount(value)}`
+    }
 ];
 export async function getStockDetailData(symbol: string): Promise<string> {
     try {
