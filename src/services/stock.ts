@@ -192,7 +192,14 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         const isGrowing = basicData.percent > 0
         const text = `${basicData?.name}: ${basicData.current} (${isGrowing ? '📈' : '📉'}${basicData.percent}%)`
         const detailText = keyMap.reduce((prev, current) => {
-            return `${prev}\n${current.label}: ${current.callback ? current.callback(basicData[current.key]) : basicData[current.key]}`
+            let value = basicData[current.key]
+            if(value === undefined || value === null){
+                return prev
+            }
+            if(current.callback){
+                value = current.callback(value)
+            }
+            return `${prev}\n${current.label}: ${value}`
         }, '')
         return `${text}\n${detailText}`
     } catch (error) {
