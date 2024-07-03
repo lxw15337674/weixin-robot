@@ -43,5 +43,5 @@ export function parseCommand(msg: string): Promise<string> {
 
 export function getHelp() {
   const commandMsg = commandMap.map(command => command.msg).join('\n')
-  return `命令列表：\n${commandMsg}\n 项目地址：https://github.com/lxw15337674/weixinrobot`
+  return `命令列表：\n${commandMsg}\n 项目地址：https://github.com/lxw15337674/weixin-robot`
 }
