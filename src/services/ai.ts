@@ -19,7 +19,7 @@ async function getAIData(content: string) {
         });
         return `${completion.choices[0].message.content}`;
     } catch (e) {
-        return '哎呦 你干嘛！坤哥累了，不想回答了！';
+        return '哎呦 你干嘛！坤哥累了，不想回答！';
     }
 }
 export { getAIData };
