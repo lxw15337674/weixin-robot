@@ -1,4 +1,4 @@
-import { formatAmount } from '@/utils/convertToNumber';
+import { formatAmount } from '../utils/convertToNumber';
 import axios from 'axios'
 
 interface Quote {
@@ -192,9 +192,9 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         const isGrowing = basicData.percent > 0
         const text = `${basicData?.name}: ${basicData.current} (${isGrowing ? '📈' : '📉'}${basicData.percent}%)`
         const detailText = keyMap.reduce((prev, current) => {
-            return `${prev}\n${current.label}: ${basicData[current.key]}`
+            return `${prev}\n${current.label}: ${current.callback ? current.callback(basicData[current.key]) : basicData[current.key]}`
         }, '')
-        return `${text}\n${detailText}`
+        return `${text}${detailText}`
     } catch (error) {
         return error.message
     }
