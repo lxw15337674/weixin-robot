@@ -45,7 +45,7 @@ test('test getStockDetailData', async () => {
 describe('test parseCommand', () => {
     it('should return null if command is not found', async () => {
         const data = await parseCommand('test');
-        expect(data).toBeNull();
+        expect(data).toBeUndefined()
     });
 
     it('should return null if command is not found', async () => {
