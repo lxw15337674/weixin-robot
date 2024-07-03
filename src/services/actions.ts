@@ -9,14 +9,14 @@ const commandMap = [
     msg: '-wb 获取当日微博热搜',
   },
   {
+    key: '-sd',
+    callback: getStockData,
+    msg: '-sd 股票代码 获取股票详细数据 例如 -sd gzmt 获取贵州茅台股票详细数据',
+  },
+  {
     key: '-s',
     callback: getStockData,
     msg: '-s 股票代码 获取股票信息 例如 -s gzmt 获取贵州茅台股票信息',
-  },
-  {
-    key:'-sd',
-    callback: getStockData,
-    msg: '-sd 股票代码 获取股票详细数据 例如 -sd gzmt 获取贵州茅台股票详细数据',
   },
   {
     key: '-a',
