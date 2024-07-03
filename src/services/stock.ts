@@ -194,7 +194,7 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         const detailText = keyMap.reduce((prev, current) => {
             return `${prev}\n${current.label}: ${current.callback ? current.callback(basicData[current.key]) : basicData[current.key]}`
         }, '')
-        return `${text}${detailText}`
+        return `${text}\n${detailText}`
     } catch (error) {
         return error.message
     }
