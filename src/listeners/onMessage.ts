@@ -94,12 +94,14 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   // 判断是否在群聊中被 @
   if (room && await msg.mentionSelf()) {
     const msg = await getAIData(content)
+    log.info(`根据命令【${content}】返回消息：${msg}`)
     await sendRoomMsg(bot, msg, topic)
     return
   }
   const func = parseCommand(content)
   if (func) {
     const msg = await func
+    log.info(`根据命令【${content}】返回消息：${msg}`)
     await sendRoomMsg(bot, msg, topic)
     return
   }
@@ -120,9 +122,11 @@ async function dispatchFriendTextMsg(msg: Message) {
   const func = parseCommand(content)
   if (func) {
     const msg = await func
+    log.info(`根据命令【${content}】返回消息：${msg}`)
     await sendContactMsg(bot, msg, alias, name)
     return
   }
+  log.info(`根据命令【${content}】返回消息：${msg}`)
   await sendContactMsg(bot, await getAIData(content), alias, name)
   return
 }
