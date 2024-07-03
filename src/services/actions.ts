@@ -14,6 +14,11 @@ const commandMap = [
     msg: '-s 股票代码 获取股票信息 例如 -s gzmt 获取贵州茅台股票信息',
   },
   {
+    key:'-sd',
+    callback: getStockData,
+    msg: '-sd 股票代码 获取股票详细数据 例如 -sd gzmt 获取贵州茅台股票详细数据',
+  },
+  {
     key: '-a',
     callback: getAIData,
     msg: '-a 或艾特坤哥，向坤哥提问 例如 -a 鲁迅与周树人的关系是什么？',
