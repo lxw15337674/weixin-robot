@@ -1,4 +1,5 @@
 import { getAIData } from './ai'
+import { holiday } from './fishingTime'
 import { getStockData, getStockDetailData } from './stock'
 import { getWeiboData } from './weibo'
 
@@ -28,6 +29,11 @@ const commandMap = [
     key: 'wb',
     callback: getWeiboData,
     msg: 'wb 获取当日微博热搜',
+  },
+  {
+    key:'ho',
+    callback:holiday,
+    msg:'ho 获取节假日信息'
   },
   {
     key: 'hp',

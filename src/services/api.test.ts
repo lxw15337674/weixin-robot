@@ -4,6 +4,7 @@ import { getAIData } from './ai';
 import { describe, expect, it, test } from '@jest/globals';
 import { parseCommand } from './actions';
 import { formatAmount } from '../utils/convertToNumber';
+import { holiday } from './fishingTime';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -42,6 +43,7 @@ describe('getStockData', () => {
         const data = await getStockData('tx');
         expect(data).not.toBeNull();
     });
+
 });
 
 describe('getAIData', () => {
@@ -62,6 +64,7 @@ describe('parseCommand', () => {
         expect(await parseCommand('ss')).not.toBeNull();
         expect(await parseCommand('sd ')).not.toBeNull();
         expect(await parseCommand('s ')).not.toBeNull();
+        expect(await parseCommand('ho')).not.toBeNull();
     });
 });
 
@@ -78,3 +81,9 @@ describe('formatAmount', () => {
         expect(formatAmount(1234)).toEqual('1234');
     });
 });
+
+describe('fishingTime', () => {
+    it('should return fishing time', async () => {
+        expect(await holiday()).not.toBeNull();
+    })
+})
