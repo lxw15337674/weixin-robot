@@ -9,7 +9,7 @@ const commandMap = [
   {
     key: 'a ',
     callback: getAIData,
-    msg: '[a 问题] 或 艾特机器人[问题]  - 向国产AI提问 例如: a 鲁迅与周树人的关系是什么？',
+    msg: 'a [问题] 或 艾特机器人[问题]  - 向国产AI提问 例如: a 鲁迅与周树人的关系是什么？',
   },
   {
     key: 'ss',
