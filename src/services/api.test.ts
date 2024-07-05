@@ -5,7 +5,8 @@ import { describe, expect, it, test } from '@jest/globals';
 import { parseCommand } from './actions';
 import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
-import { getFutureBasicData, getFutureSuggest } from './future';
+import { getFutureData, getFutureSuggest } from './future';
+import { getBinanceData } from './binance';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -54,7 +55,7 @@ describe('get future data', () => {
         expect(data).not.toBeNull();
     });
     it('should return getFutureBasicData', async () => {
-        const data = await getFutureBasicData('XAU');
+        const data = await getFutureData('XAU');
         expect(data).not.toBeNull();
     })
 });
@@ -78,6 +79,8 @@ describe('parseCommand', () => {
         expect(await parseCommand('sd ')).not.toBeNull();
         expect(await parseCommand('s ')).not.toBeNull();
         expect(await parseCommand('hy')).not.toBeNull();
+        expect(await parseCommand('hp')).not.toBeNull();
+        expect(await parseCommand('f xau')).not.toBeNull();
     });
 });
 
@@ -99,4 +102,12 @@ describe('fishingTime', () => {
     it('should return fishing time', async () => {
         expect(await holiday()).not.toBeNull();
     })
+})
+
+
+describe('binance', () => {
+    it('should return binance data', async () => {
+        expect(await getBinanceData('btc')).not.toBeNull();
+    }
+    )
 })

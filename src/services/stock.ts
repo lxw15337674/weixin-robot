@@ -129,8 +129,6 @@ export async function getSuggestStock(q: string) {
 
 export async function getStockBasicData(symbol: string): Promise<StockData['data']> {
     try {
-        if (!symbol)
-            symbol = 'szzs'
         symbol = await getSuggestStock(symbol)
 
         if (!symbol)

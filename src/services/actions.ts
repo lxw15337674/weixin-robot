@@ -1,5 +1,7 @@
 import { getAIData } from './ai'
+import { getBinanceData } from './binance'
 import { holiday } from './fishingTime'
+import { getFutureData } from './future'
 import { getStockData, getStockDetailData } from './stock'
 import { getWeiboData } from './weibo'
 
@@ -24,16 +26,26 @@ const commandMap = [
     callback: getStockData,
     msg: 's 股票代码(注意有空格) 获取股票信息 例如 s gzmt',
   },
-  
+  {
+    key: 'f ',
+    callback: getFutureData,
+    msg: 'f 期货代码(注意有空格) 获取期货信息 例如 f XAU'
+  },
+  {
+    key: 'b',
+    callback: getBinanceData,
+    msg: 'b 获取数字货币信息 例如 b btc'
+  },
+
   {
     key: 'wb',
     callback: getWeiboData,
     msg: 'wb 获取当日微博热搜',
   },
   {
-    key:'hy',
-    callback:holiday,
-    msg:'hy 获取节假日信息'
+    key: 'hy',
+    callback: holiday,
+    msg: 'hy 获取节假日信息'
   },
   {
     key: 'hp',
