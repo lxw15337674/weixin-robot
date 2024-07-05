@@ -59,7 +59,7 @@ export async function getFutureData(symbol: string): Promise<string> {
         symbol = await getFutureSuggest(symbol)
 
         if (!symbol)
-            throw new Error('未找到相关期货')
+            return `Failed to fetch  data for ${symbol}`
 
         const response = await axios.get<any>(Future_API_URL, {
             // axios 乱码解决
@@ -84,10 +84,10 @@ export async function getFutureData(symbol: string): Promise<string> {
             return extractPrices(response.data)
         }
         else {
-            throw new Error(`Failed to fetch stock data for ${symbol}: ${response.status}`)
+            return `Failed to fetch  data for ${symbol}: ${response.status}`
         }
     }
     catch (error) {
-        throw error
+        return `Failed to fetch  data for ${symbol}: ${error.message}`
     }
 }

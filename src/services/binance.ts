@@ -2,17 +2,17 @@ import axios from "axios";
 import { decode } from 'iconv-lite';
 
 const Binance_API_URL = 'https://data-api.binance.vision/api/v3/ticker/24hr' // Replace with your actual API URL
-const SUGGESTION_API_URL = 'https://data-api.binance.vision/api/v3/exchangeInfo' // Replace with your actual API URL
+// const SUGGESTION_API_URL = 'https://data-api.binance.vision/api/v3/exchangeInfo' // Replace with your actual API URL
 
 
-export async function getBinanceSuggest(searchText = 'XAU'): Promise<string> {
-    try {
-        const futureResponse = await axios.get(SUGGESTION_API_URL,);
-        return code
-    } catch (err) {
-        return err.message
-    }
-}
+// export async function getBinanceSuggest(searchText = 'XAU'): Promise<string> {
+//     try {
+//         const futureResponse = await axios.get(SUGGESTION_API_URL,);
+//         return code
+//     } catch (err) {
+//         return err.message
+//     }
+// }
 
 interface BinanceData {
     // 交易对名称，例如 BTCUSDT
@@ -77,7 +77,7 @@ export async function getBinanceData(symbol: string): Promise<string> {
             return text
         }
         else {
-            throw new Error(`Failed to fetch stock data for ${symbol}: ${response.status}`)
+            return `Failed to fetch stock data for ${symbol}: ${response.status}`
         }
     }
     catch (error) {
