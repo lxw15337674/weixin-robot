@@ -80,14 +80,13 @@ export async function getFutureData(symbol: string): Promise<string> {
         })
 
         if (response.status === 200) {
-            
             return extractPrices(response.data)
         }
         else {
-            return `Failed to fetch  data for ${symbol}: ${response.status}`
+            return `获取${symbol}的期货数据失败`
         }
     }
     catch (error) {
-        return `Failed to fetch  data for ${symbol}: ${error.message}`
+        return `没有找到${symbol}的期货数据`
     }
 }

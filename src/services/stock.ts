@@ -11,7 +11,7 @@ interface Market {
 }
 
 interface Quote {
-    
+
     current_ext?: number; // 当前价格（扩展精度）
     symbol: string; // 股票代码
     high52w: number; // 52 周最高价
@@ -137,7 +137,7 @@ export async function getStockBasicData(symbol: string): Promise<StockData['data
         const response = await axios.get<StockData>(STOCK_API_URL, {
             params: {
                 symbol,
-                extend:'detail'
+                extend: 'detail'
             },
             headers: {
                 Cookie: await getToken(),
@@ -156,19 +156,19 @@ export async function getStockBasicData(symbol: string): Promise<StockData['data
 }
 export async function getStockData(symbol: string): Promise<string> {
     try {
-        const {quote,market} = await getStockBasicData(symbol)
+        const { quote, market } = await getStockBasicData(symbol)
         const isGrowing = quote.percent > 0
 
         let text = `${quote?.name}: ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`
         // 盘前数据
-        if(quote.current_ext&&  quote.current!==quote.current_ext&&market.status_id!==5){
+        if (quote.current_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
             const isGrowing = quote.percent_ext > 0
             let extText = `盘前交易：${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext.toFixed(2)}%)`
             text = `${text}\n${extText}`
         }
         return text
     } catch (error) {
-        return error.message
+        return `获取股票${symbol}数据失败: ${error.message}`
     }
 }
 
@@ -182,8 +182,8 @@ const keyMap = [
         key: 'low',
     },
     {
-      label:'平均成交价格',
-        key:'avg_price'
+        label: '平均成交价格',
+        key: 'avg_price'
     },
     {
         label: '振幅',
@@ -211,9 +211,9 @@ const keyMap = [
         callback: (value: number) => `${value}%`
     },
     {
-        label:'总市值',
-        key:'market_capital',
-        callback:(value:number)=>`${formatAmount(value)}`
+        label: '总市值',
+        key: 'market_capital',
+        callback: (value: number) => `${formatAmount(value)}`
     }
 ];
 export async function getStockDetailData(symbol: string): Promise<string> {
@@ -223,16 +223,16 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         const text = `${quote?.name}: ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
         const detailText = keyMap.reduce((prev, current) => {
             let value = quote[current.key]
-            if(value === undefined || value === null){
+            if (value === undefined || value === null) {
                 return prev
             }
-            if(current.callback){
+            if (current.callback) {
                 value = current.callback(value)
             }
             return `${prev}\n${current.label}: ${value}`
         }, '')
         return `${text}\n${detailText}`
     } catch (error) {
-        return error.message
+        return `获取股票${symbol}数据失败: ${error.message}`
     }
 }

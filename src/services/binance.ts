@@ -77,10 +77,10 @@ export async function getBinanceData(symbol: string): Promise<string> {
             return text
         }
         else {
-            return `Failed to fetch stock data for ${symbol}: ${response.status}`
+            return `获取 ${symbol} 数据失败: ${response.status}`
         }
     }
     catch (error) {
-        throw error
+        return `获取 ${symbol} 数据失败: ${error.message}`
     }
 }
