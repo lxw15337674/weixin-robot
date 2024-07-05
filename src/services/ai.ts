@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 require('dotenv').config(); // 在其他代码之前加载 .env 文件
-const apiKey = process.env.API_KEY
+const apiKey = process.env.API_KEY??''
 const client = new OpenAI({
     apiKey,
     baseURL: "https://api.stepfun.com/v1"

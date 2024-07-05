@@ -4,7 +4,7 @@ import axios from 'axios'
 interface Market {
     status_id: number; // 市场状态ID，2代表盘前交易
     region: string; // 地区，例如 "US" 代表美国
-    status: string; // 市场状态描述，例如 "盘前交易"
+    status: string; // 市场状态描述，例如 "盘前交易",5代表盘中交易
     time_zone: string; // 时区，例如 "America/New_York"
     time_zone_desc: string | null; // 时区描述
     delay_tag: number; // 延迟标识
@@ -127,7 +127,7 @@ export async function getSuggestStock(q: string) {
         return response.data?.data?.[0]?.code
 }
 
-export async function getStockBasicData(symbol: string): Promise<Quote> {
+export async function getStockBasicData(symbol: string): Promise<StockData['data']> {
     try {
         if (!symbol)
             symbol = 'szzs'
@@ -146,7 +146,7 @@ export async function getStockBasicData(symbol: string): Promise<Quote> {
             },
         })
         if (response.status === 200 && response?.data?.data?.quote) {
-            return response.data.data.quote
+            return response.data.data
         }
         else {
             throw new Error(`Failed to fetch stock data for ${symbol}: ${response.status}`)
@@ -158,14 +158,14 @@ export async function getStockBasicData(symbol: string): Promise<Quote> {
 }
 export async function getStockData(symbol: string): Promise<string> {
     try {
-        const basicData = await getStockBasicData(symbol)
-        const isGrowing = basicData.percent > 0
+        const {quote,market} = await getStockBasicData(symbol)
+        const isGrowing = quote.percent > 0
 
-        let text = `${basicData?.name}: ${basicData.current} (${isGrowing ? '📈' : '📉'}${basicData.percent.toFixed(2)}%)`
+        let text = `${quote?.name}: ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`
         // 盘前数据
-        if(basicData.current_ext&&  basicData.current!==basicData.current_ext){
-            const isGrowing = basicData.percent_ext > 0
-            let extText = `盘前交易：${basicData.current_ext} (${isGrowing ? '📈' : '📉'}${basicData.percent_ext.toFixed(2)}%)`
+        if(quote.current_ext&&  quote.current!==quote.current_ext&&market.status_id!==5){
+            const isGrowing = quote.percent_ext > 0
+            let extText = `盘前交易：${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext.toFixed(2)}%)`
             text = `${text}\n${extText}`
         }
         return text
@@ -220,11 +220,11 @@ const keyMap = [
 ];
 export async function getStockDetailData(symbol: string): Promise<string> {
     try {
-        const basicData = await getStockBasicData(symbol)
-        const isGrowing = basicData.percent > 0
-        const text = `${basicData?.name}: ${basicData.current} (${isGrowing ? '📈' : '📉'}${basicData.percent}%)`
+        const { quote, market } = await getStockBasicData(symbol)
+        const isGrowing = quote.percent > 0
+        const text = `${quote?.name}: ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
         const detailText = keyMap.reduce((prev, current) => {
-            let value = basicData[current.key]
+            let value = quote[current.key]
             if(value === undefined || value === null){
                 return prev
             }
