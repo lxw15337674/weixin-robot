@@ -50,7 +50,7 @@ export async function getFutureSuggest(searchText = 'XAU'): Promise<string> {
         }
         return code
     } catch (err) {
-        return err.message
+        return `没有找到${searchText}的期货数据`
     }
 }
 
