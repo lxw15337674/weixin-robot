@@ -9,50 +9,49 @@ const commandMap = [
   {
     key: 'a ',
     callback: getAIData,
-    msg: '向国产AI提问: "[a 问题]" 或 "艾特机器人[问题]"  例如: "a 鲁迅与周树人的关系是什么？"',
+    msg: '"[a 问题]" 或 "艾特机器人[问题]" - 向国产AI提问 例如: "a 鲁迅与周树人的关系是什么？"',
   },
   {
     key: 'ss',
     callback: () => getStockData('SH000001'),
-    msg: '获取获取上证指数信息: "ss"',
+    msg: '"ss" - 获取上证指数信息',
   },
   {
     key: 'sd ',
     callback: getStockDetailData,
-    msg: '获取股票详细信息: "sd [股票代码]" 例如: "sd gzmt"',
+    msg: '"sd [股票代码]" - 获取股票详细信息 例如: "sd gzmt"',
   },
   {
     key: 's ',
     callback: getStockData,
-    msg: '获取股票信息: "s [股票代码]" 例如: "s gzmt"',
+    msg: '"s [股票代码]" - 获取股票信息 例如: "s gzmt"',
   },
   {
     key: 'f ',
     callback: getFutureData,
-    msg: '获取期货信息: "f [期货代码]" 例如: "f XAU"',
+    msg: '"f [期货代码]" - 获取期货信息 例如: "f XAU"',
   },
   {
     key: 'b',
     callback: getBinanceData,
-    msg: '获取数字货币信息: "b [货币代码]" 例如: "b btc"',
+    msg: '"b [货币代码]" - 获取数字货币信息 例如: "b btc"',
   },
   {
     key: 'wb',
     callback: getWeiboData,
-    msg: '获取微博热搜: "wb"',
+    msg: '"wb" - 获取微博热搜',
   },
   {
     key: 'hy',
     callback: holiday,
-    msg: '获取节假日信息: "hy"',
+    msg: '"hy" - 获取节假日信息',
   },
   {
     key: 'hp',
     callback: getHelp,
-    msg: '获取命令帮助: "hp"',
+    msg: '"hp" - 获取命令帮助',
   },
 ];
-
 // 解析命令
 export function parseCommand(msg: string): Promise<string> {
   for (const command of commandMap) {
