@@ -9,7 +9,7 @@ const commandMap = [
   {
     key: 'a ',
     callback: getAIData,
-    msg: 'a (注意有空格)或艾特坤哥，向坤哥提问 例如 a 鲁迅与周树人的关系是什么？',
+    msg: 'a 或艾特坤哥，向坤哥提问 例如:a 鲁迅与周树人的关系是什么？',
   },
   {
     key: 'ss',
@@ -19,22 +19,22 @@ const commandMap = [
   {
     key: 'sd ',
     callback: getStockDetailData,
-    msg: 'sd 股票代码(注意有空格) 获取股票详细数据 例如 sd gzmt',
+    msg: 'sd 股票代码 获取股票详细数据 例如:sd gzmt',
   },
   {
     key: 's ',
     callback: getStockData,
-    msg: 's 股票代码(注意有空格) 获取股票信息 例如 s gzmt',
+    msg: 's 股票代码 获取股票信息 例如:s gzmt',
   },
   {
     key: 'f ',
     callback: getFutureData,
-    msg: 'f 期货代码(注意有空格) 获取期货信息 例如 f XAU'
+    msg: 'f 期货代码 获取期货信息 例如:f XAU'
   },
   {
     key: 'b',
     callback: getBinanceData,
-    msg: 'b 获取数字货币信息 例如 b btc'
+    msg: 'b 获取数字货币信息 例如:b btc'
   },
 
   {
