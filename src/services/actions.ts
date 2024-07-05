@@ -3,20 +3,16 @@ import { getStockData, getStockDetailData } from './stock'
 import { getWeiboData } from './weibo'
 
 const commandMap = [
+ 
   {
-    key: 'wb',
-    callback: getWeiboData,
-    msg: 'wb 获取当日微博热搜',
+    key: 'ss',
+    callback: () => getStockData('SH000001'),
+    msg: 'ss 获取上证指数'
   },
   {
     key: 'sd ',
     callback: getStockDetailData,
     msg: 'sd 股票代码(注意有空格) 获取股票详细数据 例如 sd gzmt',
-  },
-  {
-    key: 'ss',
-    callback: () => getStockData('SH000001'),
-    msg: 'ss 获取上证指数'
   },
   {
     key: 's ',
@@ -27,6 +23,11 @@ const commandMap = [
     key: 'a ',
     callback: getAIData,
     msg: 'a (注意有空格)或艾特坤哥，向坤哥提问 例如 a 鲁迅与周树人的关系是什么？',
+  },
+  {
+    key: 'wb',
+    callback: getWeiboData,
+    msg: 'wb 获取当日微博热搜',
   },
   {
     key: 'hp',
