@@ -5,6 +5,7 @@ import { describe, expect, it, test } from '@jest/globals';
 import { parseCommand } from './actions';
 import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
+import { getFutureBasicData, getFutureSuggest } from './future';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -44,6 +45,18 @@ describe('getStockData', () => {
         expect(data).not.toBeNull();
     });
 
+});
+
+
+describe('get future data', () => {
+    it('should return future suggest', async () => {
+        const data = await getFutureSuggest('XAU');
+        expect(data).not.toBeNull();
+    });
+    it('should return getFutureBasicData', async () => {
+        const data = await getFutureBasicData('XAU');
+        expect(data).not.toBeNull();
+    })
 });
 
 describe('getAIData', () => {
