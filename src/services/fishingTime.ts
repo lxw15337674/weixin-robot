@@ -22,13 +22,13 @@ export const calculateRestDays = (dateString: string) => {
 
 export async function holiday(): Promise<string> {
     return await axios.get('https://s3.cn-north-1.amazonaws.com.cn/general.lesignstatic.com/config/jiaqi.json').then((res) => {
-        const text = res?.data.vacation.reduce((pre, cur) => {
+        const text = res?.data.vacation.reduce((pre, cur, index) => {
             const restDays = calculateRestDays(cur.holiday);
             if (restDays < 0) {
                 return pre;
             }
-            return pre + `距离${cur.holiday}【${cur.name}】 还有${restDays}天\n`;
-        } , '')
+            return pre + `距离${cur.holiday}【${cur.name}】 还有${restDays}天${index < res.data.vacation.length - 1 ? '\n' : ''}`;
+        }, '')
         return text;
     })
 }
