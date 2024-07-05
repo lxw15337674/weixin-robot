@@ -70,7 +70,7 @@ export async function getBinanceData(symbol: string): Promise<string> {
 
         if (response.status === 200) {
             const {data} = response
-            const price = Number(data.lastPrice).toFixed(2)
+            const price = Number(data.lastPrice)
             const percent = Number(data.priceChangePercent).toFixed(2)
             const isGrowing = Number(percent) > 0;
             const text = `${data.symbol}: $${price} (${isGrowing ? '📈' : '📉'}${percent}%)`
