@@ -81,6 +81,7 @@ describe('parseCommand', () => {
         expect(await parseCommand('hy')).not.toBeNull();
         expect(await parseCommand('hp')).not.toBeNull();
         expect(await parseCommand('f xau')).not.toBeNull();
+        expect(await parseCommand('b btc')).not.toBeNull();
     });
 });
 
