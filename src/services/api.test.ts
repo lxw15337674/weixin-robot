@@ -64,7 +64,7 @@ describe('parseCommand', () => {
         expect(await parseCommand('ss')).not.toBeNull();
         expect(await parseCommand('sd ')).not.toBeNull();
         expect(await parseCommand('s ')).not.toBeNull();
-        expect(await parseCommand('ho')).not.toBeNull();
+        expect(await parseCommand('hy')).not.toBeNull();
     });
 });
 

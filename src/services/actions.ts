@@ -31,9 +31,9 @@ const commandMap = [
     msg: 'wb 获取当日微博热搜',
   },
   {
-    key:'ho',
+    key:'hy',
     callback:holiday,
-    msg:'ho 获取节假日信息'
+    msg:'hy 获取节假日信息'
   },
   {
     key: 'hp',
