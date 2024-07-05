@@ -11,12 +11,17 @@ const commandMap = [
   {
     key: 'sd ',
     callback: getStockDetailData,
-    msg: 'sd 股票代码(注意有空格) 获取股票详细数据 例如 sd gzmt 获取贵州茅台股票详细数据',
+    msg: 'sd 股票代码(注意有空格) 获取股票详细数据 例如 sd gzmt',
+  },
+  {
+    key: 'ss',
+    callback: () => getStockData('SH000001'),
+    msg: 'ss 获取上证指数'
   },
   {
     key: 's ',
     callback: getStockData,
-    msg: 's 股票代码(注意有空格) 获取股票信息 例如 s gzmt 获取贵州茅台股票信息',
+    msg: 's 股票代码(注意有空格) 获取股票信息 例如 s gzmt',
   },
   {
     key: 'a ',
@@ -24,9 +29,9 @@ const commandMap = [
     msg: 'a (注意有空格)或艾特坤哥，向坤哥提问 例如 a 鲁迅与周树人的关系是什么？',
   },
   {
-    key: 'h',
+    key: 'hp',
     callback: getHelp,
-    msg: 'h 获取命令帮助',
+    msg: 'hp 获取命令帮助',
   },
 ]
 
