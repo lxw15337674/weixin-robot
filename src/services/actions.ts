@@ -9,12 +9,12 @@ const commandMap = [
   {
     key: 'a ',
     callback: getAIData,
-    msg: '获取AI信息: "[a 问题]" 或 "艾特坤哥[问题]"  例如: "a 鲁迅与周树人的关系是什么？"',
+    msg: '向国产AI提问: "[a 问题]" 或 "艾特机器人[问题]"  例如: "a 鲁迅与周树人的关系是什么？"',
   },
   {
     key: 'ss',
     callback: () => getStockData('SH000001'),
-    msg: '获取股票信息: "ss" (获取上证指数)',
+    msg: '获取获取上证指数信息: "ss"',
   },
   {
     key: 'sd ',
@@ -66,5 +66,5 @@ export function parseCommand(msg: string): Promise<string> {
 
 export function getHelp() {
   const commandMsg = commandMap.map(command => command.msg).join('\n')
-  return `命令列表：\n${commandMsg}\n 项目地址：https://github.com/lxw15337674/weixin-robot`
+  return `命令列表：\n${commandMsg}\n项目地址：https://github.com/lxw15337674/weixin-robot`
 }
