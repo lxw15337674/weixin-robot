@@ -206,20 +206,6 @@ const keyMap = [
         callback: (value: number) => `${value}%`,
     },
     {
-        label: '质押比例',
-        key: 'pledge_ratio',
-        callback: (value: number) => `${value}%`,
-    },
-    {
-        label: '做空比例',
-        key: 'short_ratio',
-        callback: (value: number) => `${value}%`,
-    },{
-        label: '机构持股比例',
-        key: 'inst_hld',
-        callback: (value: number) => `${value}%`,
-    },
-    {
         label: '总市值',
         key: 'market_capital',
         callback: (value: number) => `${formatAmount(value)}`
@@ -238,11 +224,6 @@ const keyMap = [
         label: '市净率',
         key: 'pb',
         callback: (value: number) => `${value}`
-    },
-    {
-        label:'ROE',
-        key: 'navps',
-        callback: (value: number) => `${value}%`
     },
     {
         label: '股息率',
