@@ -1,7 +1,7 @@
 import { getStockData } from './stock';
 import { getWeiboData } from './weibo';
 import { getAIData } from './ai';
-import { describe, expect, it, test } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { parseCommand } from './actions';
 import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
@@ -46,6 +46,12 @@ describe('getStockData', () => {
         expect(data).not.toBeNull();
     });
 
+    it('test',async () => {
+        const data = await getStockData('中集车辆');
+        // Failed to fetch stock data for 中集车辆: 404
+        expect(data).not.toMatch(/^Failed to fetch/);
+    })
+
 });
 
 
@@ -56,6 +62,10 @@ describe('get future data', () => {
     });
     it('should return getFutureBasicData', async () => {
         const data = await getFutureData('XAU');
+        expect(data).not.toBeNull();
+    })
+    it('should return getFutureBasicData', async () => {
+        const data = await getFutureData('bo');
         expect(data).not.toBeNull();
     })
 });

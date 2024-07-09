@@ -7,15 +7,16 @@ const SUGGESTION_API_URL = 'http://suggest3.sinajs.cn/suggest/' // Replace with 
 // "var hq_str_hf_XAU=\"2363.44,2356.800,2363.44,2363.79,2366.23,2354.11,15:30:00,2356.80,2356.45,0,0,0,2024-07-05,伦敦金（现货黄金）\";\n"
 function extractPrices(hq_str) {
     const match = hq_str.match(/(?:"[^"]*")/);
-    const data = match[0]?.slice(1, -1)?.split(',');
+    const data = match[0]?.slice(1, -1)?.split(',')
+    // 匹配中文
+    const name  = data.find(item => /[\u4e00-\u9fa5]/.test(item))
     const obj = {
         currentPrice: data[0],
-        prePrice: data[1],
-        name: data[13]
+        prePrice: data[8],
     }
     const isGrowing = obj.currentPrice > obj.prePrice;
     const percent = ((obj.currentPrice - obj.prePrice) / obj.prePrice * 100).toFixed(2);
-    return ` ${obj.name}: ${obj.currentPrice} (${isGrowing ? '📈' : '📉-'}${percent}%)`
+    return `${name}: ${obj.currentPrice} (${isGrowing ? '📈' : '📉'}${percent}%)`
 }
 export async function getFutureSuggest(searchText = 'XAU'): Promise<string> {
     try {
