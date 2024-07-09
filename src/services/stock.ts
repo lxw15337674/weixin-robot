@@ -206,19 +206,53 @@ const keyMap = [
         callback: (value: number) => `${value}%`,
     },
     {
-        label: '年初至今涨跌幅',
-        key: 'current_year_percent',
-        callback: (value: number) => `${value}%`
+        label: '质押比例',
+        key: 'pledge_ratio',
+        callback: (value: number) => `${value}%`,
+    },
+    {
+        label: '做空比例',
+        key: 'short_ratio',
+        callback: (value: number) => `${value}%`,
+    },{
+        label: '机构持股比例',
+        key: 'inst_hld',
+        callback: (value: number) => `${value}%`,
     },
     {
         label: '总市值',
         key: 'market_capital',
         callback: (value: number) => `${formatAmount(value)}`
+    },
+    {
+        label: '年初至今涨跌幅',
+        key: 'current_year_percent',
+        callback: (value: number) => `${value}%`
+    },
+    {
+        label:'市盈率(TTM)',
+        key: 'pe_ttm',
+        callback: (value: number) => `${value}`
+    },
+    {
+        label: '市净率',
+        key: 'pb',
+        callback: (value: number) => `${value}`
+    },
+    {
+        label:'ROE',
+        key: 'navps',
+        callback: (value: number) => `${value}%`
+    },
+    {
+        label: '股息率',
+        key: 'dividend_yield',
+        callback: (value: number) => `${value}%`
     }
 ];
 export async function getStockDetailData(symbol: string): Promise<string> {
     try {
-        const { quote, market } = await getStockBasicData(symbol)
+        const { quote } = await getStockBasicData(symbol)
         const isGrowing = quote.percent > 0
         const text = `${quote?.name}: ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
         const detailText = keyMap.reduce((prev, current) => {
