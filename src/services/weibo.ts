@@ -23,20 +23,22 @@ function getWeiboSearchCoreUrl(title) {
     return coreUrl;
 }
 
+const BASE_URL = 'https://raw.githubusercontent.com/lxw15337674/weibo-trending-hot-history/master/api';
+
 export async function getWeiboData(): Promise<string> {
-    const date = dayjs().format('YYYY-MM-DD')
+    const date = dayjs().format('YYYY-MM-DD');
+    const url = `${BASE_URL}/${date}/summary.json`;
+
     try {
-        const res = await axios.get(
-            `https://raw.githubusercontent.com/lxw15337674/weibo-trending-hot-history/master/api/${date}/summary.json`
-        );
-        const data: SavedWeibo[] = res.data;
-        const promises = data.slice(0, 20).map(async (cur, index) => {
-            // const shortUrl = getWeiboSearchCoreUrl(cur.title);
-            return `${index + 1}.${cur.title}  ${cur.hot}🔥`
-        });
-        const results = await Promise.all(promises);
-        return results.join('\n');
+        const res = await axios.get<SavedWeibo[]>(url); // 指定axios返回类型
+        const data = res.data.slice(0, 20); // 简化数据处理
+        let text = `今日微博热搜榜\n`;
+        // 使用数组方法生成结果字符串，避免手动拼接
+        text += data.map((item, index) => `${index + 1}. ${item.title}  ${item.hot}🔥`)
+            .join('\n');
+        return text;
     } catch (error) {
-        return '获取数据失败';
+        console.error('获取微博热搜数据失败:', error); // 打印错误信息
+        return '获取微博热搜数据失败';
     }
 }
