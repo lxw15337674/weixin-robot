@@ -36,6 +36,4 @@ pnpm i
 # start the service
 pnpm dev
 ```
-## Deploy
-推荐使用fly.io部署，直接docker部署即可。
 
