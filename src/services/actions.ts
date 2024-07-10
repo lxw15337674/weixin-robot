@@ -32,7 +32,7 @@ const commandMap = [
     msg: 'f [期货代码] - 获取期货信息 例如: f XAU',
   },
   {
-    key: 'b',
+    key: 'b ',
     callback: getBinanceData,
     msg: 'b [货币代码] - 获取数字货币信息 例如: b btc',
   },
