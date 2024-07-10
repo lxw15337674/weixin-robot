@@ -159,11 +159,11 @@ export async function getStockData(symbol: string): Promise<string> {
         const { quote, market } = await getStockBasicData(symbol)
         const isGrowing = quote.percent > 0
 
-        let text = `${quote?.name}: ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`
+        let text = `${quote?.name}(${quote?.symbol}): ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`
         // 盘前数据
         if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
             const isGrowing = quote.percent_ext > 0
-            let extText = `盘前交易：${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext.toFixed(2)}%)`
+            let extText = `盘前交易：${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext?.toFixed(2)}%)`
             text = `${text}\n${extText}`
         }
         return text
@@ -235,7 +235,7 @@ export async function getStockDetailData(symbol: string): Promise<string> {
     try {
         const { quote } = await getStockBasicData(symbol)
         const isGrowing = quote.percent > 0
-        const text = `${quote?.name}: ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
+        const text = `${quote?.name}(${quote?.symbol}): ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
         const detailText = keyMap.reduce((prev, current) => {
             let value = quote[current.key]
             if (value === undefined || value === null) {

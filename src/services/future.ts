@@ -5,7 +5,7 @@ const Future_API_URL = 'http://hq.sinajs.cn/' // Replace with your actual API UR
 const SUGGESTION_API_URL = 'http://suggest3.sinajs.cn/suggest/' // Replace with your actual API URL
 
 // "var hq_str_hf_XAU=\"2363.44,2356.800,2363.44,2363.79,2366.23,2354.11,15:30:00,2356.80,2356.45,0,0,0,2024-07-05,伦敦金（现货黄金）\";\n"
-function extractPrices(hq_str) {
+function extractPrices(hq_str, symbol:string) {
     const match = hq_str.match(/(?:"[^"]*")/);
     const data = match[0]?.slice(1, -1)?.split(',')
     // 匹配中文
@@ -16,7 +16,7 @@ function extractPrices(hq_str) {
     }
     const isGrowing = obj.currentPrice > obj.prePrice;
     const percent = ((obj.currentPrice - obj.prePrice) / obj.prePrice * 100).toFixed(2);
-    return `${name}: ${obj.currentPrice} (${isGrowing ? '📈' : '📉'}${percent}%)`
+    return `${name}(${symbol}): ${obj.currentPrice} (${isGrowing ? '📈' : '📉'}${percent}%)`
 }
 export async function getFutureSuggest(searchText = 'XAU'): Promise<string> {
     try {
@@ -81,7 +81,7 @@ export async function getFutureData(symbol: string): Promise<string> {
         })
 
         if (response.status === 200) {
-            return extractPrices(response.data)
+            return extractPrices(response.data, symbol)
         }
         else {
             return `获取${symbol}的期货数据失败`

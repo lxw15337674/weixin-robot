@@ -46,7 +46,7 @@ describe('getStockData', () => {
         expect(data).not.toBeNull();
     });
 
-    it('test',async () => {
+    it('test', async () => {
         const data = await getStockData('中集车辆');
         // Failed to fetch stock data for 中集车辆: 404
         expect(data).not.toMatch(/^Failed to fetch/);
@@ -87,12 +87,21 @@ describe('parseCommand', () => {
     it('should return data for valid commands', async () => {
         expect(await parseCommand('ss')).not.toBeNull();
         expect(await parseCommand('sd 300888')).not.toBeNull();
+
+
         expect(await parseCommand('s ')).not.toBeNull();
         expect(await parseCommand('hy')).not.toBeNull();
         expect(await parseCommand('hp')).not.toBeNull();
         expect(await parseCommand('f xau')).not.toBeNull();
         expect(await parseCommand('b btc')).not.toBeNull();
     });
+    it('test US fund', async () => {
+        expect(await parseCommand('sd cweb')).not.toBeNull();
+    });
+    it('test CN fund', async () => {
+        expect(await parseCommand('sd 印度基金lof')).not.toBeNull();
+        expect(await parseCommand('sd 164824')).not.toBeNull();
+    })
 });
 
 describe('formatAmount', () => {
