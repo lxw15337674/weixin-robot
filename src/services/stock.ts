@@ -163,7 +163,7 @@ export async function getStockData(symbol: string): Promise<string> {
         // 盘前数据
         if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
             const isGrowing = quote.percent_ext > 0
-            let extText = `盘前交易：${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext?.toFixed(2)}%)`
+            let extText = `盘前交易:${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext?.toFixed(2)}%)`
             text = `${text}\n${extText}`
         }
         return text
