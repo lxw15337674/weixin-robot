@@ -82,6 +82,8 @@ describe('parseCommand', () => {
         expect(await parseCommand('test')).toBeUndefined();
         expect(await parseCommand('sd')).toBeUndefined();
         expect(await parseCommand('s')).toBeUndefined();
+        expect(await parseCommand('f')).toBeUndefined();
+        expect(await parseCommand('b')).toBeUndefined();
     });
 
     it('should return data for valid commands', async () => {
