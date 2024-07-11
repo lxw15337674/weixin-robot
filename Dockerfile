@@ -1,21 +1,61 @@
-# 使用node20带chrome的环境启动服务
-FROM ahmed1n/nodewithchrome AS app
+ARG APT_SOURCE="debian"
 
-# 首先，更新 apt 包列表并安装 curl 用于下载 Node.js
-RUN apt-get update && apt-get install -y curl
+FROM ${APT_SOURCE}:bullseye AS base
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    apt-utils \
+    autoconf \
+    automake \
+    bash \
+    build-essential \
+    ca-certificates \
+    chromium \
+    coreutils \
+    curl \
+    ffmpeg \
+    figlet \
+    git \
+    gnupg2 \
+    jq \
+    libgconf-2-4 \
+    libtool \
+    libxtst6 \
+    moreutils \
+    python3-dev \
+    shellcheck \
+    sudo \
+    tzdata \
+    vim \
+    wget \
+    curl \
+    gnupg \
+  && apt-get purge --auto-remove \
+  && rm -rf /tmp/* /var/lib/apt/lists/*
 
-# 接着，使用 curl 下载 Node.js 安装脚本并执行安装
-RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
-RUN apt-get install -y nodejs
+# Install Node.js 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y nodejs
 
+# Install pnpm
+ARG PNPM_VERSION=9.4.0
+RUN npm install -g pnpm@$PNPM_VERSION
 
+FROM base AS builder
+ENV CHROME_BIN="/usr/bin/chromium" 
+
+RUN mkdir -p /app
 WORKDIR /app
-COPY package*.json ./
-# 使用淘宝镜像源
-RUN npm config set registry https://registry.npmmirror.com/
 
-# 使用 pnpm 安装依赖
-RUN npm install -g pnpm@7
-RUN pnpm install
-COPY . .
-CMD ["pnpm", "run", "start"]
+COPY package.json ./
+RUN  pnpm i
+
+COPY *.js ./
+COPY src/ ./src/
+
+
+# Development Stage
+FROM builder AS development
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY . . 
+CMD ["pnpm", "run", "dev"]
