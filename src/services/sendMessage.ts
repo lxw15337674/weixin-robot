@@ -1,7 +1,7 @@
 import { log } from 'wechaty'
 import type { Wechaty } from 'wechaty'
 import { PromiseQueue } from '../utils/PromiseQueue';
-import { randomSleep } from '@/utils/sleep';
+import { randomSleep } from '../utils/sleep';
 const queue = new PromiseQueue()
 
 
