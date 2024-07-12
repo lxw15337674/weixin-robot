@@ -1,6 +1,6 @@
 import { log } from 'wechaty'
 import type { Wechaty } from 'wechaty'
-import { PromiseQueue } from '@/utils/PromiseQueue';
+import { PromiseQueue } from '../utils/PromiseQueue';
 const queue = new PromiseQueue()
 
 

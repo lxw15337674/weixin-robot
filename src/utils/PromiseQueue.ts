@@ -1,3 +1,9 @@
+
+const randomSleep = (min: number, max: number) => {
+    const sleepTime = Math.floor(Math.random() * (max - min + 1)) + min;
+    return new Promise(resolve => setTimeout(resolve, sleepTime));
+}
+
 export class PromiseQueue {
     private queue: (() => Promise<any>)[] = [];
     private isRunning: boolean = false;
@@ -22,16 +28,15 @@ export class PromiseQueue {
         if (this.isRunning || this.queue.length === 0) {
             return;
         }
-
+        randomSleep(1000, 4000);
         this.isRunning = true;
 
         while (this.queue.length > 0) {
             const task = this.queue[0]
             try {
                 await task(); // 执行任务并等待其完成
-                // 随机延时 1-4 秒
-                const randomDelay = Math.floor(Math.random() * 4 + 1) * 1000;
-                await new Promise((resolve) => setTimeout(resolve, randomDelay));
+                // 随机延时 2-5 秒
+                randomSleep(2000, 5000);
                 this.queue.shift(); // 从队列中移除已完成的任务
             } catch (error) {
                 console.error("任务执行出错:", error);
