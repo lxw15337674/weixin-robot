@@ -1,4 +1,3 @@
-
 const randomSleep = (min: number, max: number) => {
     const sleepTime = Math.floor(Math.random() * (max - min + 1)) + min;
     return new Promise(resolve => setTimeout(resolve, sleepTime));
@@ -25,18 +24,17 @@ export class PromiseQueue {
      * 运行队列
      */
     private async run(): Promise<void> {
-        if (this.isRunning || this.queue.length === 0) {
+        if (this.isRunning) {
             return;
         }
-        randomSleep(1000, 4000);
         this.isRunning = true;
+        await randomSleep(3000, 10000);
 
         while (this.queue.length > 0) {
             const task = this.queue[0]
             try {
                 await task(); // 执行任务并等待其完成
-                // 随机延时 2-5 秒
-                randomSleep(2000, 5000);
+                await randomSleep(3000, 10000);
                 this.queue.shift(); // 从队列中移除已完成的任务
             } catch (error) {
                 console.error("任务执行出错:", error);
