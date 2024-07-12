@@ -31,7 +31,7 @@ export class PromiseQueue {
             const task = this.queue[0]
             try {
                 await task(); // 执行任务并等待其完成
-                await randomSleep(3000, 10000);
+                await randomSleep(2000, 5000);
                 this.queue.shift(); // 从队列中移除已完成的任务
             } catch (error) {
                 console.error("任务执行出错:", error);
