@@ -6,8 +6,8 @@ import { getAIData } from '../services/ai.ts'
 
 const startTime = new Date()
 export async function onMessage(msg: Message) {
-  // 屏蔽接收历史消息,允许5分钟内的消息
-  if (msg.date().getTime() < startTime.getTime() - 2 * 60 * 1000) {
+  // 屏蔽接收历史消息,允许1分钟内的消息
+  if (msg.date().getTime() < startTime.getTime() - 1 * 60 * 1000) {
     return
   }
   const room = msg.room()
