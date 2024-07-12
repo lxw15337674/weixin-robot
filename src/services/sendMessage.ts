@@ -1,6 +1,7 @@
 import { log } from 'wechaty'
 import type { Wechaty } from 'wechaty'
 import { PromiseQueue } from '../utils/PromiseQueue';
+import { randomSleep } from '@/utils/sleep';
 const queue = new PromiseQueue()
 
 
@@ -13,6 +14,7 @@ export async function sendContactMsg(bot: Wechaty, content: string, alias?: stri
   queue.addTask(async () => {
     try {
       const contact = await bot.Contact.find(query)
+      await randomSleep(3000, 5000)
       if (contact)
         await contact.say(content)
     }
@@ -29,7 +31,7 @@ export async function sendRoomMsg(bot: Wechaty, content: string, topic: string) 
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
-
+      await randomSleep(3000, 5000)
       if (room)
         await room.say(content)
     }
