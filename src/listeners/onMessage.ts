@@ -6,8 +6,8 @@ import { getAIData } from '../services/ai.ts'
 
 const startTime = new Date()
 export async function onMessage(msg: Message) {
-  // 屏蔽接收历史消息,允许5分钟内的消息
-  if (msg.date().getTime() < startTime.getTime() - 2 * 60 * 1000) {
+  // 屏蔽接收历史消息,允许1分钟内的消息
+  if (msg.date().getTime() < startTime.getTime() - 1 * 60 * 1000) {
     return
   }
   const room = msg.room()
@@ -16,7 +16,6 @@ export async function onMessage(msg: Message) {
     // 群白名单，只接受白名单内的群消息
     // if (!robotConfig.whiteRoomList.includes(topic))
     //   return
-
     // 群消息
     getMessagePayload(msg, room)
   }
@@ -43,33 +42,33 @@ async function getMessagePayload(msg: Message, room?: Room) {
       room ? dispatchRoomTextMsg(msg, room) : dispatchFriendTextMsg(msg)
       break
     }
-    case bot.Message.Type.Attachment:
-    case bot.Message.Type.Audio: {
-      // room ? dispatchRoomAudioMsg(msg, room) : dispatchFriendAudioMsg(msg)
-      break
-    }
-    case bot.Message.Type.Video: {
-      // room ? dispatchRoomVideoMsg(msg, room) : dispatchFriendVideoMsg(msg)
-      break
-    }
-    case bot.Message.Type.Emoticon: {
-      room ? dispatchRoomEmoticonMsg(msg, room) : dispatchFriendEmoticonMsg(msg)
-      break
-    }
-    case bot.Message.Type.Image: {
-      room ? dispatchRoomImageMsg(msg, room) : dispatchFriendImageMsg(msg)
-      break
-    }
-    case bot.Message.Type.Url: {
-      room ? dispatchRoomUrlMsg(msg, room) : dispatchFriendUrlMsg(msg)
-      break
-    }
-    case bot.Message.Type.MiniProgram: {
-      room ? dispatchRoomMiniProgramMsg(msg, room) : dispatchFriendMiniProgramMsg(msg)
-      break
-    }
+    // case bot.Message.Type.Attachment:
+    // case bot.Message.Type.Audio: {
+    //   room ? dispatchRoomAudioMsg(msg, room) : dispatchFriendAudioMsg(msg)
+    //   break
+    // }
+    // case bot.Message.Type.Video: {
+    //   room ? dispatchRoomVideoMsg(msg, room) : dispatchFriendVideoMsg(msg)
+    //   break
+    // }
+    // case bot.Message.Type.Emoticon: {
+    //   room ? dispatchRoomEmoticonMsg(msg, room) : dispatchFriendEmoticonMsg(msg)
+    //   break
+    // }
+    // case bot.Message.Type.Image: {
+    //   room ? dispatchRoomImageMsg(msg, room) : dispatchFriendImageMsg(msg)
+    //   break
+    // }
+    // case bot.Message.Type.Url: {
+    //   room ? dispatchRoomUrlMsg(msg, room) : dispatchFriendUrlMsg(msg)
+    //   break
+    // }
+    // case bot.Message.Type.MiniProgram: {
+    //   room ? dispatchRoomMiniProgramMsg(msg, room) : dispatchFriendMiniProgramMsg(msg)
+    //   break
+    // }
     default:
-      log.info('接收到莫名其妙的消息')
+      // log.info('接收到莫名其妙的消息')
       break
   }
 }
