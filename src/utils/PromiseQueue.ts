@@ -25,7 +25,7 @@ export class PromiseQueue {
             return;
         }
         this.isRunning = true;
-        await randomSleep(3000, 10000);
+        await randomSleep(2000, 5000);
 
         while (this.queue.length > 0) {
             const task = this.queue[0]
