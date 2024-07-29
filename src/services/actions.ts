@@ -10,55 +10,71 @@ const commandMap = [
     key: 'a ',
     callback: getAIData,
     msg: 'a [问题] 或 艾特机器人[问题]  - 向国产AI提问 例如: a 鲁迅与周树人的关系是什么？',
+    // 是否存在参数
+    hasArgs: true,
   },
   {
     key: 'ss',
     callback: () => getStockData('SH000001'),
     msg: 'ss - 获取上证指数信息',
+    hasArgs: false,
   },
   {
     key: 'sd ',
     callback: getStockDetailData,
     msg: 'sd [股票代码] - 获取股票详细信息 例如: sd gzmt',
+    hasArgs: true,
   },
   {
     key: 's ',
     callback: getStockData,
     msg: 's [股票代码] - 获取股票信息 例如: s gzmt',
+    hasArgs: true,
   },
   {
     key: 'f ',
     callback: getFutureData,
     msg: 'f [期货代码] - 获取期货信息 例如: f XAU',
+    hasArgs: true,
   },
   {
     key: 'b ',
     callback: getBinanceData,
     msg: 'b [货币代码] - 获取数字货币信息 例如: b btc',
+    hasArgs: true,
   },
   {
     key: 'wb',
     callback: getWeiboData,
     msg: 'wb - 获取微博热搜',
+    hasArgs: false,
   },
   {
     key: 'hy',
     callback: holiday,
     msg: 'hy - 获取节假日信息',
+    hasArgs: false,
   },
   {
     key: 'hp',
     callback: getHelp,
     msg: 'hp - 获取命令帮助',
+    hasArgs: false,
   },
 ];
 // 解析命令
 export function parseCommand(msg: string): Promise<string> {
   for (const command of commandMap) {
-    if (msg.startsWith(command.key)) {
-      // 解析后面的参数
-      const args = msg.slice(command.key.length).trim()
-      return command.callback(args)
+    if (command.hasArgs) {
+      if (msg.startsWith(command.key)) {
+        // 解析后面的参数
+        const args = msg.slice(command.key.length).trim()
+        return command.callback(args)
+      }
+    } else {
+      if (msg === command.key) {
+        return command.callback()
+      }
     }
   }
 }
