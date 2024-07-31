@@ -14,7 +14,7 @@ export async function sendContactMsg(bot: Wechaty, content: string, alias?: stri
   queue.addTask(async () => {
     try {
       const contact = await bot.Contact.find(query)
-      await randomSleep(2000, 5000);
+      await randomSleep(1000, 3000);
       if (contact)
         await contact.say(content)
     }
@@ -31,7 +31,7 @@ export async function sendRoomMsg(bot: Wechaty, content: string, topic: string) 
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
-      await randomSleep(2000, 5000);
+      await randomSleep(1000, 3000);
       if (room)
         await room.say(content)
     }
