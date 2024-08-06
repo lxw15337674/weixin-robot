@@ -1,7 +1,7 @@
 import { getStockData } from './stock';
 import { getWeiboData } from './weibo';
 import { getAIData } from './ai';
-import { describe, expect, it } from '@jest/globals';
+import { afterAll, describe, expect, it } from '@jest/globals';
 import { parseCommand } from './actions';
 import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
@@ -133,3 +133,10 @@ describe('binance', () => {
     }
     )
 })
+
+// describe('generateGroupReport', () => {
+//     it('should return group report', async () => {
+//         const text = generateGroupReport('@@46f1f5853eab12949b11bf26f35f94928fe6c9a718a27a587cb54096e40d8131');
+//         expect(text).not.toBeNull();
+//     });
+// })

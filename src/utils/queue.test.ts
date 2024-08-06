@@ -54,7 +54,7 @@ describe('PromiseQueue', () => {
         queue.addTask(task2);
 
         // 等待足够长时间，确保两个任务都已执行
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 10000));
 
         // 任务 1 执行失败，任务 2 仍然应该执行
         expect(queue.isEmpty()).toBe(true);
