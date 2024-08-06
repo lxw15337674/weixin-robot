@@ -36,12 +36,12 @@ export function generateGroupReport(groupId: string): string {
         .slice(0, 5);
 
     // 生成报告文本
-    let report = `🎉 群聊小报告 - "${group.groupName}" 的热闹现场 🎉\n\n`;
-    report += `📊 总计吐槽量：${totalMessages} 条\n\n`;
+    let report = `🎉 群聊小报告 - "${group.groupName}" 的热闹现场 🎉\n`;
+    report += `📊 总计吐槽量：${totalMessages} 条\n`;
     report += `🏆 今日话唠排行榜 TOP 5 🏆\n`;
     sortedUsers.forEach((user, index) => {
         let emoji = ['🥇', '🥈', '🥉', '🏅', '🎖️'][index];
-        report += `${emoji} ${user.username} : ${user.messageCount} 条\n`;
+        report += `${emoji} ${user.username} : ${user.messageCount} 条`;
     });
     return report;
 }
