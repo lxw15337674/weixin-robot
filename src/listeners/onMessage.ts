@@ -39,41 +39,43 @@ async function getMessagePayload(msg: Message, room?: Room) {
   }
   if (room) {
     dispatchRoomTextMsg(msg, room)
+  } else {
+    dispatchFriendTextMsg(msg)
   }
-  switch (msg.type()) {
-    case bot.Message.Type.Text: {
-      room ? dispatchRoomTextMsg(msg, room) : dispatchFriendTextMsg(msg)
-      break
-    }
-    // case bot.Message.Type.Attachment:
-    // case bot.Message.Type.Audio: {
-    //   room ? dispatchRoomAudioMsg(msg, room) : dispatchFriendAudioMsg(msg)
-    //   break
-    // }
-    // case bot.Message.Type.Video: {
-    //   room ? dispatchRoomVideoMsg(msg, room) : dispatchFriendVideoMsg(msg)
-    //   break
-    // }
-    // case bot.Message.Type.Emoticon: {
-    //   room ? dispatchRoomEmoticonMsg(msg, room) : dispatchFriendEmoticonMsg(msg)
-    //   break
-    // }
-    // case bot.Message.Type.Image: {
-    //   room ? dispatchRoomImageMsg(msg, room) : dispatchFriendImageMsg(msg)
-    //   break
-    // }
-    // case bot.Message.Type.Url: {
-    //   room ? dispatchRoomUrlMsg(msg, room) : dispatchFriendUrlMsg(msg)
-    //   break
-    // }
-    // case bot.Message.Type.MiniProgram: {
-    //   room ? dispatchRoomMiniProgramMsg(msg, room) : dispatchFriendMiniProgramMsg(msg)
-    //   break
-    // }
-    default:
-      // log.info('接收到莫名其妙的消息')
-      break
-  }
+  // switch (msg.type()) {
+  //   case bot.Message.Type.Text: {
+  //     room ? dispatchRoomTextMsg(msg, room) : dispatchFriendTextMsg(msg)
+  //     break
+  //   }
+  // case bot.Message.Type.Attachment:
+  // case bot.Message.Type.Audio: {
+  //   room ? dispatchRoomAudioMsg(msg, room) : dispatchFriendAudioMsg(msg)
+  //   break
+  // }
+  // case bot.Message.Type.Video: {
+  //   room ? dispatchRoomVideoMsg(msg, room) : dispatchFriendVideoMsg(msg)
+  //   break
+  // }
+  // case bot.Message.Type.Emoticon: {
+  //   room ? dispatchRoomEmoticonMsg(msg, room) : dispatchFriendEmoticonMsg(msg)
+  //   break
+  // }
+  // case bot.Message.Type.Image: {
+  //   room ? dispatchRoomImageMsg(msg, room) : dispatchFriendImageMsg(msg)
+  //   break
+  // }
+  // case bot.Message.Type.Url: {
+  //   room ? dispatchRoomUrlMsg(msg, room) : dispatchFriendUrlMsg(msg)
+  //   break
+  // }
+  // case bot.Message.Type.MiniProgram: {
+  //   room ? dispatchRoomMiniProgramMsg(msg, room) : dispatchFriendMiniProgramMsg(msg)
+  //   break
+  // }
+  // `  default:
+  //     // log.info('接收到莫名其妙的消息')
+  //     break
+  // }`
 }
 
 /**
@@ -83,7 +85,7 @@ async function getMessagePayload(msg: Message, room?: Room) {
  */
 async function dispatchRoomTextMsg(msg: Message, room: Room) {
   const topic = await room.topic()
-  const content = msg.text().trim()
+  const content = msg?.text()?.trim()??''
   const contact = msg.talker()
   const alias = await contact.alias()
   const bot = msg.wechaty
