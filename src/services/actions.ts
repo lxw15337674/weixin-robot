@@ -2,6 +2,7 @@ import { getAIData } from './ai'
 import { getBinanceData } from './binance'
 import { holiday } from './fishingTime'
 import { getFutureData } from './future'
+import { generateGroupReport } from './messageCount'
 import { getStockData, getStockDetailData } from './stock'
 import { getWeiboData } from './weibo'
 
@@ -12,6 +13,13 @@ const commandMap = [
     msg: 'a [问题] 或 艾特机器人[问题]  - 向国产AI提问 例如: a 鲁迅与周树人的关系是什么？',
     // 是否存在参数
     hasArgs: true,
+  },
+  // 今日群聊发言统计
+  {
+    key:'mc',
+    callback: generateGroupReport,
+    msg: 'mc - 获取今日群聊发言排名',
+    hasArgs: false,
   },
   {
     key: 'ss',
@@ -63,7 +71,7 @@ const commandMap = [
   },
 ];
 // 解析命令
-export function parseCommand(msg: string): Promise<string> {
+export function parseCommand(msg: string,roomId?:string): Promise<string> {
   for (const command of commandMap) {
     if (command.hasArgs) {
       if (msg.startsWith(command.key)) {
@@ -73,7 +81,7 @@ export function parseCommand(msg: string): Promise<string> {
       }
     } else {
       if (msg === command.key) {
-        return command.callback()
+        return command.callback(roomId)
       }
     }
   }

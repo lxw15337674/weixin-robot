@@ -2,22 +2,36 @@ import fs from 'fs';
 import { promises as fsPromises } from 'fs';
 import lodash from 'lodash';
 
-interface Message {
-    [group: string]: {
-        [user: string]: number;
-    };
+interface UserStat {
+    userId: string;
+    username: string;
+    messageCount: number;
+    lastMessageTime: string;
+}
+
+interface TimeRange {
+    date: string;
+    totalMessages: number;
+    userStats: UserStat[];
+}
+
+interface GroupData {
+    groupId: string;
+    groupName: string;
+    lastUpdated: string;
+    timeRanges: TimeRange[];
 }
 
 class MessageData {
     private path: string;
-    private data: Message;
+    private data: GroupData[];
     private lastPersistedData: string = '';
     public debouncePersistMessageFn = lodash.debounce(() => this.persistMessage(), 2000);
 
     constructor(path: string) {
         this.path = path;
-        this.data = {};
-        this.initialize().catch(console.error);
+        this.data = [];
+        this.initialize()
     }
 
     public async initialize(): Promise<void> {
@@ -25,27 +39,19 @@ class MessageData {
         this.data = await this.readJSON();
     }
 
-    private async readJSON(): Promise<Message> {
+    private async readJSON(): Promise<GroupData[]> {
         try {
             const data = await fsPromises.readFile(this.path, 'utf8');
-            return JSON.parse(data) as Message;
+            return JSON.parse(data) as GroupData[];
         } catch (error) {
             console.error('读取文件时发生错误:', error);
-            return {};
+            return [];
         }
     }
 
     private async initJSON(): Promise<void> {
         if (!fs.existsSync(this.path)) {
-            const emptyJson: Message = {
-                'group1': {
-                    'user1': 0,
-                    'user2': 0,
-                },
-                'group2': {
-                    'user1': 0,
-                },
-            };
+            const emptyJson: GroupData[] = [];
             const jsonContent = JSON.stringify(emptyJson, null, 2);
             try {
                 await fsPromises.writeFile(this.path, jsonContent, 'utf8');
@@ -56,11 +62,50 @@ class MessageData {
         }
     }
 
-    public  saveMessage(group: string, user: string): void {
-        if (!this.data[group]) {
-            this.data[group] = {};
+    public saveMessage(groupId: string, groupName: string, userId: string, username: string): void {
+        const now = new Date();
+        const today = now.toISOString().split('T')[0];
+
+        let group = this.data.find(g => g.groupId === groupId);
+        if (!group) {
+            group = {
+                groupId,
+                groupName,
+                lastUpdated: now.toISOString(),
+                timeRanges: []
+            };
+            this.data.push(group);
         }
-        this.data[group][user] = (this.data[group][user] || 0) + 1;
+
+        group.lastUpdated = now.toISOString();
+
+        let todayRange = group.timeRanges.find(range => range.date === today);
+        if (!todayRange) {
+            todayRange = {
+                date: today,
+                totalMessages: 0,
+                userStats: []
+            };
+            group.timeRanges.push(todayRange);
+        }
+
+        todayRange.totalMessages++;
+
+        let userStat = todayRange.userStats.find(stat => stat.userId === userId);
+        if (!userStat) {
+            userStat = {
+                userId,
+                username,
+                messageCount: 0,
+                lastMessageTime: now.toISOString()
+            };
+            todayRange.userStats.push(userStat);
+        }
+
+        userStat.messageCount++;
+        userStat.lastMessageTime = now.toISOString();
+
+        console.log(`已记录群【${groupName}】用户【${username}】的发言次数: ${userStat.messageCount}`);
     }
 
     public async persistMessage(): Promise<void> {
@@ -77,8 +122,12 @@ class MessageData {
         }
     }
 
-    public getData(): Message {
+    public getData(): GroupData[] {
         return this.data;
+    }
+
+    public getGroupData(groupId: string): GroupData {
+        return this.data.find(g => g.groupId === groupId);
     }
 
     public async remove(): Promise<void> {

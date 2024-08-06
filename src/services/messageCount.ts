@@ -3,10 +3,45 @@
 import MessageData from '../utils/messageData';
 export const JSONPath = './message.json';
 
-let messageData = null
-export function messageCount(group: string, user: string){
-    if(messageData){
+let messageData: MessageData = null
+export function messageCount(groupId: string, groupName: string, userId: string, username: string): void {
+    if (!messageData) {
         messageData = new MessageData(JSONPath)
     }
-    messageData.saveMessage(group, user)
+    messageData.saveMessage(groupId, groupName, userId, username)
+    messageData.debouncePersistMessageFn();
+}
+
+export function generateGroupReport(groupId: string): string {
+    if (!messageData) {
+        messageData = new MessageData(JSONPath);
+    }
+    const group = messageData.getGroupData(groupId);
+    if (!group) {
+        return `未找到群组 ID ${groupId} 的数据。`;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const todayRange = group.timeRanges.find(range => range.date === today);
+
+    if (!todayRange) {
+        return `今天还没有人发言哦~`;
+    }
+
+    let totalMessages = todayRange.totalMessages;
+
+    // 对用户按消息数排序
+    const sortedUsers = todayRange.userStats
+        .sort((a, b) => b.messageCount - a.messageCount)
+        .slice(0, 5);
+
+    // 生成报告文本
+    let report = `🎉 群聊小报告 - "${group.groupName}" 的热闹现场 🎉\n\n`;
+    report += `📊 总计吐槽量：${totalMessages} 条\n\n`;
+    report += `🏆 今日话唠排行榜 TOP 5 🏆\n`;
+    sortedUsers.forEach((user, index) => {
+        let emoji = ['🥇', '🥈', '🥉', '🏅', '🎖️'][index];
+        report += `${emoji} ${user.username} : ${user.messageCount} 条\n`;
+    });
+    return report;
 }

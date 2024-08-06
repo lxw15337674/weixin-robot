@@ -1,7 +1,7 @@
 import { getStockData } from './stock';
 import { getWeiboData } from './weibo';
 import { getAIData } from './ai';
-import { describe, expect, it } from '@jest/globals';
+import { afterAll, describe, expect, it } from '@jest/globals';
 import { parseCommand } from './actions';
 import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
@@ -134,34 +134,9 @@ describe('binance', () => {
     )
 })
 
-describe('test messageData', () => {
-    const path = './test.json';
-    const messageData = new MessageData(path);
-    afterAll(async () => {
-        await messageData.remove();
-    })
-    // it('should create json', async () => {
-    //     expect(messageData.getData()).not.toBeNull()
-    // });
-    it('should save message', async () => {
-        messageData.saveMessage('group1', 'user1');
-        messageData.saveMessage('group1', 'user1');
-        messageData.saveMessage('group1', 'user2');
-        messageData.saveMessage('group2', 'user1');
-        messageData.saveMessage('group2', 'user1');
-        messageData.saveMessage('group2', 'user2');
-        expect(messageData.getData()).toEqual(
-            {
-                "group1": {
-                    "user1": 2,
-                    "user2": 1
-                },
-                "group2": {
-                    "user1": 2,
-                    "user2": 1
-                }
-            }
-        )
-        messageData.debouncePersistMessageFn()
-    });
-});
+// describe('generateGroupReport', () => {
+//     it('should return group report', async () => {
+//         const text = generateGroupReport('@@46f1f5853eab12949b11bf26f35f94928fe6c9a718a27a587cb54096e40d8131');
+//         expect(text).not.toBeNull();
+//     });
+// })

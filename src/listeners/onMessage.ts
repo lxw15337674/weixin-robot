@@ -92,7 +92,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   //   return
   // }
   // 记录群消息
-  messageCount(topic, name)
+  messageCount(room.id, topic, contact.id, name)
 
   // 判断是否在群聊中被 @
   if (room && await msg.mentionSelf()) {
@@ -101,7 +101,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
     await sendRoomMsg(bot, msg, topic)
     return
   }
-  const func = parseCommand(content)
+  const func = parseCommand(content, room.id)
   if (func) {
     const msg = await func
     log.info(`根据命令【${content}】返回消息：${msg}`)
