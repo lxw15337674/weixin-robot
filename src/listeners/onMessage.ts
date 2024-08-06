@@ -3,6 +3,7 @@ import type { Message, Room } from 'wechaty'
 import { sendContactMsg, sendRoomMsg } from '../services/sendMessage.ts'
 import { parseCommand } from '../services/actions.ts'
 import { getAIData } from '../services/ai.ts'
+import { messageCount } from '../services/messageCount.ts'
 
 const startTime = new Date()
 export async function onMessage(msg: Message) {
@@ -90,6 +91,9 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   // if (isMentionSelf) {
   //   return
   // }
+  // 记录群消息
+  messageCount(topic, name)
+
   // 判断是否在群聊中被 @
   if (room && await msg.mentionSelf()) {
     const msg = await getAIData(content)
