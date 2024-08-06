@@ -14,7 +14,6 @@ const commandMap = [
     // 是否存在参数
     hasArgs: true,
   },
-  // 今日群聊发言统计
   {
     key:'mc',
     callback: generateGroupReport,

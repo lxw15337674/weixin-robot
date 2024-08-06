@@ -55,7 +55,6 @@ class MessageData {
             const jsonContent = JSON.stringify(emptyJson, null, 2);
             try {
                 await fsPromises.writeFile(this.path, jsonContent, 'utf8');
-                console.log('空的JSON文件已成功创建');
             } catch (err) {
                 console.error('创建文件时发生错误:', err);
             }
@@ -116,7 +115,7 @@ class MessageData {
         try {
             await fsPromises.writeFile(this.path, jsonContent, 'utf8');
             this.lastPersistedData = jsonContent;
-            console.log('JSON文件已成功写入');
+            // console.log('JSON文件已成功写入');
         } catch (err) {
             console.error('写入文件时发生错误:', err);
         }

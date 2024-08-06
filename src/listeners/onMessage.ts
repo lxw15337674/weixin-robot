@@ -37,7 +37,9 @@ async function getMessagePayload(msg: Message, room?: Room) {
   if (msg.self()) {
     return
   }
-
+  if (room) {
+    dispatchRoomTextMsg(msg, room)
+  }
   switch (msg.type()) {
     case bot.Message.Type.Text: {
       room ? dispatchRoomTextMsg(msg, room) : dispatchFriendTextMsg(msg)
@@ -86,14 +88,14 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   const alias = await contact.alias()
   const bot = msg.wechaty
   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+
   log.info(`群【${topic}】【${name}】 发送了：${content}`)
+  // 记录群消息
+  messageCount(room.id, topic, contact.id, name)
   // const isMentionSelf = await msg.mentionSelf();
   // if (isMentionSelf) {
   //   return
   // }
-  // 记录群消息
-  messageCount(room.id, topic, contact.id, name)
-
   // 判断是否在群聊中被 @
   if (room && await msg.mentionSelf()) {
     const msg = await getAIData(content)
