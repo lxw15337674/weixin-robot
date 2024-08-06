@@ -34,13 +34,16 @@ export function generateGroupReport(groupId: string): string {
     const sortedUsers = todayRange.userStats
         .sort((a, b) => b.messageCount - a.messageCount)
         .slice(0, 5);
-
+    function cleanUsername(username: string): string {
+        // 移除所有换行符和空格
+        return username.replace(/[\n\s]/g, '');
+    }
     // 生成报告文本
     let report = `🎉 群聊小报告 - "${group.groupName}" 的热闹现场 🎉,📊 总计发言量：${totalMessages} 条\n`
     report += `🏆 今日话唠排行榜 TOP 5 🏆`;
     sortedUsers.forEach((user, index) => {
         let emoji = ['🥇', '🥈', '🥉', '🏅', '🎖️'][index];
-        report += `\n${emoji} ${user.username} : ${user.messageCount} 条`;
+        report += `\n${emoji} ${cleanUsername(user.username)} : ${user.messageCount} 条`;
     });
     return report;
 }
