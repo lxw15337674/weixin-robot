@@ -15,10 +15,12 @@ const commandMap = [
     hasArgs: true,
   },
   {
-    key:'mc',
+    key: 'mc',
     callback: generateGroupReport,
     msg: 'mc - 获取今日群聊发言排名',
     hasArgs: false,
+    // 是否开启功能
+    enable: process.env.GROUP_STATISTICS
   },
   {
     key: 'ss',
@@ -70,7 +72,7 @@ const commandMap = [
   },
 ];
 // 解析命令
-export function parseCommand(msg: string,roomId?:string): Promise<string> {
+export function parseCommand(msg: string, roomId?: string): Promise<string> {
   for (const command of commandMap) {
     if (command.hasArgs) {
       if (msg.startsWith(command.key)) {
@@ -87,6 +89,6 @@ export function parseCommand(msg: string,roomId?:string): Promise<string> {
 }
 
 export function getHelp() {
-  const commandMsg = commandMap.map(command => command.msg).join('\n')
+  const commandMsg = commandMap.filter(command => command.enable).map(command => command.msg).join('\n')
   return `命令列表：\n${commandMsg}\n项目地址：https://github.com/lxw15337674/weixin-robot`
 }

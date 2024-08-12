@@ -5,6 +5,8 @@ import { parseCommand } from '../services/actions.ts'
 import { getAIData } from '../services/ai.ts'
 import { messageCount } from '../services/messageCount.ts'
 
+export const GroupStatistics = process.env.GROUP_STATISTICS ?? false
+
 const startTime = new Date()
 export async function onMessage(msg: Message) {
   // 屏蔽接收历史消息,允许1分钟内的消息
@@ -85,15 +87,18 @@ async function getMessagePayload(msg: Message, room?: Room) {
  */
 async function dispatchRoomTextMsg(msg: Message, room: Room) {
   const topic = await room.topic()
-  const content = msg?.text()?.trim()??''
+  const content = msg?.text()?.trim() ?? ''
   const contact = msg.talker()
   const alias = await contact.alias()
   const bot = msg.wechaty
   const name = alias ? `${contact.name()}(${alias})` : contact.name()
 
   log.info(`群【${topic}】【${name}】 发送了：${content}`)
+
   // 记录群消息
-  messageCount(room.id, topic, contact.id, name)
+  if (GroupStatistics) {
+    messageCount(room.id, topic, contact.id, name)
+  }
   // const isMentionSelf = await msg.mentionSelf();
   // if (isMentionSelf) {
   //   return
