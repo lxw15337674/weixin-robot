@@ -97,29 +97,46 @@ interface StockData {
 const STOCK_API_URL = 'https://stock.xueqiu.com/v5/stock/quote.json' // Replace with your actual API URL
 const SUGGESTION_API_URL = 'https://xueqiu.com/query/v1/suggest_stock.json' // Replace with your actual API URL
 // 读取环境变量
-let COOKIE = ''
+let Cookie = ''
 
 export async function getToken(): Promise<string> {
-    if (COOKIE)
-        return COOKIE
+    if (Cookie) {
+        return Cookie;
+    }
+    const cookieKey = 'xq_a_token';
 
-    const res = await axios.get('https://xueqiu.com/')
-    const cookies: string[] = res.headers['set-cookie']
-
-    const param: string = cookies.filter(key => key.includes('xq_a_token'))[0] || ''
-    const token = param.split(';')[0] || ''
-    COOKIE = token
-    return token
+    try {
+        // 先请求第一个 URL
+        const res1 = await axios.get('https://xueqiu.com');
+        Cookie = res1.headers['set-cookie']?.find(c => c.includes(cookieKey))?.split(';')[0];
+        if (!Cookie) {
+            throw new Error(`Failed to get ${cookieKey} cookie.`);
+        }
+        return Cookie;
+    } catch (error) {
+        try {
+            // 如果第一个请求没有获取到 cookie，再请求第二个 URL
+            if (!Cookie) {
+                const res2 = await axios.get('https://xueqiu.com/5124430882/303518291');
+                Cookie = res2.headers['set-cookie']?.find(c => c.includes(cookieKey))?.split(';')[0];
+                return Cookie
+            }
+        }
+        catch (error) {
+            console.error('Error getting cookie:', error);
+            throw error;
+        }
+    }
 }
-
 // https://xueqiu.com/query/v1/suggest_stock.json?q=gzmt
 export async function getSuggestStock(q: string) {
+
     const response = await axios.get<StockData>(SUGGESTION_API_URL, {
         params: {
             q,
         },
         headers: {
-            Cookie: await getToken(),
+            Cookie: await getToken()
         },
     })
 
@@ -216,7 +233,7 @@ const keyMap = [
         callback: (value: number) => `${value}%`
     },
     {
-        label:'市盈率(TTM)',
+        label: '市盈率(TTM)',
         key: 'pe_ttm',
         callback: (value: number) => `${value}`
     },

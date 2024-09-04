@@ -18,38 +18,39 @@ describe('getWeiboData', () => {
 describe('getStockData', () => {
     it('should return stock data for a valid A-share code', async () => {
         const data = await getStockData('SH600519');
-        expect(data).not.toBeNull();
+        // 不存在失败文本
+        expect(data).not.toMatch(/失败/);
     });
 
     it('should return stock data for a valid A-share code without prefix', async () => {
         const data = await getStockData('300888');
-        expect(data).not.toBeNull();
+        expect(data).not.toMatch(/失败/);
     });
 
     it('should return stock data for a valid stock symbol', async () => {
         const data = await getStockData('gzmt');
-        expect(data).not.toBeNull();
+        expect(data).not.toMatch(/失败/);
     });
 
     it('should handle invalid stock codes gracefully', async () => {
         const data = await getStockData('3008888');
-        expect(data).not.toBeNull(); // Assuming an error message is returned
+        expect(data).toMatch(/失败/);
     });
 
     it('should return pre-market data for US stocks', async () => {
         const data = await getStockData('tesla');
-        expect(data).not.toBeNull();
+        expect(data).not.toMatch(/失败/);
     });
 
     it('should return pre-market data for Hong Kong stocks', async () => {
         const data = await getStockData('tx');
-        expect(data).not.toBeNull();
+        expect(data).not.toMatch(/失败/);
     });
 
     it('test', async () => {
         const data = await getStockData('中集车辆');
         // Failed to fetch stock data for 中集车辆: 404
-        expect(data).not.toMatch(/^Failed to fetch/);
+        expect(data).not.toMatch(/失败/);
     })
 
 });
