@@ -107,25 +107,15 @@ export async function getToken(): Promise<string> {
 
     try {
         // 先请求第一个 URL
-        const res1 = await axios.get('https://xueqiu.com');
+        const res1 = await axios.get('https://xueqiu.com/about');
         Cookie = res1.headers['set-cookie']?.find(c => c.includes(cookieKey))?.split(';')[0];
         if (!Cookie) {
             throw new Error(`Failed to get ${cookieKey} cookie.`);
         }
         return Cookie;
     } catch (error) {
-        try {
-            // 如果第一个请求没有获取到 cookie，再请求第二个 URL
-            if (!Cookie) {
-                const res2 = await axios.get('https://xueqiu.com/5124430882/303518291');
-                Cookie = res2.headers['set-cookie']?.find(c => c.includes(cookieKey))?.split(';')[0];
-                return Cookie
-            }
-        }
-        catch (error) {
-            console.error('Error getting cookie:', error);
-            throw error;
-        }
+        console.error('Error getting cookie:', error);
+        throw error;
     }
 }
 // https://xueqiu.com/query/v1/suggest_stock.json?q=gzmt
@@ -175,8 +165,10 @@ export async function getStockData(symbol: string): Promise<string> {
     try {
         const { quote, market } = await getStockBasicData(symbol)
         const isGrowing = quote.percent > 0
-
-        let text = `${quote?.name}(${quote?.symbol}): ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`
+        let text = `${quote?.name}(${quote?.symbol}): ${quote.current}`;
+        if (quote.percent !== null) {
+            text += ` (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`;
+        }
         // 盘前数据
         if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
             const isGrowing = quote.percent_ext > 0

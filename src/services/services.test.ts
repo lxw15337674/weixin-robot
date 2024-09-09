@@ -33,8 +33,13 @@ describe('getStockData', () => {
     });
 
     it('should handle invalid stock codes gracefully', async () => {
-        const data = await getStockData('3008888');
+        const data = await getStockData('30088888');
         expect(data).toMatch(/失败/);
+    });
+ 
+    it('should handle empty percentage cases', async () => {
+        const data = await getStockData('kskj');
+        expect(data).not.toMatch(/失败/);
     });
 
     it('should return pre-market data for US stocks', async () => {
