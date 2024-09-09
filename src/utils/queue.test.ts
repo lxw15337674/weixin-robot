@@ -47,7 +47,7 @@ describe('PromiseQueue', () => {
     it('should handle errors gracefully', async () => {
         const queue = new PromiseQueue();
 
-        const task1 = () => Promise.reject(new Error('Task 1 failed'));
+        const task1 = () => Promise.reject(new Error('Task 1 failed'))
         const task2 = () => Promise.resolve('Task 2 success');
 
         queue.addTask(task1);
