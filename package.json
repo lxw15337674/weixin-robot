@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@wechatferry/puppet": "^0.0.21",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "decimal.js": "^10.4.3",
@@ -27,8 +28,7 @@
     "qrcode": "^1.5.3",
     "typescript": "^5.1.6",
     "vite-node": "^1.6.0",
-    "wechaty": "^1.20.2",
-    "wechaty-puppet-wechat": "^1.18.4"
+    "wechaty": "^1.20.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.40.2",
