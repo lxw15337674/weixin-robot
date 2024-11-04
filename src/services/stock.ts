@@ -97,10 +97,13 @@ interface StockData {
 const STOCK_API_URL = 'https://stock.xueqiu.com/v5/stock/quote.json' // Replace with your actual API URL
 const SUGGESTION_API_URL = 'https://xueqiu.com/query/v1/suggest_stock.json' // Replace with your actual API URL
 // 读取环境变量
-let Cookie = ''
+let Cookie = '';
+let cookieTimestamp = 0;
+const COOKIE_EXPIRATION_TIME = 2 * 24 * 60 * 60 * 1000; // 2天
 
 export async function getToken(): Promise<string> {
-    if (Cookie) {
+    const now = Date.now();
+    if (Cookie && (now - cookieTimestamp) < COOKIE_EXPIRATION_TIME) {
         return Cookie;
     }
     const cookieKey = 'xq_a_token';
@@ -112,12 +115,14 @@ export async function getToken(): Promise<string> {
         if (!Cookie) {
             throw new Error(`Failed to get ${cookieKey} cookie.`);
         }
+        cookieTimestamp = now; // 记录获取 Cookie 的时间
         return Cookie;
     } catch (error) {
         console.error('Error getting cookie:', error);
         throw error;
     }
 }
+
 // https://xueqiu.com/query/v1/suggest_stock.json?q=gzmt
 export async function getSuggestStock(q: string) {
 
