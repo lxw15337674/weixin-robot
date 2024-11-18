@@ -99,7 +99,7 @@ const SUGGESTION_API_URL = 'https://xueqiu.com/query/v1/suggest_stock.json' // R
 // 读取环境变量
 let Cookie = '';
 let cookieTimestamp = 0;
-const COOKIE_EXPIRATION_TIME = 2 * 24 * 60 * 60 * 1000; // 2天
+const COOKIE_EXPIRATION_TIME = 1 * 24 * 60 * 60 * 1000; // 1天
 
 export async function getToken(): Promise<string> {
     const now = Date.now();
