@@ -143,16 +143,16 @@ async function retryWithNewToken<T>(fetchFunction: () => Promise<T>): Promise<T>
     try {
         return await fetchFunction();
     } catch (error) {
-        if (error.response && error.response.status === 401) {
-            // 重新获取 Cookie 并重试
-            Cookie = '';
-            cookieTimestamp = 0;
+        // 重新获取 Cookie 并重试
+        Cookie = '';
+        cookieTimestamp = 0;
+        try {
             return await fetchFunction();
+        } catch (retryError) {
+            throw new Error(`Failed after retry: ${retryError.message}`);
         }
-        throw error;
     }
 }
-
 export async function getStockBasicData(symbol: string): Promise<StockData['data']> {
     try {
         symbol = await getSuggestStock(symbol);
