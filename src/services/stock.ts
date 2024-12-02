@@ -99,7 +99,7 @@ const SUGGESTION_API_URL = 'https://xueqiu.com/query/v1/suggest_stock.json' // R
 // 读取环境变量
 let Cookie = '';
 let cookieTimestamp = 0;
-const COOKIE_EXPIRATION_TIME = 2 * 24 * 60 * 60 * 1000; // 2天
+const COOKIE_EXPIRATION_TIME = 1 * 24 * 60 * 60 * 1000; // 2天
 
 export async function getToken(): Promise<string> {
     const now = Date.now();
@@ -139,50 +139,69 @@ export async function getSuggestStock(q: string) {
         return response.data?.data?.[0]?.code
 }
 
-export async function getStockBasicData(symbol: string): Promise<StockData['data']> {
+async function retryWithNewToken<T>(fetchFunction: () => Promise<T>): Promise<T> {
     try {
-        symbol = await getSuggestStock(symbol)
-
-        if (!symbol)
-            throw new Error('未找到相关股票')
-
-        const response = await axios.get<StockData>(STOCK_API_URL, {
-            params: {
-                symbol,
-                extend: 'detail'
-            },
-            headers: {
-                Cookie: await getToken(),
-            },
-        })
-        if (response.status === 200 && response?.data?.data?.quote) {
-            return response.data.data
+        return await fetchFunction();
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            // 重新获取 Cookie 并重试
+            Cookie = '';
+            cookieTimestamp = 0;
+            return await fetchFunction();
         }
-        else {
-            throw new Error(`Failed to fetch stock data for ${symbol}: ${response.status}`)
-        }
-    }
-    catch (error) {
-        throw error
+        throw error;
     }
 }
+
+export async function getStockBasicData(symbol: string): Promise<StockData['data']> {
+    try {
+        symbol = await getSuggestStock(symbol);
+
+        if (!symbol) throw new Error('未找到相关股票');
+
+        const fetchStockData = async () => {
+            const response = await axios.get<StockData>(STOCK_API_URL, {
+                params: {
+                    symbol,
+                    extend: 'detail'
+                },
+                headers: {
+                    Cookie: await getToken(),
+                },
+            });
+            if (response.status === 200 && response?.data?.data?.quote) {
+                return response.data.data;
+            } else {
+                throw new Error(`Failed to fetch stock data for ${symbol}: ${response.status}`);
+            }
+        };
+
+        return await retryWithNewToken(fetchStockData);
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function getStockData(symbol: string): Promise<string> {
     try {
-        const { quote, market } = await getStockBasicData(symbol)
-        const isGrowing = quote.percent > 0
-        let text = `${quote?.name}(${quote?.symbol}): ${quote.current}`;
-        if (quote.percent !== null) {
-            text += ` (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`;
-        }
-        // 盘前数据
-        if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
-            const isGrowing = quote.percent_ext > 0
-            let extText = `盘前交易:${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext?.toFixed(2)}%)`
-            text = `${text}\n${extText}`
-        }
-        return text
+        const fetchStockData = async () => {
+            const { quote, market } = await getStockBasicData(symbol);
+            const isGrowing = quote.percent > 0;
+            let text = `${quote?.name}(${quote?.symbol}): ${quote.current}`;
+            if (quote.percent !== null) {
+                text += ` (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`;
+            }
+            // 盘前前数据
+            if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
+                const isGrowing = quote.percent_ext > 0;
+                let extText = `盘前交易:${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext?.toFixed(2)}%)`;
+                text = `${text}\n${extText}`;
+            }
+            return text;
+        };
+        return await retryWithNewToken(fetchStockData);
     } catch (error) {
-        return `获取股票${symbol}数据失败: ${error.message}`
+        return `获取股票${symbol}数据失败: ${error.message}`;
     }
 }
 

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { decode } from 'iconv-lite';
 
 const Binance_API_URL = 'https://data-api.binance.vision/api/v3/ticker/24hr' // Replace with your actual API URL
 // const SUGGESTION_API_URL = 'https://data-api.binance.vision/api/v3/exchangeInfo' // Replace with your actual API URL
