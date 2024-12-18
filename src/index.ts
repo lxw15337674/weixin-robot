@@ -5,16 +5,18 @@ import { onLogin } from './listeners/onLogin.ts'
 import { onLogout } from './listeners/onLogout.ts'
 import { onMessage } from './listeners/onMessage.ts'
 import { onReady } from './listeners/onReady.ts'
-import { WechatferryPuppet } from '@wechatferry/puppet'
 
 
-let bot = null
 const CHROME_BIN = process.env.CHROME_BIN ?? {}
 const runRobot = async () => {
-  const puppet = new WechatferryPuppet()
   const bot = WechatyBuilder.build({
     name: 'wechat-bot',
-    ...puppet
+    // puppet: 'wechaty-puppet-wechat4u', // 如果有token，记得更换对应的puppet
+    puppet: 'wechaty-puppet-wechat', // 如果 wechaty-puppet-wechat 存在问题，也可以尝试使用上面的 wechaty-puppet-wechat4u ，记得安装 wechaty-puppet-wechat4u
+    puppetOptions: {
+      uos: true,
+      ...CHROME_BIN,
+    },
   })
 
   bot

@@ -15,7 +15,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@wechatferry/puppet": "^0.0.21",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "decimal.js": "^10.4.3",
