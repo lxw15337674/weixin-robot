@@ -1,7 +1,9 @@
-import { log, FileBox } from 'wechaty'
+import { log } from 'wechaty'
 import type { Wechaty } from 'wechaty'
 import { PromiseQueue } from '../utils/PromiseQueue';
 import { randomSleep } from '../utils/sleep';
+import { FileBox } from 'file-box'
+
 const queue = new PromiseQueue()
 
 
@@ -52,7 +54,7 @@ export async function sendContactImage(bot: Wechaty, imagePath: string, alias?: 
       const contact = await bot.Contact.find(query)
       await randomSleep(1000, 3000);
       if (contact) {
-        const fileBox = FileBox.fromFile(imagePath);
+        const fileBox = FileBox.fromFile(imagePath)
         await contact.say(fileBox);
       }
     }
@@ -70,9 +72,8 @@ export async function sendRoomImage(bot: Wechaty, imagePath: string, topic: stri
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
-      await randomSleep(1000, 3000);
       if (room) {
-        const fileBox = FileBox.fromFile(imagePath);
+        const fileBox = FileBox.fromFile(imagePath)
         await room.say(fileBox);
       }
     }

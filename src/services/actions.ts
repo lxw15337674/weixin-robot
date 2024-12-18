@@ -2,7 +2,6 @@ import { getAIData } from './ai'
 import { getBinanceData } from './binance'
 import { holiday } from './fishingTime'
 import { getFutureData } from './future'
-import { generateGroupReport } from './messageCount'
 import { getStockData, getStockDetailData } from './stock'
 import { captureScreenshot } from './stockThermalMap'
 import { getWeiboData } from './weibo'
@@ -50,7 +49,7 @@ const commandMap = [
   {
     key: 'mcn',
     callback: () => captureScreenshot('cn'),
-    msg: '获取中国股票市场热力图',
+    msg: 'mcn - 获取中国股票市场热力图',
   },
   {
     key: 'mhk',

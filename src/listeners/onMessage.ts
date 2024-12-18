@@ -1,6 +1,6 @@
 import { log } from 'wechaty'
 import type { Message, Room } from 'wechaty'
-import { sendContactImage, sendContactMsg, sendRoomMsg } from '../services/sendMessage.ts'
+import { sendContactImage, sendContactMsg, sendRoomImage, sendRoomMsg } from '../services/sendMessage.ts'
 import { parseCommand } from '../services/actions.ts'
 import { getAIData } from '../services/ai.ts'
 import { messageCount } from '../services/messageCount.ts'
@@ -116,7 +116,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
     const response = await func;
     if (response.endsWith('.png')) {
       log.info(`根据命令【${content}】返回图片：${response}`);
-      await sendContactImage(bot, response, alias, name);
+      await sendRoomImage(bot, response, topic);
     } else {
       log.info(`根据命令【${content}】返回消息：${response}`);
       await sendRoomMsg(bot, response, topic);

@@ -1,11 +1,8 @@
 import puppeteer from 'puppeteer';
-// ...existing code...
-
+import path from 'path';
 
 async function captureScreenshot(symbol: string) {
-    const browser = await puppeteer.launch({
-        headless: false,
-    });
+    let browser = await puppeteer.launch({});
     const page = await browser.newPage();
     await page.setViewport({
         width: 1920,
@@ -17,10 +14,12 @@ async function captureScreenshot(symbol: string) {
 
     await page.waitForSelector('.quote-page.router-page');
     let view = await page.$('.quote-page.router-page');
-    await view.screenshot({ path: `${symbol}.png` });
+    const filePath = path.resolve(process.cwd(), `map/${symbol}.png`);
+    await view.screenshot({ path: filePath });
+    console.log(`截图成功: ${filePath}`);
     await browser.close();
-    // 返回图片路径
-    return `${symbol}.png`;
+    // 返回图片绝对路径
+    return filePath;
 }
 
 export { captureScreenshot };

@@ -37,7 +37,7 @@ describe('getStockData', () => {
         const data = await getStockData('30088888');
         expect(data).toMatch(/失败/);
     });
- 
+
     it('should handle empty percentage cases', async () => {
         const data = await getStockData('kskj');
         expect(data).not.toMatch(/失败/);
@@ -141,8 +141,16 @@ describe('binance', () => {
     )
 })
 
-describe('stockThermalMap',()=>{
-    it ('should return thermal map', async () => {
-        expect(await captureScreenshot('hk')).not.toBeNull();
+describe('stockThermalMap', () => {
+    it('should return thermal map', async () => {
+        const results = await Promise.all([
+            captureScreenshot('us'),
+            captureScreenshot('us'),
+            captureScreenshot('us')
+        ]);
+
+        results.forEach(result => {
+            expect(result).not.toBeNull();
+        });
     })
 })
