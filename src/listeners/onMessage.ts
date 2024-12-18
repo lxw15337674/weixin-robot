@@ -1,6 +1,6 @@
 import { log } from 'wechaty'
 import type { Message, Room } from 'wechaty'
-import { sendContactMsg, sendRoomMsg } from '../services/sendMessage.ts'
+import { sendContactImage, sendContactMsg, sendRoomMsg } from '../services/sendMessage.ts'
 import { parseCommand } from '../services/actions.ts'
 import { getAIData } from '../services/ai.ts'
 import { messageCount } from '../services/messageCount.ts'
@@ -105,17 +105,22 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   // }
   // 判断是否在群聊中被 @
   if (room && await msg.mentionSelf()) {
-    const msg = await getAIData(content)
-    log.info(`根据命令【${content}】返回消息：${msg}`)
-    await sendRoomMsg(bot, msg, topic)
-    return
+    const response = await getAIData(content);
+    log.info(`根据命令【${content}】返回消息：${response}`);
+    await sendRoomMsg(bot, response, topic);
+    return;
   }
-  const func = parseCommand(content, room.id)
+
+  const func = parseCommand(content, room.id);
   if (func) {
-    const msg = await func
-    log.info(`根据命令【${content}】返回消息：${msg}`)
-    await sendRoomMsg(bot, msg, topic)
-    return
+    const response = await func;
+    if (response.endsWith('.png')) {
+      log.info(`根据命令【${content}】返回图片：${response}`);
+      await sendContactImage(bot, response, alias, name);
+    } else {
+      log.info(`根据命令【${content}】返回消息：${response}`);
+      await sendRoomMsg(bot, response, topic);
+    }
   }
 }
 
@@ -124,23 +129,23 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
  * @param msg
  */
 async function dispatchFriendTextMsg(msg: Message) {
-  const bot = msg.wechaty
-  const content = msg.text().trim()
-  const contact = msg.talker()
-  const alias = await contact.alias()
+  const bot = msg.wechaty;
+  const content = msg.text().trim();
+  const contact = msg.talker();
+  const alias = await contact.alias();
+  const name = alias ? `${contact.name()}(${alias})` : contact.name();
+  log.info(`好友【${name}】 发送了：${content}`);
 
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`好友【${name}】 发送了：${content}`)
-  const func = parseCommand(content)
-  if (func) {
-    const msg = await func
-    log.info(`根据命令【${content}】返回消息：${msg}`)
-    await sendContactMsg(bot, msg, alias, name)
-    return
+  const func = parseCommand(content);
+  let response = func ? await func : await getAIData(content);
+
+  if (response.endsWith('.png')) {
+    log.info(`根据命令【${content}】返回图片：${response}`);
+    await sendContactImage(bot, response, alias, name);
+  } else {
+    log.info(`根据命令【${content}】返回消息：${response}`);
+    await sendContactMsg(bot, response, alias, name);
   }
-  log.info(`根据命令【${content}】返回消息：${msg}`)
-  await sendContactMsg(bot, await getAIData(content), alias, name)
-  return
 }
 
 

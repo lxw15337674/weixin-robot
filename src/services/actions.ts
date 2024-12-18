@@ -4,6 +4,7 @@ import { holiday } from './fishingTime'
 import { getFutureData } from './future'
 import { generateGroupReport } from './messageCount'
 import { getStockData, getStockDetailData } from './stock'
+import { captureScreenshot } from './stockThermalMap'
 import { getWeiboData } from './weibo'
 
 const commandMap = [
@@ -14,14 +15,14 @@ const commandMap = [
     // 是否存在参数
     hasArgs: true,
   },
-  {
-    key: 'mc',
-    callback: generateGroupReport,
-    msg: 'mc - 获取今日群聊发言排名',
-    hasArgs: false,
-    // 是否开启功能
-    enable: process.env.GROUP_STATISTICS
-  },
+  // {
+  //   key: 'mc',
+  //   callback: generateGroupReport,
+  //   msg: 'mc - 获取今日群聊发言排名',
+  //   hasArgs: false,
+  //   // 是否开启功能
+  //   enable: process.env.GROUP_STATISTICS
+  // },
   {
     key: 'ss',
     callback: () => getStockData('SH000001'),
@@ -45,6 +46,21 @@ const commandMap = [
     callback: getFutureData,
     msg: 'f [期货代码] - 获取期货信息 例如: f XAU',
     hasArgs: true,
+  },
+  {
+    key: 'mcn',
+    callback: () => captureScreenshot('cn'),
+    msg: '获取中国股票市场热力图',
+  },
+  {
+    key: 'mhk',
+    callback: () => captureScreenshot('hk'),
+    msg: 'mhk - 获取香港股市场热力图',
+  },
+  {
+    key: 'mus',
+    callback: () => captureScreenshot('us'),
+    msg: 'mus - 获取美股市场热力图',
   },
   {
     key: 'b ',
@@ -89,6 +105,6 @@ export function parseCommand(msg: string, roomId?: string): Promise<string> {
 }
 
 export function getHelp() {
-  const commandMsg = commandMap.filter(command => command.enable!==true).map(command => command.msg).join('\n')
+  const commandMsg = commandMap.filter(command => command.enable !== true).map(command => command.msg).join('\n')
   return `命令列表：\n${commandMsg}\n项目地址：https://github.com/lxw15337674/weixin-robot`
 }
