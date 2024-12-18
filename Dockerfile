@@ -9,6 +9,8 @@ RUN npm config set registry https://registry.npmmirror.com/
 # 使用 pnpm 安装依赖
 RUN npm install -g pnpm@7
 RUN pnpm install
+
 COPY .dockerignore .dockerignore
+
 COPY . .
 CMD ["pnpm", "run", "start"]
