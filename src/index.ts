@@ -5,8 +5,6 @@ import { onLogin } from './listeners/onLogin.ts'
 import { onLogout } from './listeners/onLogout.ts'
 import { onMessage } from './listeners/onMessage.ts'
 import { onReady } from './listeners/onReady.ts'
-import { sendContactMsg, sendRoomMsg } from './services/sendMessage.ts'
-import { string2utf8 } from './utils/string2utf8.ts'
 
 
 let bot = null

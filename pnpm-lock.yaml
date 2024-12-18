@@ -35,6 +35,9 @@ importers:
       pm2:
         specifier: ^5.4.2
         version: 5.4.2
+      puppeteer:
+        specifier: ^22.15.0
+        version: 22.15.0(typescript@5.6.3)
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
@@ -90,9 +93,6 @@ importers:
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.17.6)(ts-node@10.9.2(@swc/core@1.7.3)(@types/node@20.17.6)(typescript@5.6.3))
-      puppeteer:
-        specifier: ^22.15.0
-        version: 22.15.0(typescript@5.6.3)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.7.3)(@types/node@20.17.6)(typescript@5.6.3)
@@ -6890,7 +6890,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 
@@ -8367,7 +8367,7 @@ snapshots:
   https-proxy-agent@5.0.1:
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.4
+      debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
 

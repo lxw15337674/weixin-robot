@@ -7,6 +7,7 @@ import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
 import { getFutureData, getFutureSuggest } from './future';
 import { getBinanceData } from './binance';
+import { captureScreenshot } from './stockThermalMap';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -140,9 +141,8 @@ describe('binance', () => {
     )
 })
 
-// describe('generateGroupReport', () => {
-//     it('should return group report', async () => {
-//         const text = generateGroupReport('@@46f1f5853eab12949b11bf26f35f94928fe6c9a718a27a587cb54096e40d8131');
-//         expect(text).not.toBeNull();
-//     });
-// })
+describe('stockThermalMap',()=>{
+    it ('should return thermal map', async () => {
+        expect(await captureScreenshot('hk')).not.toBeNull();
+    })
+})
