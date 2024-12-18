@@ -2,7 +2,10 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 
 async function captureScreenshot(symbol: string) {
-    let browser = await puppeteer.launch({});
+    let browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
     await page.setViewport({
         width: 1920,
