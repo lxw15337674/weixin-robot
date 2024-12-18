@@ -5,12 +5,7 @@ import { onLogin } from './listeners/onLogin.ts'
 import { onLogout } from './listeners/onLogout.ts'
 import { onMessage } from './listeners/onMessage.ts'
 import { onReady } from './listeners/onReady.ts'
-import { sendContactMsg, sendRoomMsg } from './services/sendMessage.ts'
-import { execSync } from 'child_process';
 
-const CHROME_BIN = execSync('which chromium').toString().trim();
-
-console.log(`Chrome binary path: ${CHROME_BIN}`);
 const runRobot = async () => {
   const bot = WechatyBuilder.build({
     name: 'wechat-bot',
@@ -18,7 +13,6 @@ const runRobot = async () => {
     puppet: 'wechaty-puppet-wechat', // 如果 wechaty-puppet-wechat 存在问题，也可以尝试使用上面的 wechaty-puppet-wechat4u ，记得安装 wechaty-puppet-wechat4u
     puppetOptions: {
       uos: true,
-      executablePath: CHROME_BIN,
     },
   })
 
