@@ -7,12 +7,20 @@ enum MapType {
     gu = 'gu'
 }
 
-async function getFutuStockMap(symbol: string, mapType: MapType ) {
+const config = {
+    headless: true,
+    args: ['--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--disable-software-rasterizer',
+        '--disable-features=VizDisplayCompositor',
+        '--no-zygote',
+        '--single-process']
+}
+async function getFutuStockMap(symbol: string, mapType: MapType) {
     mapType = mapType || MapType.hy;
-    let browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-    });
+    let browser = await puppeteer.launch(config);
     const page = await browser.newPage();
     await page.setViewport({
         width: 1920,
@@ -40,10 +48,7 @@ async function getFutuStockMap(symbol: string, mapType: MapType ) {
 
 
 async function getYuntuStockMap(symbol: string) {
-    let browser = await puppeteer.launch({
-        headless: false,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-    });
+    let browser = await puppeteer.launch(config);
     const page = await browser.newPage();
     await page.setViewport({
         width: 1920,
