@@ -53,14 +53,14 @@ RUN node -v
 ENV NODE_PATH /usr/local/bin
 ENV PATH $NODE_PATH:$PATH
 
-# 设置 Puppeteer 的环境变量，避免下载 Chromium
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+# # 设置 Puppeteer 的环境变量，避免下载 Chromium
+# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# 安装 Chromium
-RUN apt-get update && apt-get install -y chromium \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# # 安装 Chromium
+# RUN apt-get update && apt-get install -y chromium \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY package*.json ./
