@@ -74,4 +74,4 @@ RUN yarn
 
 COPY . .
 
-CMD ["npm", "run", "start"]
+CMD ["yarn", "run", "start"]

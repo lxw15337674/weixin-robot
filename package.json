@@ -24,7 +24,6 @@
     "iconv-lite": "^0.6.3",
     "lodash": "^4.17.21",
     "openai": "^4.77.0",
-    "pm2": "^5.4.3",
     "puppeteer": "^22.15.0",
     "qrcode": "^1.5.4",
     "typescript": "^5.7.2",
