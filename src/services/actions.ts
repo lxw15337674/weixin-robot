@@ -54,18 +54,18 @@ const commandMap = [
   {
     key: 'mcn',
     callback: (symbol) => getFutuStockMap('cn', symbol),
-    msg: 'mcn - 获取富途中国股票市场热力图',
+    msg: 'mcn - 获取富途中国股票市场热力图, 可选参数: [hy|gu] 例如: mcn hy 獲取行業熱力圖，mcn gu 獲取個股熱力圖',
     hasArgs: true,
   },
   {
     key: 'mhk',
-    callback: () => getFutuStockMap('hk'),
-    msg: 'mhk - 获取富途香港股市场热力图',
+    callback: (symbol) => getFutuStockMap('hk', symbol),
+    msg: 'mhk - 获取富途香港股市场热力图, 可选参数: [hy|gu] 例如: mhk hy 獲取行業熱力圖，mhk gu 獲取個股熱力圖',
   },
   {
     key: 'mus',
-    callback: () => getFutuStockMap('us'),
-    msg: 'mus - 获取富途美股市场热力图',
+    callback: (symbol) => getFutuStockMap('us', symbol),
+    msg: 'mus - 获取富途美股市场热力图, 可选参数: [hy|gu] 例如: mus hy 獲取行業熱力圖，mus gu 獲取個股熱力圖',
   },
   {
     key: 'b ',

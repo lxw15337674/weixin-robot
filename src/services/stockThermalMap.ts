@@ -27,8 +27,8 @@ async function getFutuStockMap(symbol: string, mapType: MapType ) {
             const parentElement = document.querySelector('.pouper.max-hgt');
             (parentElement?.children[1] as HTMLElement)?.click();
         });
-        await randomSleep(3000, 4000)
     }
+    await randomSleep(3000, 4000)
     let view = await page.$('.quote-page.router-page');
     const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
     await view.screenshot({ path: filePath });
