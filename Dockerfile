@@ -7,12 +7,12 @@ RUN apt-get update && apt-get install -y fontconfig \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 删除之前的 Node.js 版本
-RUN apt-get remove -y nodejs
 
 # 安装 Node.js 20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
+
+ENV NODE_PATH /usr/local/lib/nodejs/node-v20.x/bin
 
 WORKDIR /app
 COPY package*.json ./
