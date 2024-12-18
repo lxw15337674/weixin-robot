@@ -7,7 +7,8 @@ enum MapType {
     gu = 'gu'
 }
 
-async function getFutuStockMap(symbol: string, mapType: MapType = MapType.hy) {
+async function getFutuStockMap(symbol: string, mapType: MapType ) {
+    mapType = mapType || MapType.hy;
     let browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
