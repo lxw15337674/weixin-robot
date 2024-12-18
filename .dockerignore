@@ -322,7 +322,6 @@ config.json
 cache.json
 config.yaml
 .vscode
-node_modules
 dist
 .git
 Dockerfile
