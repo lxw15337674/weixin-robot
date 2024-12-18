@@ -6,7 +6,7 @@ async function captureScreenshot(symbol: string) {
     try {
         browser = await puppeteer.launch({
             headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            args: ['--no-sandbox', '--disable-setuid-sandbox','--lang=zh-CN']
         });
         const page = await browser.newPage();
         await page.setViewport({
