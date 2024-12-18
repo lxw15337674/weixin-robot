@@ -14,7 +14,7 @@ COPY package*.json ./
 RUN npm config set registry https://registry.npmmirror.com/
 
 # 使用 pnpm 安装依赖
-RUN npm install -g pnpm@7
+RUN npm install -g pnpm
 RUN pnpm install
 COPY . .
 CMD ["pnpm", "run", "start"]
