@@ -3,7 +3,7 @@ import { getBinanceData } from './binance'
 import { holiday } from './fishingTime'
 import { getFutureData } from './future'
 import { getStockData, getStockDetailData } from './stock'
-import { captureScreenshot } from './stockThermalMap'
+import { getFutuStockMap, getYuntuStockMap } from './stockThermalMap'
 import { getWeiboData } from './weibo'
 
 const commandMap = [
@@ -47,19 +47,25 @@ const commandMap = [
     hasArgs: true,
   },
   {
+    key: 'dp',
+    callback: () => getYuntuStockMap('dapan'),
+    msg: 'dp(dapan) - 获取大盘热力图',
+  },
+  {
     key: 'mcn',
-    callback: () => captureScreenshot('cn'),
-    msg: 'mcn - 获取中国股票市场热力图',
+    callback: (symbol) => getFutuStockMap('cn', symbol),
+    msg: 'mcn - 获取富途中国股票市场热力图',
+    hasArgs: true,
   },
   {
     key: 'mhk',
-    callback: () => captureScreenshot('hk'),
-    msg: 'mhk - 获取香港股市场热力图',
+    callback: () => getFutuStockMap('hk'),
+    msg: 'mhk - 获取富途香港股市场热力图',
   },
   {
     key: 'mus',
-    callback: () => captureScreenshot('us'),
-    msg: 'mus - 获取美股市场热力图',
+    callback: () => getFutuStockMap('us'),
+    msg: 'mus - 获取富途美股市场热力图',
   },
   {
     key: 'b ',

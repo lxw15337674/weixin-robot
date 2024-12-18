@@ -7,7 +7,7 @@ import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
 import { getFutureData, getFutureSuggest } from './future';
 import { getBinanceData } from './binance';
-import { captureScreenshot } from './stockThermalMap';
+import { getFutuStockMap, getYuntuStockMap } from './stockThermalMap';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -111,6 +111,9 @@ describe('parseCommand', () => {
         expect(await parseCommand('sd 印度基金lof')).not.toBeNull();
         expect(await parseCommand('sd 164824')).not.toBeNull();
     })
+    it('test mcn hy', async () => {
+        expect(await parseCommand('mcn hy')).not.toBeNull();
+    })
 });
 
 describe('formatAmount', () => {
@@ -144,9 +147,10 @@ describe('binance', () => {
 describe('stockThermalMap', () => {
     it('should return thermal map', async () => {
         const results = await Promise.all([
-            captureScreenshot('us'),
-            captureScreenshot('us'),
-            captureScreenshot('us')
+            // getFutuStockMap('us'),
+            // getFutuStockMap('us'),
+            // getFutuStockMap('us')
+            getYuntuStockMap('cn')
         ]);
 
         results.forEach(result => {
@@ -154,3 +158,4 @@ describe('stockThermalMap', () => {
         });
     })
 })
+
