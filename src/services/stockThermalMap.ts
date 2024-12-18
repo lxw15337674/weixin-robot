@@ -26,6 +26,9 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
         width: 1920,
         height: 1080
     });
+    page.on('framenavigated', frame => {
+        console.log('Frame navigated:', frame.url());
+    });
     await page.goto(`https://www.futunn.com/quote/${symbol}/heatmap`, {
         waitUntil: 'networkidle2'
     });
@@ -53,6 +56,9 @@ async function getYuntuStockMap(symbol: string) {
     await page.setViewport({
         width: 1920,
         height: 1080
+    });
+    page.on('framenavigated', frame => {
+        console.log('Frame navigated:', frame.url());
     });
     await page.goto(`https://dapanyuntu.com/`, {
         waitUntil: 'networkidle2'
