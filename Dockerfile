@@ -69,7 +69,6 @@ COPY package*.json ./
 RUN npm config set registry https://registry.npmmirror.com/
 
 # 使用 pnpm 安装依赖
-RUN npm install -g yarn
 RUN yarn
 
 COPY . .

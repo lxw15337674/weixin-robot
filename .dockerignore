@@ -142,7 +142,6 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
-n
 *memory-card.json
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
@@ -317,8 +316,5 @@ docs/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
-n
-config.json
-cache.json
 config.yaml
 .vscode
