@@ -11,7 +11,7 @@ async function getFutuStockMap(symbol: string, mapType: MapType ) {
     mapType = mapType || MapType.hy;
     let browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
     const page = await browser.newPage();
     await page.setViewport({
@@ -42,7 +42,7 @@ async function getFutuStockMap(symbol: string, mapType: MapType ) {
 async function getYuntuStockMap(symbol: string) {
     let browser = await puppeteer.launch({
         headless: false,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
     const page = await browser.newPage();
     await page.setViewport({
