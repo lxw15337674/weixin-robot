@@ -14,9 +14,12 @@ const config = {
         '--disable-dev-shm-usage',
         '--disable-gpu']
 }
+let browser
 async function getFutuStockMap(symbol: string, mapType: MapType) {
     mapType = mapType || MapType.hy;
-    let browser = await puppeteer.launch(config);
+    if (!browser) {
+        browser = await puppeteer.launch(config);
+    }
     const page = await browser.newPage();
     await page.setViewport({
         width: 1920,
@@ -44,7 +47,9 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
 
 
 async function getYuntuStockMap(symbol: string) {
-    let browser = await puppeteer.launch(config);
+    if (!browser) {
+        browser = await puppeteer.launch(config);
+    }
     const page = await browser.newPage();
     await page.setViewport({
         width: 1920,
