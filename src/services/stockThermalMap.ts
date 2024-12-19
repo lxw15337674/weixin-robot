@@ -12,11 +12,7 @@ const config = {
     args: ['--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--disable-software-rasterizer',
-        '--disable-features=VizDisplayCompositor',
-        '--no-zygote',
-        '--single-process']
+        '--disable-gpu']
 }
 async function getFutuStockMap(symbol: string, mapType: MapType) {
     mapType = mapType || MapType.hy;
@@ -25,9 +21,6 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
     await page.setViewport({
         width: 1920,
         height: 1080
-    });
-    page.on('framenavigated', frame => {
-        console.log('Frame navigated:', frame.url());
     });
     await page.goto(`https://www.futunn.com/quote/${symbol}/heatmap`, {
         waitUntil: 'networkidle2'
@@ -56,9 +49,6 @@ async function getYuntuStockMap(symbol: string) {
     await page.setViewport({
         width: 1920,
         height: 1080
-    });
-    page.on('framenavigated', frame => {
-        console.log('Frame navigated:', frame.url());
     });
     await page.goto(`https://dapanyuntu.com/`, {
         waitUntil: 'networkidle2'
