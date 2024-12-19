@@ -3,7 +3,7 @@ import path from 'path';
 import { randomSleep } from '../utils/sleep';
 
 enum MapType {
-    hy ,
+    hy,
     gu
 }
 
@@ -19,6 +19,8 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
     mapType = mapType || MapType.hy;
     if (!browser) {
         browser = await puppeteer.launch(config);
+        // 确保浏览器不会被关闭
+        await browser.newPage();
     }
     const page = await browser.newPage();
     await page.setViewport({
@@ -49,6 +51,8 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
 async function getYuntuStockMap(symbol: string) {
     if (!browser) {
         browser = await puppeteer.launch(config);
+        // 确保浏览器不会被关闭
+        await browser.newPage();
     }
     const page = await browser.newPage();
     await page.setViewport({
