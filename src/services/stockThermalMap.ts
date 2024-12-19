@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer';
 import path from 'path';
 import { randomSleep } from '../utils/sleep';
 
@@ -14,7 +14,7 @@ const config = {
         '--disable-dev-shm-usage',
         '--disable-gpu']
 }
-let browser
+let browser: Browser | null = null;
 async function getFutuStockMap(symbol: string, mapType: MapType) {
     mapType = mapType || MapType.hy;
     if (!browser) {
@@ -58,9 +58,9 @@ async function getYuntuStockMap(symbol: string) {
     await page.goto(`https://dapanyuntu.com/`, {
         waitUntil: 'networkidle2'
     });
+    await randomSleep(3000, 4000)
     let view = await page.$('#body');
     const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
-    await randomSleep(3000, 4000)
     await view.screenshot({ path: filePath });
     console.log(`截图成功: ${filePath}`);
     await page.close();
