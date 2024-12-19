@@ -43,9 +43,7 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     xdg-utils \
     wget \
-    dbus &&
-    apt-get clean &&
-    rm -rf /var/lib/apt/lists/*
+    dbus
 
 # 验证 Node.js 版本
 RUN node -v
