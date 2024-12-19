@@ -10,13 +10,17 @@ enum MapType {
 
 const config = {
     headless: true,
-    args: ['--no-sandbox',           // Docker 环境必需
-        '--disable-setuid-sandbox', // 配合 no-sandbox
-        '--disable-dev-shm-usage',  // 防止内存问题
-        '--disable-gpu',           // 提高稳定性
-        '--disable-software-rasterizer', // 优化性能
-        '--disable-accelerated-2d-canvas' // 禁用加速
-    ]
+    args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--disable-software-rasterizer',
+        '--disable-accelerated-2d-canvas',
+        '--memory-pressure-off',  // 防止内存压力
+        '--max-old-space-size=4096', // 增加内存限制
+    ],
+    timeout: 30000 // 设置超时时间
 }
 let browser: Browser | null = null;
 let page: Page | null = null;
@@ -75,7 +79,6 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
     }
 }
 
-// 这个功能会导致意外退出，暂时不用
 async function getYuntuStockMap(symbol: string) {
     const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
 
