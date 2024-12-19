@@ -318,3 +318,6 @@ docs/
 # End of https://www.toptal.com/developers/gitignore/api/python
 config.yaml
 .vscode
+dist
+.git
+Dockerfile
