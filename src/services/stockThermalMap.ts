@@ -3,8 +3,8 @@ import path from 'path';
 import { randomSleep } from '../utils/sleep';
 
 enum MapType {
-    hy = 'hy',
-    gu = 'gu'
+    hy ,
+    gu
 }
 
 const config = {

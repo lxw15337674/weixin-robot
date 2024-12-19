@@ -6,20 +6,6 @@ import { onLogout } from './listeners/onLogout.ts'
 import { onMessage } from './listeners/onMessage.ts'
 import { onReady } from './listeners/onReady.ts'
 
-const getChromiumPath = () => {
-  const platform = process.platform
-  switch (platform) {
-    case 'win32':
-      return undefined
-    case 'linux':
-      return '/usr/bin/chromium'
-    case 'darwin':
-      return '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-    default:
-      return '/usr/bin/chromium'
-  }
-}
-
 const runRobot = async () => {
   const bot = WechatyBuilder.build({
     name: 'wechat-bot',
@@ -27,7 +13,6 @@ const runRobot = async () => {
     puppet: 'wechaty-puppet-wechat', // 如果 wechaty-puppet-wechat 存在问题，也可以尝试使用上面的 wechaty-puppet-wechat4u ，记得安装 wechaty-puppet-wechat4u
     puppetOptions: {
       uos: true,
-      executablePath: getChromiumPath()
     },
   })
 

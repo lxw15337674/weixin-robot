@@ -56,12 +56,6 @@ ENV PATH $NODE_PATH:$PATH
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# 安装 Chromium
-RUN apt-get update && apt-get install -y chromium
-
-# 验证Chromium是否 安装成功
-RUN chromium --version
-
 # 使用淘宝镜像源
 RUN npm config set registry https://registry.npmmirror.com/
 RUN yarn config set registry https://registry.npmmirror.com/
