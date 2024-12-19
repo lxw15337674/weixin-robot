@@ -52,10 +52,6 @@ RUN node -v
 ENV NODE_PATH /usr/local/bin
 ENV PATH $NODE_PATH:$PATH
 
-# 设置 Puppeteer 的环境变量
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-
 # 使用淘宝镜像源
 RUN npm config set registry https://registry.npmmirror.com/
 RUN yarn config set registry https://registry.npmmirror.com/
