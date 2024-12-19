@@ -67,7 +67,9 @@ async function getYuntuStockMap(symbol: string) {
     const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
     await view.screenshot({ path: filePath });
     console.log(`截图成功: ${filePath}`);
-    await page.close();
+    if (page && !page.isClosed()) {
+        await page.close();
+    }
     // 返回图片绝对路径
     return filePath;
 }
