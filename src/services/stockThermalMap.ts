@@ -75,34 +75,34 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
     }
 }
 
-async function getYuntuStockMap(symbol: string) {
-    const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
+// 这个功能会导致意外退出，暂时不用
+// async function getYuntuStockMap(symbol: string) {
+//     const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
 
-    if (isProcessing) {
-        // 检查文件是否存在
-        if (fs.existsSync(filePath)) {
-            return filePath;
-        }
-        return '另一个截图任务正在进行中...';
-    }
+//     if (isProcessing) {
+//         // 检查文件是否存在
+//         if (fs.existsSync(filePath)) {
+//             return filePath;
+//         }
+//         return '另一个截图任务正在进行中...';
+//     }
 
-    try {
-        isProcessing = true;
+//     try {
+//         isProcessing = true;
 
-        const currentPage = await getPage();
-        await currentPage.goto(`https://dapanyuntu.com/`, {
-            waitUntil: 'networkidle2'
-        });
+//         const currentPage = await getPage();
+//         await currentPage.goto(`https://dapanyuntu.com/`, {
+//             waitUntil: 'networkidle2'
+//         });
 
-        await randomSleep(3000, 4000);
-        let view = await currentPage.$('#body');
-        await view.screenshot({ path: filePath });
-        console.log(`截图成功: ${filePath}`);
-
-        return filePath;
-    } finally {
-        isProcessing = false;
-    }
-}
+//         await randomSleep(3000, 4000);
+//         let view = await currentPage.$('#body');
+//         await view.screenshot({ path: filePath });
+//         console.log(`截图成功: ${filePath}`);
+//         return filePath;
+//     } finally {
+//         isProcessing = false;
+//     }
+// }
 
 export { getFutuStockMap, MapType, getYuntuStockMap };

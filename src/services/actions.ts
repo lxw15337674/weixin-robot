@@ -46,11 +46,11 @@ const commandMap = [
     msg: 'f [期货代码] - 获取期货信息 例如: f XAU',
     hasArgs: true,
   },
-  {
-    key: 'dp',
-    callback: () => getYuntuStockMap('dapan'),
-    msg: 'dp(dapan) - 获取大盘热力图',
-  },
+  // {
+  //   key: 'dp',
+  //   callback: () => getYuntuStockMap('dapan'),
+  //   msg: 'dp(dapan) - 获取大盘热力图',
+  // },
   {
     key: 'mcn',
     callback: (symbol) => getFutuStockMap('cn', symbol),
