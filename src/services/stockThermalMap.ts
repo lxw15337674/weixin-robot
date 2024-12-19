@@ -1,4 +1,4 @@
-import puppeteer, { Browser } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import path from 'path';
 import { randomSleep } from '../utils/sleep';
 
@@ -15,6 +15,9 @@ const config = {
         '--disable-gpu']
 }
 let browser: Browser | null = null;
+let futuPage: Page | null = null;
+let yuntuPage: Page | null = null;
+
 async function getFutuStockMap(symbol: string, mapType: MapType) {
     mapType = mapType || MapType.hy;
     if (!browser) {
@@ -22,31 +25,34 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
         // 确保浏览器不会被关闭
         await browser.newPage();
     }
-    const page = await browser.newPage();
-    await page.setViewport({
+    const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
+    if(futuPage && !futuPage.isClosed()) {
+        return filePath;
+    }
+    futuPage = await browser.newPage();
+    await futuPage.setViewport({
         width: 1920,
         height: 1080
     });
-    await page.goto(`https://www.futunn.com/quote/${symbol}/heatmap`, {
+    await futuPage.goto(`https://www.futunn.com/quote/${symbol}/heatmap`, {
         waitUntil: 'networkidle2'
     });
     if (mapType === MapType.hy) {
-        await page.click('.select-component.heatmap-list-select');
-        await page.evaluate(() => {
+        await futuPage.click('.select-component.heatmap-list-select');
+        await futuPage.evaluate(() => {
             const parentElement = document.querySelector('.pouper.max-hgt');
             (parentElement?.children[1] as HTMLElement)?.click();
         });
     }
     await randomSleep(3000, 4000)
-    let view = await page.$('.quote-page.router-page');
-    const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
+    let view = await futuPage.$('.quote-page.router-page');
     await view.screenshot({ path: filePath });
     console.log(`截图成功: ${filePath}`);
-    await page.close();
+    await futuPage.close();
+    futuPage = null;
     // 返回图片绝对路径
     return filePath;
 }
-
 
 async function getYuntuStockMap(symbol: string) {
     if (!browser) {
@@ -54,22 +60,24 @@ async function getYuntuStockMap(symbol: string) {
         // 确保浏览器不会被关闭
         await browser.newPage();
     }
-    const page = await browser.newPage();
-    await page.setViewport({
+    const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
+    if(yuntuPage && !yuntuPage.isClosed()) {
+        return filePath;
+    }
+    yuntuPage = await browser.newPage();
+    await yuntuPage.setViewport({
         width: 1920,
         height: 1080
     });
-    await page.goto(`https://dapanyuntu.com/`, {
+    await yuntuPage.goto(`https://dapanyuntu.com/`, {
         waitUntil: 'networkidle2'
     });
     await randomSleep(3000, 4000)
-    let view = await page.$('#body');
-    const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
+    let view = await yuntuPage.$('#body');
     await view.screenshot({ path: filePath });
     console.log(`截图成功: ${filePath}`);
-    if (page && !page.isClosed()) {
-        await page.close();
-    }
+    await yuntuPage.close();
+    yuntuPage = null;
     // 返回图片绝对路径
     return filePath;
 }

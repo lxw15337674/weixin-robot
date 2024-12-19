@@ -69,4 +69,4 @@ app.get('/', (req, res) => {
 //     res.send('缺少群名')
 //   }
 // })
-app.listen(3000)
+app.listen(6060)
