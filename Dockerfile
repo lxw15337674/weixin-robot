@@ -43,9 +43,9 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     xdg-utils \
     wget \
-    dbus \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    dbus &&
+    apt-get clean &&
+    rm -rf /var/lib/apt/lists/*
 
 # 验证 Node.js 版本
 RUN node -v
@@ -54,23 +54,25 @@ RUN node -v
 ENV NODE_PATH /usr/local/bin
 ENV PATH $NODE_PATH:$PATH
 
-# # 设置 Puppeteer 的环境变量，避免下载 Chromium
-# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+# 设置 Puppeteer 的环境变量
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# # 安装 Chromium
-# RUN apt-get update && apt-get install -y chromium \
-#     && apt-get clean \
-#     && rm -rf /var/lib/apt/lists/*
+# 安装 Chromium
+RUN apt-get update && apt-get install -y chromium
+
+# 验证Chromium是否 安装成功
+RUN chromium --version
+
+# 使用淘宝镜像源
+RUN npm config set registry https://registry.npmmirror.com/
+RUN yarn config set registry https://registry.npmmirror.com/
 
 WORKDIR /app
 COPY package*.json ./
 
-# 使用淘宝镜像源
-RUN npm config set registry https://registry.npmmirror.com/
-
-# 使用 pnpm 安装依赖
-RUN yarn
+# 使用 yarn 安装依赖
+RUN yarn install
 
 COPY . .
 
