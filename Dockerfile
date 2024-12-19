@@ -1,5 +1,5 @@
 # 使用官方 Node.js 20 镜像作为基础镜像
-FROM node:20-slim AS app
+FROM oven/bun:1 AS app
 
 # 更新 apt-get 并安装必要的依赖
 RUN apt-get update && apt-get install -y \
@@ -45,23 +45,17 @@ RUN apt-get update && apt-get install -y \
     wget \
     dbus
 
-# 验证 Node.js 版本
-RUN node -v
-
-# 设置 Node.js 为环境变量
-ENV NODE_PATH /usr/local/bin
-ENV PATH $NODE_PATH:$PATH
-
-# 使用淘宝镜像源
-RUN npm config set registry https://registry.npmmirror.com/
-RUN yarn config set registry https://registry.npmmirror.com/
-
 WORKDIR /app
+
+# 复制 package.json
 COPY package*.json ./
+COPY bun.lockb ./
 
-# 使用 yarn 安装依赖
-RUN yarn install
+# 使用 bun 安装依赖
+RUN bun install
 
+# 复制其余文件
 COPY . .
 
-CMD ["yarn", "run", "start"]
+# 使用 bun 运行应用
+CMD ["bun", "run", "start"]
