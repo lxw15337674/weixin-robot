@@ -7,7 +7,7 @@ import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
 import { getFutureData, getFutureSuggest } from './future';
 import { getBinanceData } from './binance';
-import { getFutuStockMap, getYuntuStockMap } from './stockThermalMap';
+import {  getYuntuStockMap } from './stockThermalMap';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {

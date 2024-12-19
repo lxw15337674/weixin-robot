@@ -26,8 +26,8 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
         await browser.newPage();
     }
     const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
-    if(futuPage && !futuPage.isClosed()) {
-        return filePath;
+    if (futuPage && !futuPage.isClosed()) {
+        return '请等待上一次请求完成';
     }
     futuPage = await browser.newPage();
     await futuPage.setViewport({
@@ -61,8 +61,8 @@ async function getYuntuStockMap(symbol: string) {
         await browser.newPage();
     }
     const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
-    if(yuntuPage && !yuntuPage.isClosed()) {
-        return filePath;
+    if (yuntuPage && !yuntuPage.isClosed()) {
+        return '请等待上一次请求完成';
     }
     yuntuPage = await browser.newPage();
     await yuntuPage.setViewport({
