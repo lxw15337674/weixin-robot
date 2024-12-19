@@ -37,7 +37,7 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
     const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
     await view.screenshot({ path: filePath });
     console.log(`截图成功: ${filePath}`);
-    await browser.close();
+    await page.close();
     // 返回图片绝对路径
     return filePath;
 }
@@ -58,7 +58,7 @@ async function getYuntuStockMap(symbol: string) {
     await randomSleep(3000, 4000)
     await view.screenshot({ path: filePath });
     console.log(`截图成功: ${filePath}`);
-    await browser.close();
+    await page.close();
     // 返回图片绝对路径
     return filePath;
 }
