@@ -4,8 +4,8 @@ import { randomSleep } from '../utils/sleep';
 import fs from 'fs';
 
 enum MapType {
-    hy = 1,
-    gu = 2
+    hy = 'hy',
+    gu = 'gu'
 }
 
 const config = {
