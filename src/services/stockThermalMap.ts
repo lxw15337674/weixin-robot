@@ -1,6 +1,5 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
+import axios from 'axios';
 import path from 'path';
-import { randomSleep } from '../utils/sleep';
 import fs from 'fs';
 
 enum MapType {
@@ -8,100 +7,57 @@ enum MapType {
     gu = 'gu'
 }
 
-const config = {
-    headless: true,
-    args: ['--no-sandbox',           // Docker 环境必需
-        '--disable-setuid-sandbox', // 配合 no-sandbox
-        '--disable-dev-shm-usage',  // 防止内存问题
-        '--disable-gpu',           // 提高稳定性
-        '--disable-software-rasterizer', // 优化性能
-        '--disable-accelerated-2d-canvas' // 禁用加速
-    ]
-}
-let browser: Browser | null = null;
-let page: Page | null = null;
-let isProcessing = false;
-
-async function getPage(): Promise<Page> {
-    if (!browser) {
-        browser = await puppeteer.launch(config);
-    }
-    if (!page || page.isClosed()) {
-        page = await browser.newPage();
-        await page.setViewport({
-            width: 1920,
-            height: 1080
-        });
-    }
-    return page;
-}
-
 async function getFutuStockMap(symbol: string, mapType: MapType) {
     const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
 
-    if (isProcessing) {
-        // 检查文件是否存在
-        if (fs.existsSync(filePath)) {
-            return filePath;
-        }
-        return '另一个截图任务正在进行中...';
-    }
-
     try {
-        isProcessing = true;
-        mapType = mapType || MapType.hy;
+        // 检查目录是否存在，不存在则创建
+        const dir = path.dirname(filePath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
 
-        const currentPage = await getPage();
-        await currentPage.goto(`https://www.futunn.com/quote/${symbol}/heatmap`, {
-            waitUntil: 'networkidle2'
+        // 通过API获取图片
+        const response = await axios({
+            method: 'GET',
+            url: `https://nest-stock.zeabur.app/getFutuStockMap/${symbol}/${mapType}`,
+            responseType: 'arraybuffer'
         });
 
-        if (mapType === MapType.hy) {
-            await currentPage.click('.select-component.heatmap-list-select');
-            await currentPage.evaluate(() => {
-                const parentElement = document.querySelector('.pouper.max-hgt');
-                (parentElement?.children[1] as HTMLElement)?.click();
-            });
-        }
-
-        await randomSleep(3000, 4000);
-        let view = await currentPage.$('.quote-page.router-page');
-        await view.screenshot({ path: filePath });
-        console.log(`截图成功: ${filePath}`);
-
+        // 将图片数据写入文件
+        fs.writeFileSync(filePath, response.data);
+        console.log(`保存图片成功: ${filePath}`);
         return filePath;
-    } finally {
-        isProcessing = false;
+    } catch (error) {
+        console.error('获取股市热力图失败:', error);
+        throw error;
     }
 }
 
-// 这个功能会导致意外退出，暂时不用
-async function getYuntuStockMap(symbol: string) {
-    const filePath = path.resolve(process.cwd(), `map/yuntu-${symbol}.png`);
-
-    if (isProcessing) {
-        // 检查文件是否存在
-        if (fs.existsSync(filePath)) {
-            return filePath;
-        }
-        return '另一个截图任务正在进行中...';
-    }
+async function getYuntuStockMap() {
+    const filePath = path.resolve(process.cwd(), `map/yuntu.png`);
 
     try {
-        isProcessing = true;
+        // 检查目录是否存在，不存在则创建
+        const dir = path.dirname(filePath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
 
-        const currentPage = await getPage();
-        await currentPage.goto(`https://dapanyuntu.com/`, {
-            waitUntil: 'networkidle2'
+        // 通过API获取图片
+        const response = await axios({
+            method: 'GET',
+            url: `https://nest-stock.zeabur.app/getYuntuStockMap`,
+            responseType: 'arraybuffer'
         });
 
-        await randomSleep(3000, 4000);
-        let view = await currentPage.$('#body');
-        await view.screenshot({ path: filePath });
-        console.log(`截图成功: ${filePath}`);
+        // 将图片数据写入文件
+        fs.writeFileSync(filePath, response.data);
+        console.log(`保存图片成功: ${filePath}`);
         return filePath;
-    } finally {
-        isProcessing = false;
+    } catch (error) {
+        console.error('获取云图失败:', error);
+        throw error;
     }
 }
 

@@ -7,7 +7,7 @@ import { formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
 import { getFutureData, getFutureSuggest } from './future';
 import { getBinanceData } from './binance';
-import {  getYuntuStockMap } from './stockThermalMap';
+import {  getFutuStockMap, getYuntuStockMap, MapType } from './stockThermalMap';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -147,10 +147,10 @@ describe('binance', () => {
 describe('stockThermalMap', () => {
     it('should return thermal map', async () => {
         const results = await Promise.all([
-            // getFutuStockMap('us'),
+            getFutuStockMap('cn', MapType.hy),
             // getFutuStockMap('us'),
             // getFutuStockMap('us')
-            getYuntuStockMap('cn')
+            // getYuntuStockMap()
         ]);
 
         results.forEach(result => {
