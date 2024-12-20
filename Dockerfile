@@ -52,10 +52,12 @@ WORKDIR /app
 COPY package*.json ./
 
 # 使用 bun 安装依赖
-RUN yarn 
+RUN yarn
 
 # 复制其余文件
 COPY . .
 
+EXPOSE 6060
+
 # 使用 bun 运行应用
-CMD ["yarn", "run", "start"]
+CMD ["npm", "run", "start"]
