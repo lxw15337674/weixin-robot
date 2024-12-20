@@ -1,6 +1,6 @@
 {
   "name": "weixin-robot",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -11,7 +11,12 @@
     "lint:fix": "eslint . --fix",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "wechat",
+    "wechaty",
+    "bot",
+    "robot"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
