@@ -9,7 +9,6 @@ enum MapType {
 
 async function getFutuStockMap(symbol: string, mapType: MapType) {
     const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
-
     try {
         // 检查目录是否存在，不存在则创建
         const dir = path.dirname(filePath);
@@ -20,7 +19,8 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
         // 通过API获取图片
         const response = await axios({
             method: 'GET',
-            url: `https://nest-stock.zeabur.app/getFutuStockMap/${symbol}/${mapType}`,
+            timeout:20000,
+            url: `https://nest-stock.zeabur.app/getFutuStockMap/${symbol}/${mapType||'gu'}`,
             responseType: 'arraybuffer'
         });
 
@@ -29,8 +29,8 @@ async function getFutuStockMap(symbol: string, mapType: MapType) {
         console.log(`保存图片成功: ${filePath}`);
         return filePath;
     } catch (error) {
-        console.error('获取股市热力图失败:', error);
-        throw error;
+        console.error('获取股市热力图失败');
+        return ''
     }
 }
 
@@ -47,6 +47,7 @@ async function getYuntuStockMap() {
         // 通过API获取图片
         const response = await axios({
             method: 'GET',
+            timeout: 20000,
             url: `https://nest-stock.zeabur.app/getYuntuStockMap`,
             responseType: 'arraybuffer'
         });
@@ -56,8 +57,8 @@ async function getYuntuStockMap() {
         console.log(`保存图片成功: ${filePath}`);
         return filePath;
     } catch (error) {
-        console.error('获取云图失败:', error);
-        throw error;
+        console.error('获取云图失败:');
+        return ''
     }
 }
 
