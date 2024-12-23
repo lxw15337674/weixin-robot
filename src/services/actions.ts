@@ -2,7 +2,7 @@ import { getAIData } from './ai'
 import { getBinanceData } from './binance'
 import { holiday } from './fishingTime'
 import { getFutureData } from './future'
-import { getStockData, getStockDetailData } from './stock'
+import { getSHStockData, getStockData, getStockDetailData } from './stock'
 import { getFutuStockMap, getYuntuStockMap } from './stockThermalMap'
 import { getWeiboData } from './weibo'
 
@@ -24,7 +24,7 @@ const commandMap = [
   // },
   {
     key: 'ss',
-    callback: () => getStockData('SH000001'),
+    callback: () => getSHStockData(),
     msg: 'ss - 获取上证指数信息',
     hasArgs: false,
   },

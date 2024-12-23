@@ -205,6 +205,59 @@ export async function getStockData(symbol: string): Promise<string> {
     }
 }
 
+
+const SHKeyMap = [
+    {
+        label: '最高价',
+        key: 'high',
+    },
+    {
+        label: '最低价',
+        key: 'low',
+    },
+    {
+        label: '振幅',
+        key: 'amplitude',
+        callback: (value: number) => `${value}%`,
+    },
+    {
+        label: '成交额',
+        key: 'amount',
+        callback: (value: number) => `${formatAmount(value)}`,
+    },
+    {
+        label: '成交量',
+        key: 'volume',
+        callback: (value: number) => `${formatAmount(value)}手`,
+    },
+    {
+        label: '年初至今涨跌幅',
+        key: 'current_year_percent',
+        callback: (value: number) => `${value}%`
+    },
+];
+
+export async function getSHStockData() {
+    try {
+        const { quote } = await getStockBasicData('SH000001')
+        const isGrowing = quote.percent > 0
+        const text = `${quote?.name}(${quote?.symbol}): ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
+        const detailText = SHKeyMap.reduce((prev, current) => {
+            let value = quote[current.key]
+            if (value === undefined || value === null) {
+                return prev
+            }
+            if (current.callback) {
+                value = current.callback(value)
+            }
+            return `${prev}\n${current.label}: ${value}`
+        }, '')
+        return `${text}\n${detailText}`
+    } catch (error) {
+        return `获取上证指数数据失败: ${error.message}`
+    }
+} 
+
 const keyMap = [
     {
         label: '最高价',
