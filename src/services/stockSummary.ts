@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { Decimal } from 'decimal.js';
 
 // 腾讯微证券热点数据
 const URL = "https://wzq.tenpay.com/cgi/cgi-bin/dapan/index?app=wzq%27";
@@ -12,7 +13,6 @@ type Timestamp = string;
 type KLineDataItem = [StringDate, StringNumber, StringNumber];
 
 // 分时数据点
-type MinuteDataItem = [StringNumber, StringNumber, StringNumber];
 
 // 估值区间
 interface ValuationInterval {
@@ -172,13 +172,29 @@ export async function getStockSummary(): Promise<string | undefined> {
         });
         
         const data = response.data.data;
-        const formatAmount = (num: number) => (num > 0 ? `+${num}` : num.toString());
+        
+        // 格式化金额，使用Decimal处理精度
+        const formatAmount = (num: number) => {
+            const isNegative = num < 0;
+            const absNum = Math.abs(num);
+
+            let result = '';
+            if (absNum >= 100000000) { // 亿
+                result = new Decimal(absNum).dividedBy(100000000).toDecimalPlaces(2).toString() + '亿';
+            } else if (absNum >= 10000) { // 万
+                result = new Decimal(absNum).dividedBy(10000).toDecimalPlaces(2).toString() + '万';
+            } else {
+                result = new Decimal(absNum).toDecimalPlaces(2).toString();
+            }
+
+            return isNegative ? '-' + result : result;
+        };
         
         let text = `📊 今日市场概览\n`;
         text += `----------------------------------------\n`;
         text += `💰 成交情况\n`;
-        text += `总成交额: ${data.turnover_dsb.all.amount}亿\n`;
-        text += `较前日: ${formatAmount(data.turnover_dsb.all.amount_change)}亿\n\n`;
+        text += `总成交额: ${formatAmount(data.turnover_dsb.all.amount)}\n`;
+        text += `较前日: ${formatAmount(data.turnover_dsb.all.amount_change)}\n\n`;
         
         text += `📈 市场表现\n`;
         text += `上涨家数: ${data.ups_downs_dsb.up_count}\n`;
@@ -189,14 +205,10 @@ export async function getStockSummary(): Promise<string | undefined> {
         text += `🌏 国际联动\n`;
         text += `${data.global_reaction.comment}\n\n`;
         
-        text += `🔄 北向资金\n`;
-        text += `净流入: ${formatAmount(data.north_bound.fund_flow_net_in)}亿\n\n`;
-        
         text += `📊 估值水平 (历史百分位)\n`;
         text += `上证指数: ${data.index_valuation.sh000001.pe_hist_percentile}%\n`;
         text += `深圳成指: ${data.index_valuation.sz399001.pe_hist_percentile}%\n`;
         text += `创业板: ${data.index_valuation.sz399006.pe_hist_percentile}%\n`;
-        
         return text;
     } catch (error) {
         const axiosError = error as AxiosError;

@@ -9,38 +9,12 @@ import { getFutuStockMap, getYuntuStockMap } from './stockThermalMap'
 import { getWeiboData } from './weibo'
 
 const commandMap = [
-  {
-    key: 'a ',
-    callback: getAIData,
-    msg: 'a [问题] 或 艾特机器人[问题]  - 向国产AI提问 例如: a 鲁迅与周树人的关系是什么？',
-    // 是否存在参数
-    hasArgs: true,
-  },
-  // {
-  //   key: 'mc',
-  //   callback: generateGroupReport,
-  //   msg: 'mc - 获取今日群聊发言排名',
-  //   hasArgs: false,
-  //   // 是否开启功能
-  //   enable: process.env.GROUP_STATISTICS
-  // },
-  {
-    key:'hot',
-    callback: getHotSpot,
-    msg: 'hot - 获取今日热点概念',
-    hasArgs: false,
-  },
+  // 股市相关命令
   {
     key: 'ss',
     callback: () => getSHStockData(),
     msg: 'ss - 获取上证指数信息',
     hasArgs: false,
-  },
-  {
-    key: 'sd ',
-    callback: getStockDetailData,
-    msg: 'sd [股票代码] - 获取股票详细信息 例如: sd gzmt',
-    hasArgs: true,
   },
   {
     key: 's ',
@@ -49,36 +23,56 @@ const commandMap = [
     hasArgs: true,
   },
   {
-    key: 'f ',
-    callback: getFutureData,
-    msg: 'f [期货代码] - 获取期货信息 例如: f XAU',
+    key: 'sd ',
+    callback: getStockDetailData,
+    msg: 'sd [股票代码] - 获取股票详细信息 例如: sd gzmt',
     hasArgs: true,
   },
   {
-    key:'dp',
+    key: 'dp',
     callback: () => getStockSummary(),
     msg: 'dp - 获取大盘市场信息',
+    hasArgs: false,
   },
   {
     key: 'mdp',
     callback: () => getYuntuStockMap(),
-    msg: 'mdp(dapan) - 获取大盘热力图',
+    msg: 'mdp - 获取大盘热力图',
+    hasArgs: false,
   },
   {
     key: 'mcn',
     callback: (symbol) => getFutuStockMap('cn', symbol),
-    msg: 'mcn - 获取富途中国股票市场热力图, 可选参数: [hy|gu] 例如: mcn hy 獲取行業熱力圖，mcn gu 獲取個股熱力圖',
+    msg: 'mcn [hy|gu] - 获取富途A股热力图 (hy:行业图 gu:个股图)',
     hasArgs: true,
   },
   {
     key: 'mhk',
     callback: (symbol) => getFutuStockMap('hk', symbol),
-    msg: 'mhk - 获取富途香港股市场热力图, 可选参数: [hy|gu] 例如: mhk hy 獲取行業熱力圖，mhk gu 獲取個股熱力圖',
+    msg: 'mhk [hy|gu] - 获取富途港股热力图 (hy:行业图 gu:个股图)',
+    hasArgs: true,
   },
   {
     key: 'mus',
     callback: (symbol) => getFutuStockMap('us', symbol),
-    msg: 'mus - 获取富途美股市场热力图, 可选参数: [hy|gu] 例如: mus hy 獲取行業熱力圖，mus gu 獲取個股熱力圖',
+    msg: 'mus [hy|gu] - 获取富途美股热力图 (hy:行业图 gu:个股图)',
+    hasArgs: true,
+  },
+
+  // AI对话
+  {
+    key: 'a ',
+    callback: getAIData,
+    msg: 'a [问题] - AI助手对话 例如: a 鲁迅与周树人的关系',
+    hasArgs: true,
+  },
+
+  // 期货与数字货币
+  {
+    key: 'f ',
+    callback: getFutureData,
+    msg: 'f [期货代码] - 获取期货信息 例如: f XAU',
+    hasArgs: true,
   },
   {
     key: 'b ',
@@ -86,12 +80,22 @@ const commandMap = [
     msg: 'b [货币代码] - 获取数字货币信息 例如: b btc',
     hasArgs: true,
   },
+
+  // 热点资讯
+  {
+    key: 'hot',
+    callback: getHotSpot,
+    msg: 'hot - 获取今日热点概念',
+    hasArgs: false,
+  },
   {
     key: 'wb',
     callback: getWeiboData,
     msg: 'wb - 获取微博热搜',
     hasArgs: false,
   },
+
+  // 其他工具
   {
     key: 'hy',
     callback: holiday,
