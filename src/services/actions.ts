@@ -3,7 +3,7 @@ import { getBinanceData } from './binance'
 import { holiday } from './fishingTime'
 import { getFutureData } from './future'
 import { getHotSpot } from './stockHotSpot'
-import { getSHStockData, getStockData, getStockDetailData } from './stockInfo'
+import { getMarketIndexData, getStockData, getStockDetailData } from './stockInfo'
 import { getStockSummary } from './stockSummary'
 import { getFutuStockMap, getYuntuStockMap, MapType } from './stockThermalMap'
 import { getWeiboData } from './weibo'
@@ -13,7 +13,7 @@ const commandMap: { key: string, callback: (args?: string) => Promise<string>, m
     // 股市相关命令
     {
       key: 'ss',
-      callback: () => getSHStockData(),
+      callback: getMarketIndexData,
       msg: 'ss - 获取上证指数信息，包含大盘涨跌幅、成交量等核心数据',
       hasArgs: false,
     },

@@ -72,6 +72,7 @@ export async function sendRoomImage(bot: Wechaty, imagePath: string, topic: stri
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
+      await randomSleep(1000, 3000);
       if (room) {
         const fileBox = FileBox.fromFile(imagePath)
         await room.say(fileBox);

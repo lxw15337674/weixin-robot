@@ -191,7 +191,7 @@ async function getMultipleStocksData(symbols: string[]): Promise<string[]> {
             const trend = isGrowing ? '📈' : '📉';
             let text = `${quote?.name}(${quote?.symbol})\n`;
             text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%`;
-            
+
             if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
                 const preIsGrowing = quote.percent_ext > 0;
                 const preTrend = preIsGrowing ? '📈' : '📉';
@@ -210,7 +210,7 @@ export async function getStockData(symbol: string): Promise<string> {
         const symbols = symbol.split(/\s+/);  // 按空格分割多个股票代码
         if (symbols.length > 1) {
             const results = await retryWithNewToken(() => getMultipleStocksData(symbols));
-            return results.join('\n');  // 用1个换行符分隔每个股票的数据
+            return results.join('\n\n');  // 用1个换行符分隔每个股票的数据
         }
 
         // 单个股票的处理逻辑
@@ -220,7 +220,7 @@ export async function getStockData(symbol: string): Promise<string> {
             const trend = isGrowing ? '📈' : '📉';
             let text = `${quote?.name}(${quote?.symbol})\n`;
             text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%`;
-            
+
             if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
                 const preIsGrowing = quote.percent_ext > 0;
                 const preTrend = preIsGrowing ? '📈' : '📉';
@@ -234,20 +234,39 @@ export async function getStockData(symbol: string): Promise<string> {
     }
 }
 
-export async function getSHStockData() {
+export async function getMarketIndexData() {
     try {
-        const { quote } = await getStockBasicData('SH000001');
-        const isGrowing = quote.percent > 0;
-        const trend = isGrowing ? '📈' : '📉';
-        let text = `${quote?.name}(${quote?.symbol})\n`;
-        text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%\n`;
-        text += `今日区间：${quote.low}～${quote.high}\n`;
-        text += `成交额：${formatAmount(quote.amount)}\n`;
-        text += `成交量：${formatAmount(quote.volume)}手\n`;
-        text += `年初至今：${quote.current_year_percent > 0 ? '+' : ''}${convertToNumber(quote.current_year_percent)}%`;
+        // 并行获取上证和深证指数数据
+        const [shData, szData] = await Promise.all([
+            getStockBasicData('SH000001'),
+            getStockBasicData('SZ399001')
+        ]);
+
+        // 处理上证指数数据
+        const shQuote = shData.quote;
+        const shIsGrowing = shQuote.percent > 0;
+        const shTrend = shIsGrowing ? '📈' : '📉';
+
+        // 处理深证指数数据
+        const szQuote = szData.quote;
+        const szIsGrowing = szQuote.percent > 0;
+        const szTrend = szIsGrowing ? '📈' : '📉';
+
+        let text = `${shQuote?.name}(${shQuote?.symbol})\n`;
+        text += `现价：${shQuote.current} ${shTrend}${convertToNumber(Math.abs(shQuote.percent))}%\n`;
+        text += `振幅：${convertToNumber(shQuote.amplitude)}%\n`;
+        text += `成交额：${formatAmount(shQuote.amount)}\n`;
+        text += `年初至今：${shQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(shQuote.current_year_percent)}%\n\n`;
+
+        text += `${szQuote?.name}(${szQuote?.symbol})\n`;
+        text += `现价：${szQuote.current} ${szTrend}${convertToNumber(Math.abs(szQuote.percent))}%\n`;
+        text += `振幅：${convertToNumber(szQuote.amplitude)}%\n`;
+        text += `成交额：${formatAmount(szQuote.amount)}\n`;
+        text += `年初至今：${szQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(szQuote.current_year_percent)}%`;
+
         return text;
     } catch (error) {
-        return `获取上证指数失败：${error.message}`;
+        return `获取市场指数失败：${error.message}`;
     }
 }
 
@@ -256,10 +275,10 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         const { quote } = await getStockBasicData(symbol);
         const isGrowing = quote.percent > 0;
         const trend = isGrowing ? '📈' : '📉';
-        
+
         let text = `${quote?.name}(${quote?.symbol})\n`;
         text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%\n`;
-        text += `今日区间：${quote.low}～${quote.high}\n`;
+        text += `振幅：${convertToNumber(quote.amplitude)}%\n`;
         text += `成交均价：${convertToNumber(quote.avg_price)}\n`;
         text += `成交额：${formatAmount(quote.amount)}\n`;
         text += `成交量：${formatAmount(quote.volume)}手\n`;
@@ -268,11 +287,11 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         text += `年初至今：${quote.current_year_percent > 0 ? '+' : ''}${convertToNumber(quote.current_year_percent)}%\n`;
         text += `市盈率TTM：${convertToNumber(quote.pe_ttm || 0)}\n`;
         text += `市净率：${convertToNumber(quote.pb || 0)}`;
-        
+
         if (quote.dividend_yield) {
             text += `\n股息率：${convertToNumber(quote.dividend_yield)}%`;
         }
-        
+
         return text;
     } catch (error) {
         return `获取 ${symbol} 详情失败：${error.message}`;
