@@ -1,7 +1,10 @@
 import Decimal from 'decimal.js';
 
 // 格式化金额，使用Decimal处理精度
-export const formatAmount = (num: number) => {
+export const formatAmount = (num?: number | null) => {
+    if (num === null || num === undefined) {
+        return '';
+    }
     const isNegative = num < 0;
     const absNum = Math.abs(num);
 
@@ -18,6 +21,9 @@ export const formatAmount = (num: number) => {
 };
 
 // 保留两位小数
-export const convertToNumber = (num: number) => {
-    return new Decimal(num).toDecimalPlaces(2).toNumber();
+export const convertToNumber = (num?: number | null) => {
+    if (num === null || num === undefined) {
+        return ''
+    }
+    return new Decimal(num).toDecimalPlaces(2).toString();
 };

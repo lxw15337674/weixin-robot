@@ -241,7 +241,6 @@ export async function getMarketIndexData() {
             getStockBasicData('SH000001'),
             getStockBasicData('SZ399001')
         ]);
-
         // 处理上证指数数据
         const shQuote = shData.quote;
         const shIsGrowing = shQuote.percent > 0;
@@ -263,7 +262,6 @@ export async function getMarketIndexData() {
         text += `振幅：${convertToNumber(szQuote.amplitude)}%\n`;
         text += `成交额：${formatAmount(szQuote.amount)}\n`;
         text += `年初至今：${szQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(szQuote.current_year_percent)}%`;
-
         return text;
     } catch (error) {
         return `获取市场指数失败：${error.message}`;
