@@ -9,6 +9,7 @@ import { getFutureData, getFutureSuggest } from './future';
 import { getBinanceData } from './binance';
 import {  getFutuStockMap, getYuntuStockMap, MapType } from './stockThermalMap';
 import { getHotSpot } from './stockHotSpot';
+import { getStockSummary } from './stockSummary';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -174,3 +175,9 @@ describe('getHotSpot', () => {
 });
 
 
+describe('getStockSummary', () => {
+    it('should fetch stock summary', async () => {
+        const data = await getStockSummary();
+        expect(data).not.toBeNull();
+    });
+});

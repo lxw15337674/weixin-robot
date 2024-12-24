@@ -4,6 +4,7 @@ import { holiday } from './fishingTime'
 import { getFutureData } from './future'
 import { getHotSpot } from './stockHotSpot'
 import { getSHStockData, getStockData, getStockDetailData } from './stockInfo'
+import { getStockSummary } from './stockSummary'
 import { getFutuStockMap, getYuntuStockMap } from './stockThermalMap'
 import { getWeiboData } from './weibo'
 
@@ -54,9 +55,14 @@ const commandMap = [
     hasArgs: true,
   },
   {
-    key: 'dp',
+    key:'dp',
+    callback: () => getStockSummary(),
+    msg: 'dp - 获取大盘市场信息',
+  },
+  {
+    key: 'mdp',
     callback: () => getYuntuStockMap(),
-    msg: 'dp(dapan) - 获取大盘热力图',
+    msg: 'mdp(dapan) - 获取大盘热力图',
   },
   {
     key: 'mcn',
