@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { Decimal } from 'decimal.js';
+import { formatAmount } from "../utils/convertToNumber";
 
 // 腾讯微证券热点数据
 const URL = "https://wzq.tenpay.com/cgi/cgi-bin/dapan/index?app=wzq%27";
@@ -173,23 +174,7 @@ export async function getStockSummary(): Promise<string | undefined> {
         
         const data = response.data.data;
         
-        // 格式化金额，使用Decimal处理精度
-        const formatAmount = (num: number) => {
-            const isNegative = num < 0;
-            const absNum = Math.abs(num);
-
-            let result = '';
-            if (absNum >= 100000000) { // 亿
-                result = new Decimal(absNum).dividedBy(100000000).toDecimalPlaces(2).toString() + '亿';
-            } else if (absNum >= 10000) { // 万
-                result = new Decimal(absNum).dividedBy(10000).toDecimalPlaces(2).toString() + '万';
-            } else {
-                result = new Decimal(absNum).toDecimalPlaces(2).toString();
-            }
-
-            return isNegative ? '-' + result : result;
-        };
-        
+      
         let text = `📊 今日市场概览\n`;
         text += `----------------------------------------\n`;
         text += `💰 成交情况\n`;

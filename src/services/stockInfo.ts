@@ -1,4 +1,4 @@
-import { formatAmount } from '../utils/convertToNumber';
+import { formatAmount, convertToNumber } from '../utils/convertToNumber';
 import axios from 'axios'
 
 interface Market {
@@ -182,158 +182,100 @@ export async function getStockBasicData(symbol: string): Promise<StockData['data
     }
 }
 
+// 新增辅助函数用于并行获取多个股票数据
+async function getMultipleStocksData(symbols: string[]): Promise<string[]> {
+    const promises = symbols.map(async (symbol) => {
+        try {
+            const { quote, market } = await getStockBasicData(symbol);
+            const isGrowing = quote.percent > 0;
+            const trend = isGrowing ? '📈' : '📉';
+            let text = `${quote?.name}(${quote?.symbol})\n`;
+            text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%`;
+            
+            if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
+                const preIsGrowing = quote.percent_ext > 0;
+                const preTrend = preIsGrowing ? '📈' : '📉';
+                text += `\n盘前：${quote.current_ext} ${preTrend}${convertToNumber(Math.abs(quote.percent_ext))}%`;
+            }
+            return text;
+        } catch (error) {
+            return `获取 ${symbol} 失败：${error.message}`;
+        }
+    });
+    return await Promise.all(promises);
+}
+
 export async function getStockData(symbol: string): Promise<string> {
     try {
+        const symbols = symbol.split(/\s+/);  // 按空格分割多个股票代码
+        if (symbols.length > 1) {
+            const results = await retryWithNewToken(() => getMultipleStocksData(symbols));
+            return results.join('\n');  // 用1个换行符分隔每个股票的数据
+        }
+
+        // 单个股票的处理逻辑
         const fetchStockData = async () => {
             const { quote, market } = await getStockBasicData(symbol);
             const isGrowing = quote.percent > 0;
-            let text = `${quote?.name}(${quote?.symbol}): ${quote.current}`;
-            if (quote.percent !== null) {
-                text += ` (${isGrowing ? '📈' : '📉'}${quote.percent.toFixed(2)}%)`;
-            }
-            // 盘前前数据
+            const trend = isGrowing ? '📈' : '📉';
+            let text = `${quote?.name}(${quote?.symbol})\n`;
+            text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%`;
+            
             if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
-                const isGrowing = quote.percent_ext > 0;
-                let extText = `盘前交易:${quote.current_ext} (${isGrowing ? '📈' : '📉'}${quote.percent_ext?.toFixed(2)}%)`;
-                text = `${text}\n${extText}`;
+                const preIsGrowing = quote.percent_ext > 0;
+                const preTrend = preIsGrowing ? '📈' : '📉';
+                text += `\n盘前：${quote.current_ext} ${preTrend}${convertToNumber(Math.abs(quote.percent_ext))}%`;
             }
             return text;
         };
         return await retryWithNewToken(fetchStockData);
     } catch (error) {
-        return `获取股票${symbol}数据失败: ${error.message}`;
+        return `获取 ${symbol} 失败：${error.message}`;
     }
 }
-
-
-const SHKeyMap = [
-    {
-        label: '最高价',
-        key: 'high',
-    },
-    {
-        label: '最低价',
-        key: 'low',
-    },
-    {
-        label: '振幅',
-        key: 'amplitude',
-        callback: (value: number) => `${value}%`,
-    },
-    {
-        label: '成交额',
-        key: 'amount',
-        callback: (value: number) => `${formatAmount(value)}`,
-    },
-    {
-        label: '成交量',
-        key: 'volume',
-        callback: (value: number) => `${formatAmount(value)}手`,
-    },
-    {
-        label: '年初至今涨跌幅',
-        key: 'current_year_percent',
-        callback: (value: number) => `${value}%`
-    },
-];
 
 export async function getSHStockData() {
     try {
-        const { quote } = await getStockBasicData('SH000001')
-        const isGrowing = quote.percent > 0
-        const text = `${quote?.name}(${quote?.symbol}): ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
-        const detailText = SHKeyMap.reduce((prev, current) => {
-            let value = quote[current.key]
-            if (value === undefined || value === null) {
-                return prev
-            }
-            if (current.callback) {
-                value = current.callback(value)
-            }
-            return `${prev}\n${current.label}: ${value}`
-        }, '')
-        return `${text}\n${detailText}`
+        const { quote } = await getStockBasicData('SH000001');
+        const isGrowing = quote.percent > 0;
+        const trend = isGrowing ? '📈' : '📉';
+        let text = `${quote?.name}(${quote?.symbol})\n`;
+        text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%\n`;
+        text += `今日区间：${quote.low}～${quote.high}\n`;
+        text += `成交额：${formatAmount(quote.amount)}\n`;
+        text += `成交量：${formatAmount(quote.volume)}手\n`;
+        text += `年初至今：${quote.current_year_percent > 0 ? '+' : ''}${convertToNumber(quote.current_year_percent)}%`;
+        return text;
     } catch (error) {
-        return `获取上证指数数据失败: ${error.message}`
-    }
-} 
-
-const keyMap = [
-    {
-        label: '最高价',
-        key: 'high',
-    },
-    {
-        label: '最低价',
-        key: 'low',
-    },
-    {
-        label: '平均成交价格',
-        key: 'avg_price'
-    },
-    {
-        label: '振幅',
-        key: 'amplitude',
-        callback: (value: number) => `${value}%`,
-    },
-    {
-        label: '成交额',
-        key: 'amount',
-        callback: (value: number) => `${formatAmount(value)}`,
-    },
-    {
-        label: '成交量',
-        key: 'volume',
-        callback: (value: number) => `${formatAmount(value)}手`,
-    },
-    {
-        label: '换手率',
-        key: 'turnover_rate',
-        callback: (value: number) => `${value}%`,
-    },
-    {
-        label: '总市值',
-        key: 'market_capital',
-        callback: (value: number) => `${formatAmount(value)}`
-    },
-    {
-        label: '年初至今涨跌幅',
-        key: 'current_year_percent',
-        callback: (value: number) => `${value}%`
-    },
-    {
-        label: '市盈率(TTM)',
-        key: 'pe_ttm',
-        callback: (value: number) => `${value}`
-    },
-    {
-        label: '市净率',
-        key: 'pb',
-        callback: (value: number) => `${value}`
-    },
-    {
-        label: '股息率',
-        key: 'dividend_yield',
-        callback: (value: number) => `${value}%`
-    }
-];
-export async function getStockDetailData(symbol: string): Promise<string> {
-    try {
-        const { quote } = await getStockBasicData(symbol)
-        const isGrowing = quote.percent > 0
-        const text = `${quote?.name}(${quote?.symbol}): ${quote.current} (${isGrowing ? '📈' : '📉'}${quote.percent}%)`
-        const detailText = keyMap.reduce((prev, current) => {
-            let value = quote[current.key]
-            if (value === undefined || value === null) {
-                return prev
-            }
-            if (current.callback) {
-                value = current.callback(value)
-            }
-            return `${prev}\n${current.label}: ${value}`
-        }, '')
-        return `${text}\n${detailText}`
-    } catch (error) {
-        return `获取股票${symbol}数据失败: ${error.message}`
+        return `获取上证指数失败：${error.message}`;
     }
 }
+
+export async function getStockDetailData(symbol: string): Promise<string> {
+    try {
+        const { quote } = await getStockBasicData(symbol);
+        const isGrowing = quote.percent > 0;
+        const trend = isGrowing ? '📈' : '📉';
+        
+        let text = `${quote?.name}(${quote?.symbol})\n`;
+        text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%\n`;
+        text += `今日区间：${quote.low}～${quote.high}\n`;
+        text += `成交均价：${convertToNumber(quote.avg_price)}\n`;
+        text += `成交额：${formatAmount(quote.amount)}\n`;
+        text += `成交量：${formatAmount(quote.volume)}手\n`;
+        text += `换手率：${convertToNumber(quote.turnover_rate)}%\n`;
+        text += `总市值：${formatAmount(quote.market_capital)}\n`;
+        text += `年初至今：${quote.current_year_percent > 0 ? '+' : ''}${convertToNumber(quote.current_year_percent)}%\n`;
+        text += `市盈率TTM：${convertToNumber(quote.pe_ttm || 0)}\n`;
+        text += `市净率：${convertToNumber(quote.pb || 0)}`;
+        
+        if (quote.dividend_yield) {
+            text += `\n股息率：${convertToNumber(quote.dividend_yield)}%`;
+        }
+        
+        return text;
+    } catch (error) {
+        return `获取 ${symbol} 详情失败：${error.message}`;
+    }
+}
+

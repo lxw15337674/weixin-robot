@@ -17,8 +17,8 @@ export async function getHotSpot(): Promise<string | undefined> {
             }
         });
         const hotSpot = response.data.data?.concept_data.list as HotSpot[];
-        const string =  hotSpot.map(item => `${item.title}: ${item.desc}`).join('\n');
-        return `今天炒什么:\n${string}`;
+        const formattedList =  hotSpot.map(item => `${item.title}: ${item.desc}`).join('\n');
+        return `📈 今日市场热点概念\n\n${formattedList}`;
     } catch (error) {
         const axiosError = error as AxiosError;
         console.error(`获取热点数据失败: ${axiosError.message}`);
