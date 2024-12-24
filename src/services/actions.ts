@@ -20,7 +20,7 @@ const commandMap: { key: string, callback: (args?: string) => Promise<string>, m
     {
       key: 's ',
       callback: getStockData,
-      msg: 's [股票代码] - 获取股票信息 例如: s gzmt',
+      msg: 's [股票代码] - 获取股票信息,支持一次查询多只股票 例如: s 600519 000858',
       hasArgs: true,
     },
     {
