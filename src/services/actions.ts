@@ -2,7 +2,8 @@ import { getAIData } from './ai'
 import { getBinanceData } from './binance'
 import { holiday } from './fishingTime'
 import { getFutureData } from './future'
-import { getSHStockData, getStockData, getStockDetailData } from './stock'
+import { getHotSpot } from './stockHotSpot'
+import { getSHStockData, getStockData, getStockDetailData } from './stockInfo'
 import { getFutuStockMap, getYuntuStockMap } from './stockThermalMap'
 import { getWeiboData } from './weibo'
 
@@ -22,6 +23,12 @@ const commandMap = [
   //   // 是否开启功能
   //   enable: process.env.GROUP_STATISTICS
   // },
+  {
+    key:'hot',
+    callback: getHotSpot,
+    msg: 'hot - 获取今日热点概念',
+    hasArgs: false,
+  },
   {
     key: 'ss',
     callback: () => getSHStockData(),

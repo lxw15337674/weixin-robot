@@ -13,11 +13,13 @@ const CONFIG = {
     TIMEOUT: 20000
 };
 
-async function retry<T>(fn: () => Promise<T>, retries: number = CONFIG.MAX_RETRIES): Promise<T | ''> {
+type RetryResult<T> = T extends { data: any } ? T | '' : T | '';
+
+async function retry<T>(fn: () => Promise<T>, retries: number = CONFIG.MAX_RETRIES): Promise<RetryResult<T>> {
     try {
-        return await fn();
+        return await fn() as RetryResult<T>;
     } catch (error) {
-        if (retries <= 1) return '';
+        if (retries <= 1) return '' as RetryResult<T>;
         await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
         return retry(fn, retries - 1);
     }

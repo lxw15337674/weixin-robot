@@ -1,4 +1,4 @@
-import { getStockData } from './stock';
+import { getStockData } from './stockInfo';
 import { getWeiboData } from './weibo';
 import { getAIData } from './ai';
 import { afterAll, describe, expect, it } from '@jest/globals';
@@ -8,6 +8,7 @@ import { holiday } from './fishingTime';
 import { getFutureData, getFutureSuggest } from './future';
 import { getBinanceData } from './binance';
 import {  getFutuStockMap, getYuntuStockMap, MapType } from './stockThermalMap';
+import { getHotSpot } from './stockHotSpot';
 
 describe('getWeiboData', () => {
     it('should fetch Weibo data', async () => {
@@ -93,6 +94,7 @@ describe('parseCommand', () => {
         expect(await parseCommand('b')).toBeUndefined();
         expect(await parseCommand('wb ')).toBeUndefined();
         expect(await parseCommand('wb 11')).toBeUndefined();
+        
     });
 
     it('should return data for valid commands', async () => {
@@ -103,6 +105,7 @@ describe('parseCommand', () => {
         expect(await parseCommand('hp')).not.toBeNull();
         expect(await parseCommand('f xau')).not.toBeNull();
         expect(await parseCommand('b btc')).not.toBeNull();
+        expect(await parseCommand('hot')).not.toBeNull();
     });
     it('test US fund', async () => {
         expect(await parseCommand('sd cweb')).not.toBeNull();
@@ -158,4 +161,16 @@ describe('stockThermalMap', () => {
         });
     })
 })
+
+describe('getHotSpot', () => {
+    it('should return hot spot data', async () => {
+        const data = await getHotSpot();
+        expect(data).not.toBeUndefined();
+        if (data) {
+            expect(typeof data).toBe('string');
+            expect(data.length).toBeGreaterThan(0);
+        }
+    });
+});
+
 
