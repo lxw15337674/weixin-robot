@@ -255,13 +255,13 @@ export async function getMarketIndexData() {
         text += `现价：${shQuote.current} ${shTrend}${convertToNumber(shQuote.percent)}%\n`;
         text += `振幅：${convertToNumber(shQuote.amplitude)}%\n`;
         text += `成交额：${formatAmount(shQuote.amount)}\n`;
-        text += `年初至今：${shQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(shQuote.current_year_percent)}%\n\n`;
+        text += `年初至今：${convertToNumber(shQuote.current_year_percent)}%\n\n`;
 
         text += `${szQuote?.name}(${szQuote?.symbol})\n`;
         text += `现价：${szQuote.current} ${szTrend}${convertToNumber(szQuote.percent)}%\n`;
         text += `振幅：${convertToNumber(szQuote.amplitude)}%\n`;
         text += `成交额：${formatAmount(szQuote.amount)}\n`;
-        text += `年初至今：${szQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(szQuote.current_year_percent)}%`;
+        text += `年初至今：${convertToNumber(szQuote.current_year_percent)}%`;
         return text;
     } catch (error) {
         return `获取市场指数失败：${error.message}`;
@@ -282,7 +282,7 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         text += `成交量：${formatAmount(quote.volume)}手\n`;
         text += `换手率：${convertToNumber(quote.turnover_rate)}%\n`;
         text += `总市值：${formatAmount(quote.market_capital)}\n`;
-        text += `年初至今：${quote.current_year_percent > 0 ? '+' : ''}${convertToNumber(quote.current_year_percent)}%\n`;
+        text += `年初至今：${convertToNumber(quote.current_year_percent)}%\n`;
         text += `市盈率TTM：${convertToNumber(quote.pe_ttm || 0)}\n`;
         text += `市净率：${convertToNumber(quote.pb || 0)}`;
 
