@@ -176,7 +176,7 @@ export async function getStockSummary(): Promise<string | undefined> {
         
       
         let text = `📊 今日市场概览\n`;
-        text += `----------------------------------------\n`;
+        text += `----------------------------\n`;
         text += `💰 成交情况\n`;
         text += `总成交额: ${formatAmount(data.turnover_dsb.all.amount)}\n`;
         text += `较前日: ${formatAmount(data.turnover_dsb.all.amount_change)}\n\n`;
@@ -193,7 +193,7 @@ export async function getStockSummary(): Promise<string | undefined> {
         text += `📊 估值水平 (历史百分位)\n`;
         text += `上证指数: ${data.index_valuation.sh000001.pe_hist_percentile}%\n`;
         text += `深圳成指: ${data.index_valuation.sz399001.pe_hist_percentile}%\n`;
-        text += `创业板: ${data.index_valuation.sz399006.pe_hist_percentile}%\n`;
+        text += `创业板: ${data.index_valuation.sz399006.pe_hist_percentile}%`;
         return text;
     } catch (error) {
         const axiosError = error as AxiosError;
