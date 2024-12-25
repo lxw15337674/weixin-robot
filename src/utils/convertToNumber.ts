@@ -26,5 +26,5 @@ export const convertToNumber = (num?: number | null) => {
         return ''
     }
     const value = new Decimal(num).toDecimalPlaces(2).toString();
-    return num > 0 ? '+' + value : value;
+    return value;
 };
