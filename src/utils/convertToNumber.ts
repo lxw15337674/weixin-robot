@@ -20,10 +20,11 @@ export const formatAmount = (num?: number | null) => {
     return isNegative ? '-' + result : result;
 };
 
-// 保留两位小数
+// 保留两位小数并处理正负号
 export const convertToNumber = (num?: number | null) => {
     if (num === null || num === undefined) {
         return ''
     }
-    return new Decimal(num).toDecimalPlaces(2).toString();
+    const value = new Decimal(num).toDecimalPlaces(2).toString();
+    return num > 0 ? '+' + value : value;
 };

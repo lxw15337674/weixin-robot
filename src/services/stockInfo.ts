@@ -190,12 +190,12 @@ async function getMultipleStocksData(symbols: string[]): Promise<string[]> {
             const isGrowing = quote.percent > 0;
             const trend = isGrowing ? '📈' : '📉';
             let text = `${quote?.name}(${quote?.symbol})\n`;
-            text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%`;
+            text += `现价：${quote.current} ${trend}${convertToNumber(quote.percent)}%`;
 
             if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
                 const preIsGrowing = quote.percent_ext > 0;
                 const preTrend = preIsGrowing ? '📈' : '📉';
-                text += `\n盘前：${quote.current_ext} ${preTrend}${convertToNumber(Math.abs(quote.percent_ext))}%`;
+                text += `\n盘前：${quote.current_ext} ${preTrend}${convertToNumber(quote.percent_ext)}%`;
             }
             return text;
         } catch (error) {
@@ -219,12 +219,12 @@ export async function getStockData(symbol: string): Promise<string> {
             const isGrowing = quote.percent > 0;
             const trend = isGrowing ? '📈' : '📉';
             let text = `${quote?.name}(${quote?.symbol})\n`;
-            text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%`;
+            text += `现价：${quote.current} ${trend}${convertToNumber(quote.percent)}%`;
 
             if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
                 const preIsGrowing = quote.percent_ext > 0;
                 const preTrend = preIsGrowing ? '📈' : '📉';
-                text += `\n盘前：${quote.current_ext} ${preTrend}${convertToNumber(Math.abs(quote.percent_ext))}%`;
+                text += `\n盘前：${quote.current_ext} ${preTrend}${convertToNumber(quote.percent_ext)}%`;
             }
             return text;
         };
@@ -252,13 +252,13 @@ export async function getMarketIndexData() {
         const szTrend = szIsGrowing ? '📈' : '📉';
 
         let text = `${shQuote?.name}(${shQuote?.symbol})\n`;
-        text += `现价：${shQuote.current} ${shTrend}${convertToNumber(Math.abs(shQuote.percent))}%\n`;
+        text += `现价：${shQuote.current} ${shTrend}${convertToNumber(shQuote.percent)}%\n`;
         text += `振幅：${convertToNumber(shQuote.amplitude)}%\n`;
         text += `成交额：${formatAmount(shQuote.amount)}\n`;
         text += `年初至今：${shQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(shQuote.current_year_percent)}%\n\n`;
 
         text += `${szQuote?.name}(${szQuote?.symbol})\n`;
-        text += `现价：${szQuote.current} ${szTrend}${convertToNumber(Math.abs(szQuote.percent))}%\n`;
+        text += `现价：${szQuote.current} ${szTrend}${convertToNumber(szQuote.percent)}%\n`;
         text += `振幅：${convertToNumber(szQuote.amplitude)}%\n`;
         text += `成交额：${formatAmount(szQuote.amount)}\n`;
         text += `年初至今：${szQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(szQuote.current_year_percent)}%`;
@@ -275,7 +275,7 @@ export async function getStockDetailData(symbol: string): Promise<string> {
         const trend = isGrowing ? '📈' : '📉';
 
         let text = `${quote?.name}(${quote?.symbol})\n`;
-        text += `现价：${quote.current} ${trend}${convertToNumber(Math.abs(quote.percent))}%\n`;
+        text += `现价：${quote.current} ${trend}${convertToNumber(quote.percent)}%\n`;
         text += `振幅：${convertToNumber(quote.amplitude)}%\n`;
         text += `成交均价：${convertToNumber(quote.avg_price)}\n`;
         text += `成交额：${formatAmount(quote.amount)}\n`;
