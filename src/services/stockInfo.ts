@@ -189,8 +189,7 @@ async function getMultipleStocksData(symbols: string[]): Promise<string[]> {
             const { quote, market } = await getStockBasicData(symbol);
             const isGrowing = quote.percent > 0;
             const trend = isGrowing ? '📈' : '📉';
-            let text = `${quote?.name}(${quote?.symbol})\n`;
-            text += `现价：${quote.current} ${trend}${isGrowing ? '+' : ''}${convertToNumber(quote.percent)}%`;
+            let text = `${quote?.name}(${quote?.symbol}): ${quote.current} (${trend}${isGrowing ? '+' : ''}${convertToNumber(quote.percent)}%)`;
 
             if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
                 const preIsGrowing = quote.percent_ext > 0;
@@ -208,27 +207,8 @@ async function getMultipleStocksData(symbols: string[]): Promise<string[]> {
 export async function getStockData(symbol: string): Promise<string> {
     try {
         const symbols = symbol.split(/\s+/);  // 按空格分割多个股票代码
-        if (symbols.length > 1) {
-            const results = await retryWithNewToken(() => getMultipleStocksData(symbols));
-            return results.join('\n\n');  // 用1个换行符分隔每个股票的数据
-        }
-
-        // 单个股票的处理逻辑
-        const fetchStockData = async () => {
-            const { quote, market } = await getStockBasicData(symbol);
-            const isGrowing = quote.percent > 0;
-            const trend = isGrowing ? '📈' : '📉';
-            let text = `${quote?.name}(${quote?.symbol})\n`;
-            text += `现价：${quote.current} ${trend}${isGrowing ? '+' : ''}${convertToNumber(quote.percent)}%`;
-
-            if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
-                const preIsGrowing = quote.percent_ext > 0;
-                const preTrend = preIsGrowing ? '📈' : '📉';
-                text += `\n盘前：${quote.current_ext} ${preTrend}${preIsGrowing ? '+' : ''}${convertToNumber(quote.percent_ext)}%`;
-            }
-            return text;
-        };
-        return await retryWithNewToken(fetchStockData);
+        const results = await retryWithNewToken(() => getMultipleStocksData(symbols));
+        return results.join('\n\n');  // 用1个换行符分隔每个股票的数据
     } catch (error) {
         return `获取 ${symbol} 失败：${error.message}`;
     }

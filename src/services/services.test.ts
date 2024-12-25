@@ -61,8 +61,8 @@ describe('Market Data Tests', () => {
         // 多股票查询测试
         describe('Multiple Stocks Query Tests', () => {
             it('should handle multiple stocks with different separators', async () => {
-                const data1 = await getStockData('tx pa');
-                const data2 = await getStockData('tx  pa  jd');
+                const data1 = await getStockData('tx xm');
+                const data2 = await getStockData('google apple msft');
                 expect(data1.split('\n\n').length).toBe(2);
                 expect(data2.split('\n\n').length).toBe(3);
             });
