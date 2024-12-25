@@ -194,7 +194,7 @@ async function getMultipleStocksData(symbols: string[]): Promise<string[]> {
             if (quote.current_ext && quote.percent_ext && quote.current !== quote.current_ext && market.status_id !== 5) {
                 const preIsGrowing = quote.percent_ext > 0;
                 const preTrend = preIsGrowing ? '📈' : '📉';
-                text += `\n盘前：${quote.current_ext} ${preTrend}${preIsGrowing ? '+' : ''}${convertToNumber(quote.percent_ext)}%`;
+                text += `\n盘前：${quote.current_ext} (${preTrend}${preIsGrowing ? '+' : ''}${convertToNumber(quote.percent_ext)}%)`;
             }
             return text;
         } catch (error) {
