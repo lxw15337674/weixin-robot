@@ -3,7 +3,7 @@ import { getWeiboData } from './weibo';
 import { getAIData } from './ai';
 import { describe, expect, it } from '@jest/globals';
 import { parseCommand } from './actions';
-import { formatAmount } from '../utils/convertToNumber';
+import { convertToNumber, formatAmount } from '../utils/convertToNumber';
 import { holiday } from './fishingTime';
 import { getFutureData, getFutureSuggest } from './future';
 import { getBinanceData } from './binance';
@@ -17,7 +17,7 @@ describe('Market Data Tests', () => {
         // A股测试
         describe('A-Share Tests', () => {
             it('should return data for valid A-share code with prefix', async () => {
-                const data = await getStockData('SH600519');
+                const data = await getStockData('SZ300664');
                 expect(data).not.toMatch(/失败/);
             });
 
@@ -165,5 +165,44 @@ describe('Service Tests', () => {
             const data = await getStockSummary();
             expect(data).not.toBeNull();
         });
+    });
+});
+
+
+
+describe('convertToNumber', () => {
+    // 测试空值处理
+    it('应该正确处理 null 和 undefined', () => {
+        expect(convertToNumber(null)).toBe('');
+        expect(convertToNumber(undefined)).toBe('');
+    });
+
+    // 测试正数截断
+    it('应该正确截断正数小数位', () => {
+        expect(convertToNumber(123.456)).toBe('123.45');  // 直接截断不四舍五入
+        expect(convertToNumber(123.999)).toBe('123.99');  // 直接截断不四舍五入
+        expect(convertToNumber(123)).toBe('123.00');
+        expect(convertToNumber(0.1)).toBe('0.10');
+    });
+
+    // 测试负数截断
+    it('应该正确截断负数小数位', () => {
+        expect(convertToNumber(-123.456)).toBe('-123.45'); // 直接截断不四舍五入
+        expect(convertToNumber(-123.999)).toBe('-123.99'); // 直接截断不四舍五入
+        expect(convertToNumber(-123)).toBe('-123.00');
+        expect(convertToNumber(-0.1)).toBe('-0.10');
+    });
+
+    // 测试零值
+    it('应该正确处理零', () => {
+        expect(convertToNumber(0)).toBe('0.00');
+        expect(convertToNumber(-0)).toBe('0.00');
+    });
+
+    // 测试极小值截断
+    it('应该正确截断极小值', () => {
+        expect(convertToNumber(0.001)).toBe('0.00');
+        expect(convertToNumber(0.999)).toBe('0.99');  // 直接截断不四舍五入
+        expect(convertToNumber(-0.999)).toBe('-0.99'); // 直接截断不四舍五入
     });
 });

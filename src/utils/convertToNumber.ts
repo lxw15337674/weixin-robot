@@ -21,10 +21,33 @@ export const formatAmount = (num?: number | null) => {
 };
 
 // 保留两位小数并处理正负号
-export const convertToNumber = (num?: number | null) => {
+
+export const convertToNumber = (num?: number | null): string => {
     if (num === null || num === undefined) {
-        return ''
+        return '';
     }
-    const value = new Decimal(num).toDecimalPlaces(2).toString();
-    return value;
+
+    // 使用 Decimal 处理数字
+    const decimalNum = new Decimal(num);
+
+    // 保留两位小数，截断而不是四舍五入
+    const truncated = decimalNum.toDecimalPlaces(2, Decimal.ROUND_DOWN);
+
+    // 处理负零的情况
+    if (truncated.isZero()) {
+        return '0.00';
+    }
+
+    // 处理负号
+    const isNegative = truncated.isNegative();
+    const absoluteValue = truncated.abs();
+
+    // 转换为字符串并确保两位小数
+    const [integerPart, decimalPart = '00'] = absoluteValue.toString().split('.');
+
+    // 补全小数部分
+    const paddedDecimalPart = decimalPart.padEnd(2, '0');
+
+    // 拼接结果
+    return `${isNegative ? '-' : ''}${integerPart}.${paddedDecimalPart}`;
 };
