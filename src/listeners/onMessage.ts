@@ -113,6 +113,9 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   const func = parseCommand(content, room.id);
   if (func) {
     const response = await func;
+    if (!response) {
+      return
+    }
     if (Buffer.isBuffer(response)) {
       log.info(`根据命令【${content}】返回图片`);
       await sendRoomImage(bot, response, topic);
@@ -141,7 +144,9 @@ async function dispatchFriendTextMsg(msg: Message) {
 
   const func = parseCommand(content);
   let response = func ? await func : await getAIData(content);
-
+  if (!response) {
+    return
+  }
   if (Buffer.isBuffer(response)) {
     log.info(`根据命令【${content}】返回图片`);
     await sendContactImage(bot, response, alias, name);

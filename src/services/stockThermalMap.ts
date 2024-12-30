@@ -57,7 +57,7 @@ async function getPage(): Promise<Page> {
     return page;
 }
 
-async function getFutuStockMap(area: string, mapType: string): Promise<Buffer> {
+async function getFutuStockMap(area: string, mapType: string): Promise<Buffer | null> {
     const cacheKey = `futu-${area}-${mapType}`;
     const now = Date.now();
 
@@ -69,7 +69,7 @@ async function getFutuStockMap(area: string, mapType: string): Promise<Buffer> {
 
     if (isFutuProcessing) {
         console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: Futu ${area}-${mapType}`);
-        return stockMapCache[cacheKey].buffer;
+        return stockMapCache[cacheKey]?.buffer || null;
     }
 
     try {
@@ -107,7 +107,7 @@ async function getFutuStockMap(area: string, mapType: string): Promise<Buffer> {
         return buffer;
     } catch (error) {
         console.error(`[${new Date().toLocaleString()}] Futu 行情图获取失败:`, error);
-        return stockMapCache[cacheKey].buffer;
+        return stockMapCache[cacheKey]?.buffer || null;
     } finally {
         isFutuProcessing = false;
     }
@@ -124,7 +124,7 @@ async function getYuntuStockMap(): Promise<Buffer | null> {
 
     if (isYuntuProcessing) {
         console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: 云图`);
-        return stockMapCache[cacheKey]?.buffer;
+        return stockMapCache[cacheKey]?.buffer || null;
     }
 
     try {
@@ -149,7 +149,7 @@ async function getYuntuStockMap(): Promise<Buffer | null> {
         return buffer;
     } catch (error) {
         console.error(`[${new Date().toLocaleString()}] 云图获取失败:`, error);
-        return stockMapCache[cacheKey].buffer;
+        return stockMapCache[cacheKey]?.buffer || null;
     } finally {
         isYuntuProcessing = false;
     }
