@@ -1,15 +1,15 @@
-import { getStockData } from './stockInfo';
-import { getWeiboData } from './weibo';
-import { getAIData } from './ai';
+import { getStockData } from '../stockInfo';
+import { getWeiboData } from '../weibo';
+import { getAIData } from '../ai';
 import { describe, expect, it } from '@jest/globals';
-import { parseCommand } from './actions';
-import { convertToNumber, formatAmount } from '../utils/convertToNumber';
-import { holiday } from './fishingTime';
-import { getFutureData, getFutureSuggest } from './future';
-import { getBinanceData } from './binance';
-import { getFutuStockMap, MapType } from './stockThermalMap';
-import { getHotSpot } from './stockHotSpot';
-import { getStockSummary } from './stockSummary';
+import { parseCommand } from '../actions';
+import { convertToNumber, formatAmount } from '../../utils/convertToNumber';
+import { holiday } from '../fishingTime';
+import { getFutureData, getFutureSuggest } from '../future';
+import { getBinanceData } from '../binance';
+import { getFutuStockMap, MapType } from '../stockThermalMap';
+import { getHotSpot } from '../stockHotSpot';
+import { getStockSummary } from '../stockSummary';
 
 // 市场数据相关测试
 describe('Market Data Tests', () => {

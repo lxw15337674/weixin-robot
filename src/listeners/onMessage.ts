@@ -99,28 +99,31 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   if (GroupStatistics) {
     messageCount(room.id, topic, contact.id, name)
   }
-  // const isMentionSelf = await msg.mentionSelf();
-  // if (isMentionSelf) {
-  //   return
-  // }
+
   // 判断是否在群聊中被 @
-  if (room && await msg.mentionSelf()) {
+  if (await msg.mentionSelf()) {
     const response = await getAIData(content);
-    log.info(`根据命令【${content}】返回消息：${response}`);
-    await sendRoomMsg(bot, response, topic);
+    if (typeof response === 'string') {
+      log.info(`根据@消息【${content}】返回消息：${response}`);
+      await sendRoomMsg(bot, response, topic);
+    }
     return;
   }
 
   const func = parseCommand(content, room.id);
   if (func) {
     const response = await func;
-    if (response.endsWith('.png')) {
-      log.info(`根据命令【${content}】返回图片：${response}`);
+    if (Buffer.isBuffer(response)) {
+      log.info(`根据命令【${content}】返回图片`);
       await sendRoomImage(bot, response, topic);
-    } else {
+      return;
+    }
+    if (typeof response === 'string') {
       log.info(`根据命令【${content}】返回消息：${response}`);
       await sendRoomMsg(bot, response, topic);
+      return;
     }
+    log.warn(`未知的响应类型: ${typeof response}`);
   }
 }
 
@@ -139,13 +142,17 @@ async function dispatchFriendTextMsg(msg: Message) {
   const func = parseCommand(content);
   let response = func ? await func : await getAIData(content);
 
-  if (response.endsWith('.png')) {
-    log.info(`根据命令【${content}】返回图片：${response}`);
+  if (Buffer.isBuffer(response)) {
+    log.info(`根据命令【${content}】返回图片`);
     await sendContactImage(bot, response, alias, name);
-  } else {
+    return
+  }
+  if (typeof response === 'string') {
     log.info(`根据命令【${content}】返回消息：${response}`);
     await sendContactMsg(bot, response, alias, name);
+    return
   }
+  log.warn(`未知的响应类型: ${typeof response}`);
 }
 
 

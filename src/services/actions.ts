@@ -8,7 +8,7 @@ import { getStockSummary } from './stockSummary'
 import { getFutuStockMap, getYuntuStockMap, MapType } from './stockThermalMap'
 import { getWeiboData } from './weibo'
 
-const commandMap: { key: string, callback: (args?: string) => Promise<string>, msg: string, hasArgs: boolean, enable?: boolean }[]
+const commandMap: { key: string, callback: (args?: string) => Promise<string|Buffer>, msg: string, hasArgs: boolean, enable?: boolean }[]
   = [
     // 股市相关命令
     {
@@ -111,7 +111,7 @@ const commandMap: { key: string, callback: (args?: string) => Promise<string>, m
     },
   ];
 // 解析命令
-export function parseCommand(msg: string, roomId?: string): Promise<string> {
+export function parseCommand(msg: string, roomId?: string): Promise<string | Buffer> {
   for (const command of commandMap) {
     if (command.hasArgs) {
       if (msg.startsWith(command.key)) {

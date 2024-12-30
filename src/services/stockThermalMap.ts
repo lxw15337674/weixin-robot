@@ -1,104 +1,158 @@
-import axios, { AxiosError } from 'axios';
-import path from 'path';
-import fs from 'fs';
+import { Browser, Page, chromium } from 'playwright';
 
-enum MapType {
+export enum MapType {
     hy = 'hy',
     gu = 'gu'
 }
+export enum Area {
+    'hk' = 'hk',
+    'us' = 'us',
+    'cn' = 'cn'
+}
+const config = {
+    headless: true,
+    args: ['--no-sandbox',           // Docker 环境必需
+        '--disable-setuid-sandbox', // 配合 no-sandbox
+    ]
+}
+let browser: Browser | null = null;
+let page: Page | null = null;
+let isFutuProcessing = false;
+let isYuntuProcessing = false;
+// 缓存变量
+interface CacheData {
+    buffer: Buffer;
+    updateTime: number;
+}
 
-const CONFIG = {
-    MAX_RETRIES: 3,
-    RETRY_DELAY: 1000,
-    TIMEOUT: 20000
-};
+interface StockMapCache {
+    [key: string]: CacheData;
+}
 
-type RetryResult<T> = T extends { data: any } ? T | '' : T | '';
+let stockMapCache: StockMapCache = {};
+const CACHE_EXPIRE_TIME = 1 * 60 * 1000; // 1分钟缓存过期
 
-async function retry<T>(fn: () => Promise<T>, retries: number = CONFIG.MAX_RETRIES): Promise<RetryResult<T>> {
+// 清理过期缓存
+function clearExpiredCache() {
+    const now = Date.now();
+    Object.keys(stockMapCache).forEach(key => {
+        if (now - stockMapCache[key].updateTime > CACHE_EXPIRE_TIME) {
+            delete stockMapCache[key];
+        }
+    });
+}
+
+async function getPage(): Promise<Page> {
+    if (!browser) {
+        browser = await chromium.launch(config);
+    }
+    if (!page) {
+        const context = await browser.newContext();
+        page = await context.newPage();
+        await page.setViewportSize({
+            width: 1920,
+            height: 1080
+        });
+    }
+    return page;
+}
+
+async function getFutuStockMap(area: string, mapType: string): Promise<Buffer> {
+    const cacheKey = `futu-${area}-${mapType}`;
+    const now = Date.now();
+
+    // 检查缓存
+    if (stockMapCache[cacheKey] && now - stockMapCache[cacheKey].updateTime < CACHE_EXPIRE_TIME) {
+        console.log(`[${new Date().toLocaleString()}] 命中缓存: Futu ${area}-${mapType}`);
+        return stockMapCache[cacheKey].buffer;
+    }
+
+    if (isFutuProcessing) {
+        console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: Futu ${area}-${mapType}`);
+        return stockMapCache[cacheKey].buffer;
+    }
+
     try {
-        return await fn() as RetryResult<T>;
+        isFutuProcessing = true;
+        console.log(`[${new Date().toLocaleString()}] 开始获取 Futu 行情图: ${area}-${mapType}`);
+        clearExpiredCache();
+
+        // 参数校验
+        if (!Object.values(Area).includes(area as Area)) {
+            area = Area.cn;
+        }
+        if (!Object.values(MapType).includes(mapType as MapType)) {
+            mapType = MapType.gu;
+        }
+
+        const currentPage = await getPage();
+        await currentPage.goto(`https://www.futunn.com/quote/${area}/heatmap`, {
+            waitUntil: 'networkidle'
+        });
+        if (mapType === MapType.hy) {
+            await currentPage.click('.select-component.heatmap-list-select');
+            await currentPage.evaluate(() => {
+                const parentElement = document.querySelector('.pouper.max-hgt');
+                (parentElement?.children[1] as HTMLElement)?.click();
+            });
+        }
+        await currentPage.waitForTimeout(3000);
+        const view = await currentPage.locator('.quote-page.router-page');
+        const buffer = await view.screenshot() as Buffer;
+        stockMapCache[cacheKey] = {
+            buffer,
+            updateTime: now
+        };
+        console.log(`[${new Date().toLocaleString()}] Futu 行情图更新成功: ${area}-${mapType}`);
+        return buffer;
     } catch (error) {
-        if (retries <= 1) return '' as RetryResult<T>;
-        await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
-        return retry(fn, retries - 1);
+        console.error(`[${new Date().toLocaleString()}] Futu 行情图获取失败:`, error);
+        return stockMapCache[cacheKey].buffer;
+    } finally {
+        isFutuProcessing = false;
     }
 }
 
-async function getFutuStockMap(symbol: string, mapType: MapType) {
-    const filePath = path.resolve(process.cwd(), `map/futu-${symbol}-${mapType}.png`);
-    
-    try {
-        const dir = path.dirname(filePath);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
+async function getYuntuStockMap(): Promise<Buffer | null> {
+    const cacheKey = 'yuntu';
+    const now = Date.now();
 
-        const response = await retry(async () => {
-            try {
-                return await axios({
-                    method: 'GET',
-                    timeout: CONFIG.TIMEOUT,
-                    url: `https://nest-stock.zeabur.app/getFutuStockMap/${symbol}/${mapType||'gu'}`,
-                    responseType: 'arraybuffer'
-                });
-            } catch (error) {
-                const axiosError = error as AxiosError;
-                console.error(`获取富途股市热力图失败: ${axiosError.message}`);
-                return '';
-            }
+    if (stockMapCache[cacheKey] && now - stockMapCache[cacheKey].updateTime < CACHE_EXPIRE_TIME) {
+        console.log(`[${new Date().toLocaleString()}] 命中缓存: 云图`);
+        return stockMapCache[cacheKey].buffer;
+    }
+
+    if (isYuntuProcessing) {
+        console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: 云图`);
+        return stockMapCache[cacheKey]?.buffer;
+    }
+
+    try {
+        isYuntuProcessing = true;
+        console.log(`[${new Date().toLocaleString()}] 开始获取云图行情`);
+        clearExpiredCache();
+
+        const currentPage = await getPage();
+        await currentPage.goto(`https://dapanyuntu.com/`, {
+            waitUntil: 'networkidle'
         });
 
-        if (!response || !response.data || response.data.length === 0) {
-            console.error('接收到的图片数据为空');
-            return '';
-        }
+        await currentPage.waitForTimeout(8000);
+        const view = await currentPage.locator('#body');
+        const buffer = await view.screenshot() as Buffer;
+        stockMapCache[cacheKey] = {
+            buffer,
+            updateTime: now
+        };
+        console.log(`[${new Date().toLocaleString()}] 云图行情更新成功`);
 
-        await fs.promises.writeFile(filePath, response.data);
-        console.log(`保存富途热力图成功: ${filePath}`);
-        return filePath;
+        return buffer;
     } catch (error) {
-        console.error(`处理富途热力图失败: ${error instanceof Error ? error.message : '未知错误'}`);
-        return '';
+        console.error(`[${new Date().toLocaleString()}] 云图获取失败:`, error);
+        return stockMapCache[cacheKey].buffer;
+    } finally {
+        isYuntuProcessing = false;
     }
 }
 
-async function getYuntuStockMap() {
-    const filePath = path.resolve(process.cwd(), `map/yuntu.png`);
-
-    try {
-        const dir = path.dirname(filePath);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-
-        const response = await retry(async () => {
-            try {
-                return await axios({
-                    method: 'GET',
-                    timeout: CONFIG.TIMEOUT,
-                    url: `https://nest-stock.zeabur.app/getYuntuStockMap`,
-                    responseType: 'arraybuffer'
-                });
-            } catch (error) {
-                const axiosError = error as AxiosError;
-                console.error(`获取云图失败: ${axiosError.message}`);
-                return '';
-            }
-        });
-
-        if (!response || !response.data || response.data.length === 0) {
-            console.error('接收到的图片数据为空');
-            return '';
-        }
-
-        await fs.promises.writeFile(filePath, response.data);
-        console.log(`保存云图成功: ${filePath}`);
-        return filePath;
-    } catch (error) {
-        console.error(`处理云图失败: ${error instanceof Error ? error.message : '未知错误'}`);
-        return '';
-    }
-}
-
-export { getFutuStockMap, MapType, getYuntuStockMap };
+export { getFutuStockMap, getYuntuStockMap };

@@ -51,13 +51,14 @@ WORKDIR /app
 # 复制 package.json
 COPY package*.json ./
 
-# 使用 bun 安装依赖
-RUN yarn
+# 安装依赖
+RUN yarn && \
+    npx playwright install-deps chromium && \
+    npx playwright install chromium
 
 # 复制其余文件
 COPY . .
 
 EXPOSE 6060
 
-# 使用 bun 运行应用
 CMD ["npm", "run", "start"]
