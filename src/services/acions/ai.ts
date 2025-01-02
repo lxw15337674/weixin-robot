@@ -23,7 +23,7 @@ async function getAIData(content: string) {
             }],
         });
         const msg=  `${completion.choices[0].message.content}`;
-        
+        return msg
     } catch (e) {
         return '哎呦 你干嘛！坤哥累了，不想回答！';
     }
