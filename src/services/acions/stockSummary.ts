@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { Decimal } from 'decimal.js';
-import { formatAmount } from "../utils/convertToNumber";
+import { formatAmount } from "../../utils/convertToNumber";
 
 // 腾讯微证券热点数据
 const URL = "https://wzq.tenpay.com/cgi/cgi-bin/dapan/index?app=wzq%27";

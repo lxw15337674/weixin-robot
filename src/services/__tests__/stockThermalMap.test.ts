@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, jest } from '@jest/globals';
-import { getFutuStockMap, getYuntuStockMap, MapType, Area } from '../stockThermalMap';
+import { getFutuStockMap, getYuntuStockMap, MapType, Area } from '../acions/stockThermalMap';
 
 describe('Stock Thermal Map Service', () => {
     afterEach(() => {

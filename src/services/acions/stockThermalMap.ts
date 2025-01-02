@@ -1,5 +1,5 @@
 import { Browser, Page, chromium } from 'playwright';
-import { saveBufferToImage } from '../utils/save';
+import { saveBufferToImage } from '../../utils/save';
 
 export enum MapType {
     hy = 'hy',

@@ -1,4 +1,4 @@
-import { formatAmount, convertToNumber } from '../utils/convertToNumber';
+import { formatAmount, convertToNumber } from '../../utils/convertToNumber';
 import axios from 'axios'
 
 interface Market {

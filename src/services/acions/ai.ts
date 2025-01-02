@@ -22,7 +22,8 @@ async function getAIData(content: string) {
                 role: "user", content
             }],
         });
-        return `${completion.choices[0].message.content}`;
+        const msg=  `${completion.choices[0].message.content}`;
+        
     } catch (e) {
         return '哎呦 你干嘛！坤哥累了，不想回答！';
     }

@@ -1,14 +1,21 @@
-import { getAIData } from './ai'
-import { getBinanceData } from './binance'
-import { holiday } from './fishingTime'
-import { getFutureData } from './future'
-import { getHotSpot } from './stockHotSpot'
-import { getMarketIndexData, getStockData, getStockDetailData } from './stockInfo'
-import { getStockSummary } from './stockSummary'
-import { getFutuStockMap, getYuntuStockMap, MapType } from './stockThermalMap'
-import { getWeiboData } from './weibo'
+import { getAIData } from './acions/ai'
+import { getBinanceData } from './acions/binance'
+import { holiday } from './acions/fishingTime'
+import { getFutureData } from './acions/future'
+import { repeatMessage } from './acions/repeatMessage'
+import { getHotSpot } from './acions/stockHotSpot'
+import { getMarketIndexData, getStockData, getStockDetailData } from './acions/stockInfo'
+import { getStockSummary } from './acions/stockSummary'
+import { getFutuStockMap, getYuntuStockMap, MapType } from './acions/stockThermalMap'
+import { getWeiboData } from './acions/weibo'
 
-const commandMap: { key: string, callback: (args?: string) => Promise<string>, msg: string, hasArgs: boolean, enable?: boolean }[]
+export interface CommandParams {
+  args?: string,
+  sendMessage: (content: string) => void,
+  key: string,
+  roomId?: string
+}
+const commandMap: { key: string, callback: (params: CommandParams) => Promise<string>, msg: string, hasArgs: boolean, enable?: boolean }[]
   = [
     // 股市相关命令
     {
@@ -19,43 +26,43 @@ const commandMap: { key: string, callback: (args?: string) => Promise<string>, m
     },
     {
       key: 's ',
-      callback: getStockData,
+      callback: (params) => getStockData(params.args),
       msg: 's [股票代码] - 获取股票信息,支持一次查询多只股票 例如: s 600519 000858',
       hasArgs: true,
     },
     {
       key: 'sd ',
-      callback: getStockDetailData,
+      callback: (params) => getStockDetailData(params.args),
       msg: 'sd [股票代码] - 获取股票详细信息 例如: sd gzmt',
       hasArgs: true,
     },
     {
       key: 'dp',
-      callback: () => getStockSummary(),
+      callback: getStockSummary,
       msg: 'dp - 获取大盘市场信息，包括涨跌家数、板块概览等',
       hasArgs: false,
     },
     {
       key: 'mdp',
-      callback: () => getYuntuStockMap(),
+      callback: getYuntuStockMap,
       msg: 'mdp - 获取云图大盘热力图，直观展示市场热点分布',
       hasArgs: false,
     },
     {
       key: 'mcn',
-      callback: (symbol) => getFutuStockMap('cn', symbol as MapType),
+      callback: (params) => getFutuStockMap('cn', params.args as MapType),
       msg: 'mcn [hy|gu] - 获取富途A股热力图 (hy:行业图 gu:个股图)',
       hasArgs: true,
     },
     {
       key: 'mhk',
-      callback: (symbol) => getFutuStockMap('hk', symbol as MapType),
+      callback: (params) => getFutuStockMap('hk', params.args as MapType),
       msg: 'mhk [hy|gu] - 获取富途港股热力图 (hy:行业图 gu:个股图)',
       hasArgs: true,
     },
     {
       key: 'mus',
-      callback: (symbol) => getFutuStockMap('us', symbol as MapType),
+      callback: (params) => getFutuStockMap('us', params.args as MapType),
       msg: 'mus [hy|gu] - 获取富途美股热力图 (hy:行业图 gu:个股图)',
       hasArgs: true,
     },
@@ -63,7 +70,7 @@ const commandMap: { key: string, callback: (args?: string) => Promise<string>, m
     // AI对话
     {
       key: 'a ',
-      callback: getAIData,
+      callback: (params) => getAIData(params.args),
       msg: 'a [问题] - AI助手对话 例如: a 鲁迅与周树人的关系',
       hasArgs: true,
     },
@@ -71,13 +78,13 @@ const commandMap: { key: string, callback: (args?: string) => Promise<string>, m
     // 期货与数字货币
     {
       key: 'f ',
-      callback: getFutureData,
+      callback: (params) => getFutureData(params.args),
       msg: 'f [期货代码] - 获取期货信息 例如: f XAU',
       hasArgs: true,
     },
     {
       key: 'b ',
-      callback: getBinanceData,
+      callback: (params) => getBinanceData(params.args),
       msg: 'b [货币代码] - 获取数字货币信息 例如: b btc',
       hasArgs: true,
     },
@@ -109,19 +116,22 @@ const commandMap: { key: string, callback: (args?: string) => Promise<string>, m
       msg: 'hp - 获取命令帮助',
       hasArgs: false,
     },
+    // 复读
+    {
+      key: 're',
+      callback: repeatMessage,
+      msg: 're [文本] - 复读机器人',
+      hasArgs: true,
+    }
   ];
 // 解析命令
-export function parseCommand(msg: string, roomId?: string): Promise<string > {
+export async function parseCommand(msg: string, sendMessage: (content: string) => void, roomId?: string) {
   for (const command of commandMap) {
-    if (command.hasArgs) {
-      if (msg.startsWith(command.key)) {
-        // 解析后面的参数
-        const args = msg.slice(command.key.length).trim()
-        return command.callback(args)
-      }
-    } else {
-      if (msg === command.key) {
-        return command.callback(roomId)
+    if (msg.startsWith(command.key)) {
+      const args = msg.slice(command.key.length).trim()
+      const content = await command.callback({ args, sendMessage, key: command.key, roomId })
+      if (content) {
+        await sendMessage(content)
       }
     }
   }

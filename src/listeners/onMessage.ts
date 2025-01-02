@@ -1,9 +1,9 @@
 import { log } from 'wechaty'
 import type { Message, Room } from 'wechaty'
 import { sendContactImage, sendContactMsg, sendRoomImage, sendRoomMsg } from '../services/sendMessage.ts'
-import { parseCommand } from '../services/actions.ts'
-import { getAIData } from '../services/ai.ts'
-import { messageCount } from '../services/messageCount.ts'
+import { parseCommand } from '../services/command.ts'
+import { getAIData } from '../services/acions/ai.ts'
+import { messageCount } from '../services/acions/messageCount.ts'
 
 export const GroupStatistics = process.env.GROUP_STATISTICS ?? false
 
@@ -110,24 +110,23 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
     return;
   }
 
-  const func = parseCommand(content, room.id);
-  if (func) {
-    const response = await func;
-    if (!response) {
+  const sendMessage = async (content: string) => {
+    if (!content) {
       return
     }
-    if (response.endsWith('.png')) {
+    if (content.endsWith('.png')) {
       log.info(`根据命令【${content}】返回图片`);
-      await sendRoomImage(bot, response, topic);
+      await sendRoomImage(bot, content, topic);
       return;
     }
-    if (typeof response === 'string') {
-      log.info(`根据命令【${content}】返回消息：${response}`);
-      await sendRoomMsg(bot, response, topic);
+    if (typeof content === 'string') {
+      log.info(`根据命令【${content}】返回消息：${content}`);
+      await sendRoomMsg(bot, content, topic);
       return;
     }
-    log.warn(`未知的响应类型: ${typeof response}`);
+    log.warn(`未知的响应类型: ${typeof content}`);
   }
+  parseCommand(content, sendMessage, room.id);
 }
 
 /**
@@ -141,23 +140,23 @@ async function dispatchFriendTextMsg(msg: Message) {
   const alias = await contact.alias();
   const name = alias ? `${contact.name()}(${alias})` : contact.name();
   log.info(`好友【${name}】 发送了：${content}`);
-
-  const func = parseCommand(content);
-  let response = func ? await func : await getAIData(content);
-  if (!response) {
-    return
+  const sendMessage = async (content: string) => {
+    if (!content) {
+      return
+    }
+    if (content.endsWith('.png')) {
+      log.info(`根据命令【${content}】返回图片`);
+      await sendContactImage(bot, content, alias, name);
+      return;
+    }
+    if (typeof content === 'string') {
+      log.info(`根据命令【${content}】返回消息：${content}`);
+      await sendContactMsg(bot, content, alias, name);
+      return;
+    }
+    log.warn(`未知的响应类型: ${typeof content}`);
   }
-  if (response.endsWith('.png')) {
-    log.info(`根据命令【${content}】返回图片`);
-    await sendContactImage(bot, response, alias, name);
-    return
-  }
-  if (typeof response === 'string') {
-    log.info(`根据命令【${content}】返回消息：${response}`);
-    await sendContactMsg(bot, response, alias, name);
-    return
-  }
-  log.warn(`未知的响应类型: ${typeof response}`);
+  parseCommand(content, sendMessage);
 }
 
 
