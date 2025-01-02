@@ -99,12 +99,7 @@ async function getFutuStockMap(area: string, mapType: string): Promise<string | 
         const currentPage = await getPage();
         await currentPage.goto(`https://www.futunn.com/quote/${area}/heatmap`, {
             waitUntil: 'networkidle',
-            timeout: 30000
-        }).catch(async (error) => {
-            console.error('页面加载超时，正在清理实例...');
-            await closeBrowser();
-            throw error;
-        });
+        })
         if (mapType === MapType.hy) {
             await currentPage.click('.select-component.heatmap-list-select');
             await currentPage.evaluate(() => {
@@ -155,13 +150,7 @@ async function getYuntuStockMap(): Promise<string | null> {
         const currentPage = await getPage();
         await currentPage.goto(`https://dapanyuntu.com/`, {
             waitUntil: 'networkidle',
-            timeout: 30000
-        }).catch(async (error) => {
-            console.error('页面加载超时，正在清理实例...');
-            await closeBrowser();
-            throw error;
-        });
-
+        })
         await currentPage.waitForTimeout(8000);
         const view = await currentPage.locator('#body');
         const buffer = await view.screenshot() as Buffer;
