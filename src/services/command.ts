@@ -21,7 +21,7 @@ const commandMap: { key: string, callback: (params: CommandParams) => Promise<st
     {
       key: 'scn',
       callback: getCNMarketIndexData,
-      msg: 'ss - 获取上证指数信息，包含大盘涨跌幅、成交量等核心数据',
+      msg: 'scn - 获取上证指数信息，包含大盘涨跌幅、成交量等核心数据',
       hasArgs: false,
     },
     {
