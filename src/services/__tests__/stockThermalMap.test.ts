@@ -36,4 +36,5 @@ describe('Stock Thermal Map Service', () => {
             expect(secondCall).toBeDefined();
         });
     });
+        
 });

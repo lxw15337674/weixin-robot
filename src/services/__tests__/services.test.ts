@@ -174,6 +174,32 @@ describe('Service Tests', () => {
         });
 
     });
+    describe('scn', () => {
+        it('test', async () => {
+            expect(await parseCommand('scn', (res) => {
+                console.log(res);
+                return res
+            })).not.toBeNull();
+        });
+    })
+
+    describe('sus', () => {
+        it('test', async () => {
+            expect(await parseCommand('sus', (res) => {
+                console.log(res);
+                return res
+            })).not.toBeNull();
+        });
+    })
+
+    describe('shk', () => {
+        it('test', async () => {
+            expect(await parseCommand('shk', (res) => {
+                console.log(res);
+                return res
+            })).not.toBeNull();
+        });
+    })
 });
 
 

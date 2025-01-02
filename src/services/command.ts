@@ -4,7 +4,7 @@ import { holiday } from './acions/fishingTime'
 import { getFutureData } from './acions/future'
 import { repeatMessage } from './acions/repeatMessage'
 import { getHotSpot } from './acions/stockHotSpot'
-import { getMarketIndexData, getStockData, getStockDetailData } from './acions/stockInfo'
+import { getCNMarketIndexData, getHKMarketIndexData, getStockData, getStockDetailData, getUSMarketIndexData } from './acions/stockInfo'
 import { getStockSummary } from './acions/stockSummary'
 import { getFutuStockMap, getYuntuStockMap, MapType } from './acions/stockThermalMap'
 import { getWeiboData } from './acions/weibo'
@@ -19,9 +19,21 @@ const commandMap: { key: string, callback: (params: CommandParams) => Promise<st
   = [
     // 股市相关命令
     {
-      key: 'ss',
-      callback: getMarketIndexData,
+      key: 'scn',
+      callback: getCNMarketIndexData,
       msg: 'ss - 获取上证指数信息，包含大盘涨跌幅、成交量等核心数据',
+      hasArgs: false,
+    },
+    {
+      key:'sus',
+      callback: getUSMarketIndexData,
+      msg: 'sus - 获取美股指数信息，包含大盘涨跌幅、成交量等核心数据',
+      hasArgs: false,
+    },
+    {
+      key:'shk',
+      callback: getHKMarketIndexData,
+      msg: 'shk - 获取港股指数信息，包含大盘涨跌幅、成交量等核心数据',
       hasArgs: false,
     },
     {
