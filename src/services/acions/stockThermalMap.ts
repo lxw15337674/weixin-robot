@@ -148,10 +148,8 @@ async function getYuntuStockMap(): Promise<string | null> {
         clearExpiredCache();
 
         const currentPage = await getPage();
-        await currentPage.goto(`https://dapanyuntu.com/`, {
-            waitUntil: 'load',
-        })
-        await currentPage.waitForTimeout(8000);
+        await currentPage.goto(`https://dapanyuntu.com/`, {})
+        await currentPage.waitForTimeout(10000);
         const view = await currentPage.locator('#body');
         const buffer = await view.screenshot() as Buffer;
         const filePath = await saveBufferToImage(buffer, cacheKey);
