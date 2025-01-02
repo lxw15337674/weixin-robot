@@ -116,7 +116,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
     if (!response) {
       return
     }
-    if (Buffer.isBuffer(response)) {
+    if (response.endsWith('.png')) {
       log.info(`根据命令【${content}】返回图片`);
       await sendRoomImage(bot, response, topic);
       return;
@@ -147,7 +147,7 @@ async function dispatchFriendTextMsg(msg: Message) {
   if (!response) {
     return
   }
-  if (Buffer.isBuffer(response)) {
+  if (response.endsWith('.png')) {
     log.info(`根据命令【${content}】返回图片`);
     await sendContactImage(bot, response, alias, name);
     return
@@ -162,67 +162,67 @@ async function dispatchFriendTextMsg(msg: Message) {
 
 
 
-async function dispatchRoomEmoticonMsg(msg: Message, room: Room) {
-  const topic = await room.topic()
-  const contact = msg.talker()
-  const alias = await contact.alias()
+// async function dispatchRoomEmoticonMsg(msg: Message, room: Room) {
+//   const topic = await room.topic()
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
 
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`群【${topic}】【${name}】 发送了表情符号`)
-}
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`群【${topic}】【${name}】 发送了表情符号`)
+// }
 
-async function dispatchFriendEmoticonMsg(msg: Message) {
-  const contact = msg.talker()
-  const alias = await contact.alias()
+// async function dispatchFriendEmoticonMsg(msg: Message) {
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
 
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`好友【${name}】 发送了表情符号`)
-}
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`好友【${name}】 发送了表情符号`)
+// }
 
-async function dispatchRoomImageMsg(msg: Message, room: Room) {
-  const topic = await room.topic()
-  const contact = msg.talker()
-  const alias = await contact.alias()
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`群【${topic}】【${name}】 发送了图片`)
-}
+// async function dispatchRoomImageMsg(msg: Message, room: Room) {
+//   const topic = await room.topic()
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`群【${topic}】【${name}】 发送了图片`)
+// }
 
-async function dispatchFriendImageMsg(msg: Message) {
-  const contact = msg.talker()
-  const alias = await contact.alias()
+// async function dispatchFriendImageMsg(msg: Message) {
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
 
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`好友【${name}】 发送了图片`)
-}
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`好友【${name}】 发送了图片`)
+// }
 
-async function dispatchRoomUrlMsg(msg: Message, room: Room) {
-  const topic = await room.topic()
-  const contact = msg.talker()
-  const alias = await contact.alias()
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`群【${topic}】【${name}】 发送了链接`)
-}
+// async function dispatchRoomUrlMsg(msg: Message, room: Room) {
+//   const topic = await room.topic()
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`群【${topic}】【${name}】 发送了链接`)
+// }
 
-async function dispatchFriendUrlMsg(msg: Message) {
-  const contact = msg.talker()
-  const alias = await contact.alias()
+// async function dispatchFriendUrlMsg(msg: Message) {
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
 
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`好友【${name}】 发送了链接`)
-}
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`好友【${name}】 发送了链接`)
+// }
 
-async function dispatchRoomMiniProgramMsg(msg: Message, room: Room) {
-  const topic = await room.topic()
-  const contact = msg.talker()
-  const alias = await contact.alias()
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`群【${topic}】【${name}】 发送了小程序`)
-}
+// async function dispatchRoomMiniProgramMsg(msg: Message, room: Room) {
+//   const topic = await room.topic()
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`群【${topic}】【${name}】 发送了小程序`)
+// }
 
-async function dispatchFriendMiniProgramMsg(msg: Message) {
-  const contact = msg.talker()
-  const alias = await contact.alias()
+// async function dispatchFriendMiniProgramMsg(msg: Message) {
+//   const contact = msg.talker()
+//   const alias = await contact.alias()
 
-  const name = alias ? `${contact.name()}(${alias})` : contact.name()
-  log.info(`好友【${name}】 发送了小程序`)
-}
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name()
+//   log.info(`好友【${name}】 发送了小程序`)
+// }
