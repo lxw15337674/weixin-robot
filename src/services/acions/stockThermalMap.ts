@@ -149,7 +149,7 @@ async function getYuntuStockMap(): Promise<string | null> {
 
         const currentPage = await getPage();
         await currentPage.goto(`https://dapanyuntu.com/`, {
-            waitUntil: 'load2',
+            waitUntil: 'load',
         })
         await currentPage.waitForTimeout(8000);
         const view = await currentPage.locator('#body');
