@@ -11,11 +11,7 @@ export const repeatMessage = async (params: CommandParams): Promise<string> => {
 
 
     // 替换整个表情标签为[内容]格式
-
     const lastSpaceIndex = args.lastIndexOf(' ');
-    if (lastSpaceIndex === -1) {
-        return null
-    }
 
     const content = extractBracketContent(args.slice(0, lastSpaceIndex))
     const rawCount = args.slice(lastSpaceIndex + 1);

@@ -1,3 +1,4 @@
+import { repeatMessage } from './../acions/repeatMessage';
 import { getStockData } from '../acions/stockInfo';
 import { getWeiboData } from '../acions/weibo';
 import { getAIData } from '../acions/ai';
@@ -118,7 +119,7 @@ describe('Utility Tests', () => {
         it('should handle valid commands', async () => {
             expect(await parseCommand('ss', () => { })).not.toBeNull();
             expect(await parseCommand('sd 300888', () => { })).not.toBeNull();
-            expect(await parseCommand('re 复读机 3', () => { })).not.toBeNull();
+            expect(await parseCommand('re [庆祝]', () => { })).not.toBeNull();
             expect(await parseCommand('hot', () => { })).not.toBeNull();
         });
 
@@ -167,8 +168,13 @@ describe('Service Tests', () => {
             expect(data).not.toBeNull();
         });
     });
-});
+    describe('repeatMessage', () => {
+        it('test', async () => {
+            expect(await parseCommand('re [庆祝]', () => { })).not.toBeNull();
+        });
 
+    });
+});
 
 
 describe('convertToNumber', () => {
