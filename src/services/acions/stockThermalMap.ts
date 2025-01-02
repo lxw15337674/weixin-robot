@@ -98,7 +98,7 @@ async function getFutuStockMap(area: string, mapType: string): Promise<string | 
 
         const currentPage = await getPage();
         await currentPage.goto(`https://www.futunn.com/quote/${area}/heatmap`, {
-            waitUntil: 'networkidle',
+            waitUntil: 'load',
         })
         if (mapType === MapType.hy) {
             await currentPage.click('.select-component.heatmap-list-select');
@@ -149,7 +149,7 @@ async function getYuntuStockMap(): Promise<string | null> {
 
         const currentPage = await getPage();
         await currentPage.goto(`https://dapanyuntu.com/`, {
-            waitUntil: 'networkidle',
+            waitUntil: 'load2',
         })
         await currentPage.waitForTimeout(8000);
         const view = await currentPage.locator('#body');
