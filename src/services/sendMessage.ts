@@ -16,7 +16,7 @@ export async function sendContactMsg(bot: Wechaty, content: string, alias?: stri
   queue.addTask(async () => {
     try {
       const contact = await bot.Contact.find(query)
-      await randomSleep(1000, 2000);
+      await randomSleep(2000, 6000);
       if (contact)
         await contact.say(content)
     }
@@ -33,7 +33,7 @@ export async function sendRoomMsg(bot: Wechaty, content: string, topic: string) 
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
-      await randomSleep(1000, 2000);
+      await randomSleep(2000, 6000);
       if (room)
         await room.say(content)
     }
@@ -52,7 +52,7 @@ export async function sendContactImage(bot: Wechaty, imagePath: string, alias?: 
   queue.addTask(async () => {
     try {
       const contact = await bot.Contact.find(query)
-      await randomSleep(1000, 2000);
+      await randomSleep(2000, 6000);
       if (contact) {
         const fileBox = FileBox.fromFile(imagePath)
         await contact.say(fileBox);
@@ -73,7 +73,7 @@ export async function sendRoomImage(bot: Wechaty, imagePath: string, topic: stri
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
-      await randomSleep(1000, 2000);
+      await randomSleep(2000, 6000);
       if (room) {
         const fileBox = FileBox.fromFile(imagePath)
         await room.say(fileBox);
