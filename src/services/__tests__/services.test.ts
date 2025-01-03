@@ -174,6 +174,12 @@ describe('Service Tests', () => {
         });
 
     });
+    describe('repeatMessage', () => {
+        it('test', async () => {
+            expect(await parseCommand('re awsl', () => { })).not.toBeNull();
+        });
+
+    });
     describe('scn', () => {
         it('test', async () => {
             expect(await parseCommand('scn', (res) => {
