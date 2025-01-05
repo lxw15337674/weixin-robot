@@ -1,15 +1,16 @@
-import { getStockData } from '../stockInfo';
-import { getWeiboData } from '../weibo';
-import { getAIData } from '../ai';
+import { repeatMessage } from './../acions/repeatMessage';
+import { getStockData } from '../acions/stockInfo';
+import { getWeiboData } from '../acions/weibo';
+import { getAIData } from '../acions/ai';
 import { describe, expect, it } from '@jest/globals';
-import { parseCommand } from '../actions';
+import { parseCommand } from '../command';
 import { convertToNumber, formatAmount } from '../../utils/convertToNumber';
-import { holiday } from '../fishingTime';
-import { getFutureData, getFutureSuggest } from '../future';
-import { getBinanceData } from '../binance';
-import { getFutuStockMap, MapType } from '../stockThermalMap';
-import { getHotSpot } from '../stockHotSpot';
-import { getStockSummary } from '../stockSummary';
+import { holiday } from '../acions/fishingTime';
+import { getFutureData, getFutureSuggest } from '../acions/future';
+import { getBinanceData } from '../acions/binance';
+import { getFutuStockMap, MapType } from '../acions/stockThermalMap';
+import { getHotSpot } from '../acions/stockHotSpot';
+import { getStockSummary } from '../acions/stockSummary';
 
 // 市场数据相关测试
 describe('Market Data Tests', () => {
@@ -116,15 +117,16 @@ describe('Utility Tests', () => {
 
     describe('Command Parsing', () => {
         it('should handle valid commands', async () => {
-            expect(await parseCommand('ss')).not.toBeNull();
-            expect(await parseCommand('sd 300888')).not.toBeNull();
-            expect(await parseCommand('hot')).not.toBeNull();
+            expect(await parseCommand('ss', () => { })).not.toBeNull();
+            expect(await parseCommand('sd 300888', () => { })).not.toBeNull();
+            expect(await parseCommand('re [庆祝]', () => { })).not.toBeNull();
+            expect(await parseCommand('hot', () => { })).not.toBeNull();
         });
 
         it('should handle invalid commands', async () => {
-            expect(await parseCommand('test')).toBeUndefined();
-            expect(await parseCommand('sd')).toBeUndefined();
-            expect(await parseCommand('wb 11')).toBeUndefined();
+            expect(await parseCommand('test', () => { })).toBeUndefined();
+            expect(await parseCommand('sd', () => { })).toBeUndefined();
+            expect(await parseCommand('wb 11', () => { })).toBeUndefined();
         });
     });
 });
@@ -166,8 +168,45 @@ describe('Service Tests', () => {
             expect(data).not.toBeNull();
         });
     });
-});
+    describe('repeatMessage', () => {
+        it('test', async () => {
+            expect(await parseCommand('re [庆祝]', () => { })).not.toBeNull();
+        });
 
+    });
+    describe('repeatMessage', () => {
+        it('test', async () => {
+            expect(await parseCommand('re awsl', () => { })).not.toBeNull();
+        });
+
+    });
+    describe('scn', () => {
+        it('test', async () => {
+            expect(await parseCommand('scn', (res) => {
+                console.log(res);
+                return res
+            })).not.toBeNull();
+        });
+    })
+
+    describe('sus', () => {
+        it('test', async () => {
+            expect(await parseCommand('sus', (res) => {
+                console.log(res);
+                return res
+            })).not.toBeNull();
+        });
+    })
+
+    describe('shk', () => {
+        it('test', async () => {
+            expect(await parseCommand('shk', (res) => {
+                console.log(res);
+                return res
+            })).not.toBeNull();
+        });
+    })
+});
 
 
 describe('convertToNumber', () => {

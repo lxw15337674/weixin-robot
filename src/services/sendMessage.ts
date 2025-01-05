@@ -16,7 +16,7 @@ export async function sendContactMsg(bot: Wechaty, content: string, alias?: stri
   queue.addTask(async () => {
     try {
       const contact = await bot.Contact.find(query)
-      await randomSleep(1000, 3000);
+      await randomSleep(2000, 6000);
       if (contact)
         await contact.say(content)
     }
@@ -33,7 +33,7 @@ export async function sendRoomMsg(bot: Wechaty, content: string, topic: string) 
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
-      await randomSleep(1000, 3000);
+      await randomSleep(2000, 6000);
       if (room)
         await room.say(content)
     }
@@ -43,7 +43,7 @@ export async function sendRoomMsg(bot: Wechaty, content: string, topic: string) 
   })
 }
 // 发送图片给联系人
-export async function sendContactImage(bot: Wechaty, buffer: Buffer, alias?: string, name?: string) {
+export async function sendContactImage(bot: Wechaty, imagePath: string, alias?: string, name?: string) {
   let query: Record<string, string> = {}
   if (alias)
     query = { alias }
@@ -52,9 +52,9 @@ export async function sendContactImage(bot: Wechaty, buffer: Buffer, alias?: str
   queue.addTask(async () => {
     try {
       const contact = await bot.Contact.find(query)
-      await randomSleep(1000, 3000);
+      await randomSleep(2000, 6000);
       if (contact) {
-        const fileBox = FileBox.fromBuffer(buffer)
+        const fileBox = FileBox.fromFile(imagePath)
         await contact.say(fileBox);
       }
     }
@@ -64,17 +64,18 @@ export async function sendContactImage(bot: Wechaty, buffer: Buffer, alias?: str
   })
 }
 
+
 // 发送图片给群组
-export async function sendRoomImage(bot: Wechaty, buffer: Buffer, topic: string) {
+export async function sendRoomImage(bot: Wechaty, imagePath: string, topic: string) {
   const query: Record<string, string> = {
     topic,
   }
   queue.addTask(async () => {
     try {
       const room = await bot.Room.find(query)
-      await randomSleep(1000, 3000);
+      await randomSleep(2000, 6000);
       if (room) {
-        const fileBox = FileBox.fromBuffer(buffer)
+        const fileBox = FileBox.fromFile(imagePath)
         await room.say(fileBox);
       }
     }

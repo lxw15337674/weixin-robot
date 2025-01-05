@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+
 export const saveBufferToImage = async (buffer: Buffer, prefix: string) => {
     const dir = path.join(process.cwd(), 'images');
     if (!fs.existsSync(dir)) {

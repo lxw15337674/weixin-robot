@@ -1,4 +1,5 @@
 import { Browser, Page, chromium } from 'playwright';
+import { saveBufferToImage } from '../../utils/save';
 
 export enum MapType {
     hy = 'hy',
@@ -21,7 +22,7 @@ let isFutuProcessing = false;
 let isYuntuProcessing = false;
 // 缓存变量
 interface CacheData {
-    buffer: Buffer;
+    filePath?: string;
     updateTime: number;
 }
 
@@ -57,38 +58,48 @@ async function getPage(): Promise<Page> {
     return page;
 }
 
-async function getFutuStockMap(area: string, mapType: string): Promise<Buffer | null> {
+// 添加浏览器清理函数
+async function closeBrowser() {
+    if (browser) {
+        await browser.close();
+        browser = null;
+        page = null;
+    }
+}
+
+async function getFutuStockMap(area: string, mapType: string): Promise<string | null> {
+    // 参数校验
+    if (!Object.values(Area).includes(area as Area)) {
+        area = Area.cn;
+    }
+    if (!Object.values(MapType).includes(mapType as MapType)) {
+        mapType = MapType.gu;
+    }
     const cacheKey = `futu-${area}-${mapType}`;
     const now = Date.now();
 
     // 检查缓存
     if (stockMapCache[cacheKey] && now - stockMapCache[cacheKey].updateTime < CACHE_EXPIRE_TIME) {
-        console.log(`[${new Date().toLocaleString()}] 命中缓存: Futu ${area}-${mapType}`);
-        return stockMapCache[cacheKey].buffer;
+        console.log(`[${new Date().toLocaleString()}] 命中缓存: ${cacheKey}`);
+        return stockMapCache[cacheKey].filePath || null;
     }
 
     if (isFutuProcessing) {
-        console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: Futu ${area}-${mapType}`);
-        return stockMapCache[cacheKey]?.buffer || null;
+        console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: ${cacheKey}`);
+        return stockMapCache[cacheKey]?.filePath || null;
     }
 
     try {
         isFutuProcessing = true;
-        console.log(`[${new Date().toLocaleString()}] 开始获取 Futu 行情图: ${area}-${mapType}`);
+        console.log(`[${new Date().toLocaleString()}] 开始获取 Futu 行情图: cacheKey`);
         clearExpiredCache();
 
-        // 参数校验
-        if (!Object.values(Area).includes(area as Area)) {
-            area = Area.cn;
-        }
-        if (!Object.values(MapType).includes(mapType as MapType)) {
-            mapType = MapType.gu;
-        }
+       
 
         const currentPage = await getPage();
         await currentPage.goto(`https://www.futunn.com/quote/${area}/heatmap`, {
-            waitUntil: 'networkidle'
-        });
+            waitUntil: 'load',
+        })
         if (mapType === MapType.hy) {
             await currentPage.click('.select-component.heatmap-list-select');
             await currentPage.evaluate(() => {
@@ -99,33 +110,37 @@ async function getFutuStockMap(area: string, mapType: string): Promise<Buffer | 
         await currentPage.waitForTimeout(3000);
         const view = await currentPage.locator('.quote-page.router-page');
         const buffer = await view.screenshot() as Buffer;
+        const filePath = await saveBufferToImage(buffer, cacheKey);
         stockMapCache[cacheKey] = {
-            buffer,
+            filePath,
             updateTime: now
         };
-        console.log(`[${new Date().toLocaleString()}] Futu 行情图更新成功: ${area}-${mapType}`);
-        return buffer;
+        console.log(`[${new Date().toLocaleString()}] Futu 行情图更新成功: cacheKey`);
+        return stockMapCache[cacheKey].filePath || null;
     } catch (error) {
         console.error(`[${new Date().toLocaleString()}] Futu 行情图获取失败:`, error);
-        return stockMapCache[cacheKey]?.buffer || null;
+        // 发生错误时清理浏览器实例
+        await closeBrowser();
+        return stockMapCache[cacheKey]?.filePath || null;
     } finally {
         isFutuProcessing = false;
         await closeBrowser();
     }
 }
 
-async function getYuntuStockMap(): Promise<Buffer | null> {
+async function getYuntuStockMap(): Promise<string | null> {
     const cacheKey = 'yuntu';
     const now = Date.now();
 
+    // 检查缓存
     if (stockMapCache[cacheKey] && now - stockMapCache[cacheKey].updateTime < CACHE_EXPIRE_TIME) {
-        console.log(`[${new Date().toLocaleString()}] 命中缓存: 云图`);
-        return stockMapCache[cacheKey].buffer;
+        console.log(`[${new Date().toLocaleString()}] 命中缓存: ${cacheKey}`);
+        return stockMapCache[cacheKey].filePath || null;
     }
 
     if (isYuntuProcessing) {
-        console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: 云图`);
-        return stockMapCache[cacheKey]?.buffer || null;
+        console.log(`[${new Date().toLocaleString()}] 正在处理中，返回旧缓存: ${cacheKey}`);
+        return stockMapCache[cacheKey]?.filePath || null;
     }
 
     try {
@@ -134,37 +149,26 @@ async function getYuntuStockMap(): Promise<Buffer | null> {
         clearExpiredCache();
 
         const currentPage = await getPage();
-        await currentPage.goto(`https://dapanyuntu.com/`, {
-            waitUntil: 'networkidle'
-        });
-
-        await currentPage.waitForTimeout(8000);
+        await currentPage.goto(`https://dapanyuntu.com/`, {})
+        await currentPage.waitForTimeout(10000);
         const view = await currentPage.locator('#body');
         const buffer = await view.screenshot() as Buffer;
+        const filePath = await saveBufferToImage(buffer, cacheKey);
         stockMapCache[cacheKey] = {
-            buffer,
+            filePath,
             updateTime: now
         };
-        console.log(`[${new Date().toLocaleString()}] 云图行情更新成功`);
-
-        return buffer;
+        console.log(`[${new Date().toLocaleString()}] 云图行情更新成功: ${cacheKey}`);
+        
+        return stockMapCache[cacheKey].filePath || null;
     } catch (error) {
         console.error(`[${new Date().toLocaleString()}] 云图获取失败:`, error);
-        return stockMapCache[cacheKey]?.buffer || null;
+        // 发生错误时清理浏览器实例
+        await closeBrowser();
+        return stockMapCache[cacheKey]?.filePath || null;
     } finally {
         isYuntuProcessing = false;
         await closeBrowser();
-    }
-}
-
-async function closeBrowser() {
-    if (page) {
-        await page.close();
-        page = null;
-    }
-    if (browser) {
-        await browser.close();
-        browser = null;
     }
 }
 

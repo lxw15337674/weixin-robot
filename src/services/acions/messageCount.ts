@@ -1,6 +1,6 @@
 // 用json保存每个群里每个用户的发言内容
 
-import MessageData from '../utils/messageData';
+import MessageData from '../../utils/messageData';
 export const JSONPath = './message.json';
 
 let messageData: MessageData = null

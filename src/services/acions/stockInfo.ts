@@ -1,4 +1,4 @@
-import { formatAmount, convertToNumber } from '../utils/convertToNumber';
+import { formatAmount, convertToNumber } from '../../utils/convertToNumber';
 import axios from 'axios'
 
 interface Market {
@@ -214,40 +214,68 @@ export async function getStockData(symbol: string): Promise<string> {
     }
 }
 
-export async function getMarketIndexData() {
+function formatIndexData(quoteData: any) {
+    const quote = quoteData.quote;
+    const isGrowing = quote.percent > 0;
+    const trend = isGrowing ? '📈' : '📉';
+
+    let text = quote?.name ? `${quote.name}${quote.symbol ? `(${quote.symbol})` : ''}\n` : '';
+    if (quote?.current && quote?.percent !== undefined) {
+        text += `现价：${quote.current} ${trend}${isGrowing ? '+' : ''}${convertToNumber(quote.percent)}%\n`;
+    }
+
+    if (quote?.amplitude) {
+        text += `振幅：${convertToNumber(quote.amplitude)}%\n`;
+    }
+
+    if (quote?.amount) {
+        text += `成交额：${formatAmount(quote.amount)}\n`;
+    }
+
+    if (quote?.current_year_percent !== undefined) {
+        text += `年初至今：${quote.current_year_percent > 0 ? '+' : ''}${convertToNumber(quote.current_year_percent)}%`;
+    }
+    return text;
+}
+
+export async function getCNMarketIndexData() {
     try {
-        // 并行获取上证和深证指数数据
-        const [shData, szData] = await Promise.all([
+        const data = await Promise.all([
             getStockBasicData('SH000001'),
-            getStockBasicData('SZ399001')
+            getStockBasicData('SZ399001'),
+            getStockBasicData('SZ399006')
         ]);
-        // 处理上证指数数据
-        const shQuote = shData.quote;
-        const shIsGrowing = shQuote.percent > 0;
-        const shTrend = shIsGrowing ? '📈' : '📉';
-
-        // 处理深证指数数据
-        const szQuote = szData.quote;
-        const szIsGrowing = szQuote.percent > 0;
-        const szTrend = szIsGrowing ? '📈' : '📉';
-
-        let text = `${shQuote?.name}(${shQuote?.symbol})\n`;
-        text += `现价：${shQuote.current} ${shTrend}${shIsGrowing ? '+' : ''}${convertToNumber(shQuote.percent)}%\n`;
-        text += `振幅：${convertToNumber(shQuote.amplitude)}%\n`;
-        text += `成交额：${formatAmount(shQuote.amount)}\n`;
-        text += `年初至今：${shQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(shQuote.current_year_percent)}%\n\n`;
-
-        text += `${szQuote?.name}(${szQuote?.symbol})\n`;
-        text += `现价：${szQuote.current} ${szTrend}${szIsGrowing ? '+' : ''}${convertToNumber(szQuote.percent)}%\n`;
-        text += `振幅：${convertToNumber(szQuote.amplitude)}%\n`;
-        text += `成交额：${formatAmount(szQuote.amount)}\n`;
-        text += `年初至今：${szQuote.current_year_percent > 0 ? '+' : ''}${convertToNumber(szQuote.current_year_percent)}%`;
-        return text;
+        return data.map(formatIndexData).join('\n\n');
     } catch (error) {
         return `获取市场指数失败：${error.message}`;
     }
 }
 
+export async function getUSMarketIndexData() {
+    try {
+        // 并行获取道琼斯和纳斯达克指数数据
+        const data = await Promise.all([
+            getStockBasicData('.DJI'),
+            getStockBasicData('.IXIC'),
+            getStockBasicData('.INX')
+        ]);
+        return data.map(formatIndexData).join('\n\n');
+    } catch (error) {
+        return `获取美国市场指数失败：${error.message}`;
+    }
+}
+export async function getHKMarketIndexData() {
+    try {
+        const data = await Promise.all([
+            getStockBasicData('HSI'),
+            getStockBasicData('HSCEI'),
+            getStockBasicData('HSTECH')
+        ]);
+        return data.map(formatIndexData).join('\n\n');
+    } catch (error) {
+        return `获取港股市场指数失败：${error.message}`;
+    }
+}
 export async function getStockDetailData(symbol: string): Promise<string> {
     try {
         const { quote } = await getStockBasicData(symbol);
