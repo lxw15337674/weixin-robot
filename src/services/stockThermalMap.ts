@@ -110,6 +110,7 @@ async function getFutuStockMap(area: string, mapType: string): Promise<Buffer | 
         return stockMapCache[cacheKey]?.buffer || null;
     } finally {
         isFutuProcessing = false;
+        await closeBrowser();
     }
 }
 
@@ -152,7 +153,19 @@ async function getYuntuStockMap(): Promise<Buffer | null> {
         return stockMapCache[cacheKey]?.buffer || null;
     } finally {
         isYuntuProcessing = false;
+        await closeBrowser();
     }
 }
 
-export { getFutuStockMap, getYuntuStockMap };
+async function closeBrowser() {
+    if (page) {
+        await page.close();
+        page = null;
+    }
+    if (browser) {
+        await browser.close();
+        browser = null;
+    }
+}
+
+export { getFutuStockMap, getYuntuStockMap, closeBrowser };
