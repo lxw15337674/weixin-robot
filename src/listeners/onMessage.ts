@@ -114,8 +114,8 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
     if (!content) {
       return
     }
-    if (content.endsWith('.png') || content.endsWith('.jpg') || content.endsWith('.jpeg')) {
-      log.info(`根据命令【${content}】返回图片`);
+    if (isFileExtension(content)) {
+      log.info(`根据命令【${content}】返回文件`);
       await sendRoomImage(bot, content, topic);
       return;
     }
@@ -144,8 +144,8 @@ async function dispatchFriendTextMsg(msg: Message) {
     if (!content) {
       return
     }
-    if (content.endsWith('.png') || content.endsWith('.jpg') || content.endsWith('.jpeg')) {
-      log.info(`根据命令【${content}】返回图片`);
+    if (isFileExtension(content)) {
+      log.info(`根据命令【${content}】返回文件`);
       await sendContactImage(bot, content, alias, name);
       return;
     }
@@ -159,7 +159,19 @@ async function dispatchFriendTextMsg(msg: Message) {
   parseCommand(content, sendMessage);
 }
 
-
+function isFileExtension(content: string): boolean {
+  const fileExtensions = [
+    // 图片
+    '.png', '.jpg', '.jpeg', '.webp', '.gif',
+    // 文档
+    '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.txt',
+    // 音视频
+    '.mp3', '.mp4', '.wav',
+    // 压缩文件
+    '.zip', '.rar', '.7z'
+  ]
+  return fileExtensions.some(ext => content.toLowerCase().endsWith(ext))
+}
 
 // async function dispatchRoomEmoticonMsg(msg: Message, room: Room) {
 //   const topic = await room.topic()

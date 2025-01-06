@@ -2,44 +2,31 @@ import axios from 'axios';
 import { saveBufferToImage } from '../../utils/save';
 import path from 'path';
 
-interface PicInfo {
-    large: {
-        url: string;
-        width: number;
-        height: number;
-    };
-    original: {
-        url: string;
-        width: number;
-        height: number;
-    };
-}
 
 interface ImageData {
-    pic_id: string;
-    wb_url: string;
-    pic_info: PicInfo;
+    image:string
 }
 
 export async function getRandomImage(): Promise<string> {
   try {
-    // 生成随机的 offset (0-1000之间)
-    const randomOffset = Math.floor(Math.random() * 1000);
     
     // 获取图片列表
-    const response = await axios.get<ImageData[]>(
-      `https://awsl.api.awsl.icu/v2/list?uid=&limit=1&offset=${randomOffset}`
+    const response = await axios.get<ImageData>(
+      `https://bhwa233.vercel.app/api/image`
     );
-    const randomImg = response.data[0];
-    const imageUrl = randomImg.pic_info.large.url;
+     const imageUrl = response.data.image
+
+    // 从URL中提取文件扩展名
+    const extension = imageUrl.split('.').pop() || 'webp';
+    const filename = `random_awsl.${extension}`;
 
     // 下载图片
     const imageResponse = await axios.get(imageUrl, {
       responseType: 'arraybuffer'
     });
 
-    // 保存图片到本地（覆盖已存在的文件）
-    const filepath = await saveBufferToImage(imageResponse.data, 'random_awsl.jpg');
+    // 保存图片到本地（使用提取的扩展名）
+    const filepath = await saveBufferToImage(imageResponse.data, filename);
 
     return filepath;
   } catch (error) {
