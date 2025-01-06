@@ -129,6 +129,12 @@ describe('Utility Tests', () => {
             expect(await parseCommand('sd', () => { })).toBeUndefined();
             expect(await parseCommand('wb 11', () => { })).toBeUndefined();
         });
+        // 测试图片
+        it('should handle image commands', async () => {
+            await parseCommand('img', (path) => { 
+                expect(path).not.toBeNull();
+            })
+        });
     });
 });
 
