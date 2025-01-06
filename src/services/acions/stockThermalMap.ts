@@ -124,6 +124,7 @@ async function getFutuStockMap(area: string, mapType: string): Promise<string | 
         return stockMapCache[cacheKey]?.filePath || null;
     } finally {
         isFutuProcessing = false;
+        await closeBrowser();
     }
 }
 
@@ -167,6 +168,7 @@ async function getYuntuStockMap(): Promise<string | null> {
         return stockMapCache[cacheKey]?.filePath || null;
     } finally {
         isYuntuProcessing = false;
+        await closeBrowser();
     }
 }
 
