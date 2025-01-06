@@ -93,7 +93,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
   const bot = msg.wechaty
   const name = alias ? `${contact.name()}(${alias})` : contact.name()
 
-  log.info(`群【${topic}】【${name}】 发送了：${content}`)
+  // log.info(`群【${topic}】【${name}】 发送了：${content}`)
 
   // 记录群消息
   if (GroupStatistics) {
@@ -139,7 +139,7 @@ async function dispatchFriendTextMsg(msg: Message) {
   const contact = msg.talker();
   const alias = await contact.alias();
   const name = alias ? `${contact.name()}(${alias})` : contact.name();
-  log.info(`好友【${name}】 发送了：${content}`);
+  // log.info(`好友【${name}】 发送了：${content}`);
   const sendMessage = async (content: string) => {
     if (!content) {
       return
@@ -166,7 +166,7 @@ function isFileExtension(content: string): boolean {
     // 文档
     '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.txt',
     // 音视频
-    '.mp3', '.mp4', '.wav',
+    '.mp3', '.mp4', '.wav','mov',
     // 压缩文件
     '.zip', '.rar', '.7z'
   ]
