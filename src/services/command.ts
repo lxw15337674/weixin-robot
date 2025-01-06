@@ -8,6 +8,7 @@ import { getCNMarketIndexData, getHKMarketIndexData, getStockData, getStockDetai
 import { getStockSummary } from './acions/stockSummary'
 import { getFutuStockMap, getYuntuStockMap, MapType } from './acions/stockThermalMap'
 import { getWeiboData } from './acions/weibo'
+import { getRandomImage } from './acions/randomImage'
 
 export interface CommandParams {
   args?: string,
@@ -134,7 +135,14 @@ const commandMap: { key: string, callback: (params: CommandParams) => Promise<st
       callback: repeatMessage,
       msg: 're [文本] [次数] - 复读机器人, 例如: re 你好 3',
       hasArgs: true,
-    }
+    },
+    // 随机图片命令
+    {
+      key: 'img',
+      callback: getRandomImage,
+      msg: 'img - 获取一张随机图片',
+      hasArgs: false,
+    },
   ];
 // 解析命令
 export async function parseCommand(msg: string, sendMessage: (content: string) => void, roomId?: string) {

@@ -2,7 +2,7 @@ import { repeatMessage } from './../acions/repeatMessage';
 import { getStockData } from '../acions/stockInfo';
 import { getWeiboData } from '../acions/weibo';
 import { getAIData } from '../acions/ai';
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it, test, jest, beforeEach } from '@jest/globals';
 import { parseCommand } from '../command';
 import { convertToNumber, formatAmount } from '../../utils/convertToNumber';
 import { holiday } from '../acions/fishingTime';
@@ -11,6 +11,7 @@ import { getBinanceData } from '../acions/binance';
 import { getFutuStockMap, MapType } from '../acions/stockThermalMap';
 import { getHotSpot } from '../acions/stockHotSpot';
 import { getStockSummary } from '../acions/stockSummary';
+import { getRandomImage } from '../acions/randomImage';
 
 // 市场数据相关测试
 describe('Market Data Tests', () => {
@@ -244,4 +245,14 @@ describe('convertToNumber', () => {
         expect(convertToNumber(0.999)).toBe('0.99');  // 直接截断不四舍五入
         expect(convertToNumber(-0.999)).toBe('-0.99'); // 直接截断不四舍五入
     });
+});
+
+// Mock randomImage function
+
+describe('img command', () => {
+  test('should call getRandomImage when img command is used', async () => {
+    // await parseCommand('img', mockSendMessage);
+    const randomImage = await getRandomImage()
+      expect(randomImage).not.toBeNull()
+  });
 });

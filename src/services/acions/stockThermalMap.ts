@@ -110,7 +110,7 @@ async function getFutuStockMap(area: string, mapType: string): Promise<string | 
         await currentPage.waitForTimeout(3000);
         const view = await currentPage.locator('.quote-page.router-page');
         const buffer = await view.screenshot() as Buffer;
-        const filePath = await saveBufferToImage(buffer, cacheKey);
+        const filePath = await saveBufferToImage(buffer, `${cacheKey}.png`);
         stockMapCache[cacheKey] = {
             filePath,
             updateTime: now
@@ -152,7 +152,7 @@ async function getYuntuStockMap(): Promise<string | null> {
         await currentPage.waitForTimeout(10000);
         const view = await currentPage.locator('#body');
         const buffer = await view.screenshot() as Buffer;
-        const filePath = await saveBufferToImage(buffer, cacheKey);
+        const filePath = await saveBufferToImage(buffer, `${cacheKey}.png`);
         stockMapCache[cacheKey] = {
             filePath,
             updateTime: now

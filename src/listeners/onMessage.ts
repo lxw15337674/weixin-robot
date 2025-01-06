@@ -114,7 +114,7 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
     if (!content) {
       return
     }
-    if (content.endsWith('.png')) {
+    if (content.endsWith('.png') || content.endsWith('.jpg') || content.endsWith('.jpeg')) {
       log.info(`根据命令【${content}】返回图片`);
       await sendRoomImage(bot, content, topic);
       return;
@@ -144,7 +144,7 @@ async function dispatchFriendTextMsg(msg: Message) {
     if (!content) {
       return
     }
-    if (content.endsWith('.png')) {
+    if (content.endsWith('.png') || content.endsWith('.jpg') || content.endsWith('.jpeg')) {
       log.info(`根据命令【${content}】返回图片`);
       await sendContactImage(bot, content, alias, name);
       return;
