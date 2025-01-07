@@ -29,20 +29,19 @@ export async function onMessage(msg: Message) {
       return
 
     // 私聊信息
-    getMessagePayload(msg)
+    // getMessagePayload(msg)
   }
 }
 
 async function getMessagePayload(msg: Message, room?: Room) {
-  const bot = msg.wechaty
-
   if (msg.self()) {
     return
   }
   if (room) {
+    // 私聊信息
     dispatchRoomTextMsg(msg, room)
   } else {
-    dispatchFriendTextMsg(msg)
+    // dispatchFriendTextMsg(msg)
   }
   // switch (msg.type()) {
   //   case bot.Message.Type.Text: {
@@ -133,31 +132,31 @@ async function dispatchRoomTextMsg(msg: Message, room: Room) {
  * 好友文本消息
  * @param msg
  */
-async function dispatchFriendTextMsg(msg: Message) {
-  const bot = msg.wechaty;
-  const content = msg.text().trim();
-  const contact = msg.talker();
-  const alias = await contact.alias();
-  const name = alias ? `${contact.name()}(${alias})` : contact.name();
-  // log.info(`好友【${name}】 发送了：${content}`);
-  const sendMessage = async (content: string) => {
-    if (!content) {
-      return
-    }
-    if (isFileExtension(content)) {
-      log.info(`根据命令【${content}】返回文件`);
-      await sendContactImage(bot, content, alias, name);
-      return;
-    }
-    if (typeof content === 'string') {
-      log.info(`根据命令【${content}】返回消息：${content}`);
-      await sendContactMsg(bot, content, alias, name);
-      return;
-    }
-    log.warn(`未知的响应类型: ${typeof content}`);
-  }
-  parseCommand(content, sendMessage);
-}
+// async function dispatchFriendTextMsg(msg: Message) {
+//   const bot = msg.wechaty;
+//   const content = msg.text().trim();
+//   const contact = msg.talker();
+//   const alias = await contact.alias();
+//   const name = alias ? `${contact.name()}(${alias})` : contact.name();
+//   // log.info(`好友【${name}】 发送了：${content}`);
+//   const sendMessage = async (content: string) => {
+//     if (!content) {
+//       return
+//     }
+//     if (isFileExtension(content)) {
+//       log.info(`根据命令【${content}】返回文件`);
+//       await sendContactImage(bot, content, alias, name);
+//       return;
+//     }
+//     if (typeof content === 'string') {
+//       log.info(`根据命令【${content}】返回消息：${content}`);
+//       await sendContactMsg(bot, content, alias, name);
+//       return;
+//     }
+//     log.warn(`未知的响应类型: ${typeof content}`);
+//   }
+//   parseCommand(content, sendMessage);
+// }
 
 function isFileExtension(content: string): boolean {
   const fileExtensions = [

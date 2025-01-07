@@ -9,6 +9,9 @@ import { getStockSummary } from './acions/stockSummary'
 import { getFutuStockMap, getYuntuStockMap, MapType } from './acions/stockThermalMap'
 import { getWeiboData } from './acions/weibo'
 import { getRandomImage } from './acions/randomImage'
+import { mdimg } from 'mdimg'
+import { saveBufferToImage } from '../utils/save'
+import { getHelp } from './acions/getHelp'
 
 export interface CommandParams {
   args?: string,
@@ -16,7 +19,7 @@ export interface CommandParams {
   key: string,
   roomId?: string
 }
-const commandMap: { key: string, callback: (params: CommandParams) => Promise<string>, msg: string, hasArgs: boolean, enable?: boolean }[]
+export const commandMap: { key: string, callback: (params: CommandParams) => Promise<string>, msg: string, hasArgs: boolean, enable?: boolean }[]
   = [
     // 股市相关命令
     {
@@ -26,13 +29,13 @@ const commandMap: { key: string, callback: (params: CommandParams) => Promise<st
       hasArgs: false,
     },
     {
-      key:'sus',
+      key: 'sus',
       callback: getUSMarketIndexData,
       msg: 'sus - 获取美股指数信息，包含大盘涨跌幅、成交量等核心数据',
       hasArgs: false,
     },
     {
-      key:'shk',
+      key: 'shk',
       callback: getHKMarketIndexData,
       msg: 'shk - 获取港股指数信息，包含大盘涨跌幅、成交量等核心数据',
       hasArgs: false,
@@ -157,7 +160,3 @@ export async function parseCommand(msg: string, sendMessage: (content: string) =
   }
 }
 
-export async function getHelp() {
-  const commandMsg = commandMap.filter(command => command.enable !== true).map(command => command.msg).join('\n')
-  return `命令列表：\n${commandMsg}\n项目地址：https://github.com/lxw15337674/weixin-robot`
-}

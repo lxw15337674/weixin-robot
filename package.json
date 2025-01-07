@@ -28,6 +28,7 @@
     "file-box": "^1.4.15",
     "iconv-lite": "^0.6.3",
     "lodash": "^4.17.21",
+    "mdimg": "^1.4.3",
     "openai": "^4.77.0",
     "playwright": "^1.49.1",
     "qrcode": "^1.5.4",
@@ -44,6 +45,7 @@
     "@flydotio/dockerfile": "^0.5.9",
     "@jest/globals": "^29.7.0",
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.0",
     "@types/lodash": "^4.17.13",
     "@types/node": "^20.17.10",
     "@types/qrcode-terminal": "^0.12.2",
@@ -51,8 +53,7 @@
     "eslint": "^8.57.1",
     "jest": "^29.5.0",
     "puppeteer": "23.11.0",
-    "ts-node": "^10.9.2",
-    "@types/jest": "^29.5.0",
-    "ts-jest": "^29.1.0"
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.2"
   }
 }
