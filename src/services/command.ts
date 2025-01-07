@@ -9,8 +9,6 @@ import { getStockSummary } from './acions/stockSummary'
 import { getFutuStockMap, getYuntuStockMap, MapType } from './acions/stockThermalMap'
 import { getWeiboData } from './acions/weibo'
 import { getRandomImage } from './acions/randomImage'
-import { mdimg } from 'mdimg'
-import { saveBufferToImage } from '../utils/save'
 import { getHelp } from './acions/getHelp'
 
 export interface CommandParams {

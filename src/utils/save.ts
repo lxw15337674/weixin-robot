@@ -1,6 +1,6 @@
 import * as fs from 'fs';
+import { mdimg } from 'mdimg';
 import * as path from 'path';
-import { mdimg } from "mdimg";
 
 
 
