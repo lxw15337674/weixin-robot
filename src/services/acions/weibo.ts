@@ -20,21 +20,25 @@ const BASE_URL = 'https://raw.githubusercontent.com/lxw15337674/weibo-trending-h
 export async function getWeiboData(): Promise<string> {
     const date = dayjs().format('YYYY-MM-DD');
     const url = `${BASE_URL}/${date}/summary.json`;
-    try {
-        const { data } = await axios.get<SavedWeibo[]>(url);
-        const topData = data.slice(0, 20);
+    const { data } = await axios.get<SavedWeibo[]>(url);
+    return data.slice(0, 10).map((item, index) =>
+        `${index + 1}. ${item.title} ${item.hot}🔥`
+    ).join('\n');
+    // try {
+    //     const { data } = await axios.get<SavedWeibo[]>(url);
+    //     const topData = data.slice(0, 20);
 
-        const content = topData.map((item, index) => 
-            `${index + 1}. ${item.title} ${item.hot}🔥`
-        ).join('\n\n');
+    //     const content = topData.map((item, index) => 
+    //         `${index + 1}. ${item.title} ${item.hot}🔥`
+    //     ).join('\n\n');
 
-        const markdown = `# 微博热搜榜\n\n${content}`;
-        return await saveTextToImage(markdown, 'weibo.png');
-    } catch (error) {
-        console.error('生成微博热搜图片失败:', error);
-        const { data } = await axios.get<SavedWeibo[]>(url);
-        return data.slice(0, 20).map((item, index) => 
-            `${index + 1}. ${item.title} ${item.hot}🔥`
-        ).join('\n\n');
-    }
+    //     const markdown = `# 微博热搜榜\n\n${content}`;
+    //     return await saveTextToImage(markdown, 'weibo.png');
+    // } catch (error) {
+    //     console.error('生成微博热搜图片失败:', error);
+    //     const { data } = await axios.get<SavedWeibo[]>(url);
+    //     return data.slice(0, 20).map((item, index) => 
+    //         `${index + 1}. ${item.title} ${item.hot}🔥`
+    //     ).join('\n');
+    // }
 }

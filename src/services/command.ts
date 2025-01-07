@@ -138,12 +138,12 @@ export const commandMap: { key: string, callback: (params: CommandParams) => Pro
       hasArgs: true,
     },
     // 随机图片命令
-    {
-      key: 'img',
-      callback: getRandomImage,
-      msg: 'img - 获取一张随机图片',
-      hasArgs: false,
-    },
+    // {
+    //   key: 'img',
+    //   callback: getRandomImage,
+    //   msg: 'img - 获取一张随机图片',
+    //   hasArgs: false,
+    // },
   ];
 // 解析命令
 export async function parseCommand(msg: string, sendMessage: (content: string) => void, roomId?: string) {

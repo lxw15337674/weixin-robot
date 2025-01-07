@@ -19,7 +19,7 @@ export const saveBufferToImage = async (buffer: Buffer, filename:string) => {
 };
 
 
-
+// mdimg 不支持vite-node执行
 export async function saveTextToImage(text: string, filename: string) {
     try {
         const { data } = await mdimg({
