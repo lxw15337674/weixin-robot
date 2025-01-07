@@ -15,15 +15,6 @@ interface SavedWeibo {
     origin?: number;
 }
 
-function getWeiboSearchCoreUrl(title) {
-    // 使用 encodeURIComponent 对 title 进行 URL 编码
-    const encodedTitle = encodeURIComponent(`#${title}#`);
-    // 构建新的 URL
-    const baseUrl = 'https://s.weibo.com/weibo?';
-    const coreUrl = `${baseUrl}q=${encodedTitle}`;
-    return coreUrl;
-}
-
 const BASE_URL = 'https://raw.githubusercontent.com/lxw15337674/weibo-trending-hot-history/master/api';
 
 export async function getWeiboData(): Promise<string> {

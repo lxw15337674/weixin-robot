@@ -208,7 +208,7 @@ export async function getStockData(symbol: string): Promise<string> {
     try {
         const symbols = symbol.split(/\s+/);  // 按空格分割多个股票代码
         const results = await retryWithNewToken(() => getMultipleStocksData(symbols));
-        return results.join('\n\n');  // 用1个换行符分隔每个股票的数据
+        return results.join('\n');  // 用1个换行符分隔每个股票的数据
     } catch (error) {
         return `获取 ${symbol} 失败：${error.message}`;
     }
@@ -222,10 +222,6 @@ function formatIndexData(quoteData: any) {
     let text = quote?.name ? `${quote.name}${quote.symbol ? `(${quote.symbol})` : ''}\n` : '';
     if (quote?.current && quote?.percent !== undefined) {
         text += `现价：${quote.current} ${trend}${isGrowing ? '+' : ''}${convertToNumber(quote.percent)}%\n`;
-    }
-
-    if (quote?.amplitude) {
-        text += `振幅：${convertToNumber(quote.amplitude)}%\n`;
     }
 
     if (quote?.amount) {
