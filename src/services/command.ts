@@ -132,7 +132,7 @@ export const commandMap: { key: string, callback: (params: CommandParams) => Pro
     },
     // 复读
     {
-      key: 're',
+      key: 're ',
       callback: repeatMessage,
       msg: 're [文本] [次数] - 复读机器人, 例如: re 你好 3',
       hasArgs: true,
