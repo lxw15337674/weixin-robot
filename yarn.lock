@@ -2953,7 +2953,7 @@ charenc@0.0.2:
   resolved "https://registry.npmmirror.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==
 
-cheerio@0.22.0, cheerio@^0.22.0, cheerio@^1.0.0:
+cheerio@^0.22.0:
   version "0.22.0"
   resolved "https://registry.npmjs.org/cheerio/-/cheerio-0.22.0.tgz#a9baa860a3f9b595a6b81b1a86873121ed3a269e"
   integrity sha512-8/MzidM6G/TgRelkzDG13y3Y9LxBjCb+8yOEZ9+wwq5gVF2w2pV0wmHvjfT0RvuxGyR7UEuK36r+yYMbT4uKgA==
@@ -3097,11 +3097,6 @@ combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
   dependencies:
     delayed-stream "~1.0.0"
-
-commander@^12.1.0:
-  version "12.1.0"
-  resolved "https://registry.npmjs.org/commander/-/commander-12.1.0.tgz#01423b36f501259fdaac4d0e4d60c96c991585d3"
-  integrity sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -5721,11 +5716,6 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-marked@^14.1.2:
-  version "14.1.4"
-  resolved "https://registry.npmjs.org/marked/-/marked-14.1.4.tgz#5e348de817bfa35a11e71de7e41dd7c3fdb186a9"
-  integrity sha512-vkVZ8ONmUdPnjCKc5uTRvmkRbx4EAi2OkTOXmfTDhZz3OFqMNBM1oTTWwTr4HY4uAEojhzPf+Fy8F1DWa3Sndg==
-
 math-intrinsics@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmmirror.com/math-intrinsics/-/math-intrinsics-1.0.0.tgz#4e04bf87c85aa51e90d078dac2252b4eb5260817"
@@ -5755,16 +5745,6 @@ mdast-util-to-string@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmmirror.com/mdast-util-to-string/-/mdast-util-to-string-2.0.0.tgz#b8cfe6a713e1091cb5b728fc48885a4767f8b97b"
   integrity sha512-AW4DRS3QbBayY/jJmD8437V1Gombjf8RSOUCMFBuo5iHi58AGEgVCKQ+ezHkZZDpAQS75hcBMpLqjpJTjtUL7w==
-
-mdimg@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.npmjs.org/mdimg/-/mdimg-1.4.3.tgz#cea0d31581c49c6352f9be1be637f0ab146258ff"
-  integrity sha512-dF0JDXYlVO0SUOJv+DKP+iJbBDaaqZWYsEFbVolY4uLuBuTSiIxfV61Oo0kVJyueRIfSNyrPmetv7xC2s2Eg2g==
-  dependencies:
-    cheerio "^1.0.0"
-    commander "^12.1.0"
-    marked "^14.1.2"
-    puppeteer "^23.4.0"
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -6474,18 +6454,6 @@ puppeteer-core@23.11.0:
     typed-query-selector "^2.12.0"
     ws "^8.18.0"
 
-puppeteer-core@23.11.1:
-  version "23.11.1"
-  resolved "https://registry.npmjs.org/puppeteer-core/-/puppeteer-core-23.11.1.tgz#3e064de11b3cb3a2df1a8060ff2d05b41be583db"
-  integrity sha512-3HZ2/7hdDKZvZQ7dhhITOUg4/wOrDRjyK2ZBllRB0ZCOi9u0cwq1ACHDjBB+nX+7+kltHjQvBRdeY7+W0T+7Gg==
-  dependencies:
-    "@puppeteer/browsers" "2.6.1"
-    chromium-bidi "0.11.0"
-    debug "^4.4.0"
-    devtools-protocol "0.0.1367902"
-    typed-query-selector "^2.12.0"
-    ws "^8.18.0"
-
 puppeteer-extra-plugin-stealth@^2.9.0:
   version "2.11.2"
   resolved "https://registry.npmmirror.com/puppeteer-extra-plugin-stealth/-/puppeteer-extra-plugin-stealth-2.11.2.tgz#bd3f5a1781cac8a98c983d148086585a84fcc8f1"
@@ -6562,18 +6530,6 @@ puppeteer@^13.5.1:
     tar-fs "2.1.1"
     unbzip2-stream "1.4.3"
     ws "8.5.0"
-
-puppeteer@^23.4.0:
-  version "23.11.1"
-  resolved "https://registry.npmjs.org/puppeteer/-/puppeteer-23.11.1.tgz#98fd9040786b1219b1a4f639c270377586e8899c"
-  integrity sha512-53uIX3KR5en8l7Vd8n5DUv90Ae9QDQsyIthaUFVzwV6yU750RjqRznEtNMBT20VthqAdemnJN+hxVdmMHKt7Zw==
-  dependencies:
-    "@puppeteer/browsers" "2.6.1"
-    chromium-bidi "0.11.0"
-    cosmiconfig "^9.0.0"
-    devtools-protocol "0.0.1367902"
-    puppeteer-core "23.11.1"
-    typed-query-selector "^2.12.0"
 
 pure-rand@^6.0.0:
   version "6.1.0"

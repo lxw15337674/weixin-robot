@@ -1,4 +1,3 @@
-import { saveTextToImage } from "../../utils/save";
 import { commandMap } from "../command";
 
 export async function getHelp() {

@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import axios from 'axios';
-import { saveTextToImage } from "../../utils/save";
 
 
 interface SavedWeibo {
