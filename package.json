@@ -35,8 +35,7 @@
     "typescript": "^5.7.2",
     "vite-node": "^1.6.0",
     "wechatferry": "^0.0.24",
-    "wechaty": "^1.20.2",
-    "wechaty-puppet-wechat": "^1.18.4"
+    "wechaty": "^1.20.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.40.3",

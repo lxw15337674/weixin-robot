@@ -12,14 +12,9 @@ let bot: any
 
 // 添加一个变量来存储最新的二维码
 let lastQrCode: { qrcode: string; status: ScanStatus } | null = null
-const puppet = new WechatferryPuppet()
-console.log(puppet.puppet)
 const runRobot = async () => {
-  bot = WechatyBuilder.build({
-    name: 'wechat-bot',
-    ...puppet
-  })
-
+  const puppet = new WechatferryPuppet()
+  bot = WechatyBuilder.build({ puppet })
   bot
     .on('scan', (qrcode, status) => {
       // 存储最新的二维码
