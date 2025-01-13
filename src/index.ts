@@ -5,21 +5,19 @@ import { onLogin } from './listeners/onLogin.ts'
 import { onLogout } from './listeners/onLogout.ts'
 import { onMessage } from './listeners/onMessage.ts'
 import { onReady } from './listeners/onReady.ts'
+import { WechatferryPuppet } from '@wechatferry/puppet'
 
 // 将 bot 变量提升到全局作用域，以便其他路由可以访问
 let bot: any
 
 // 添加一个变量来存储最新的二维码
 let lastQrCode: { qrcode: string; status: ScanStatus } | null = null
-
+const puppet = new WechatferryPuppet()
+console.log(puppet.puppet)
 const runRobot = async () => {
   bot = WechatyBuilder.build({
     name: 'wechat-bot',
-    // puppet: 'wechaty-puppet-wechat4u', // 如果有token，记得更换对应的puppet
-    puppet: 'wechaty-puppet-wechat', // 如果 wechaty-puppet-wechat 存在问题，也可以尝试使用上面的 wechaty-puppet-wechat4u ，记得安装 wechaty-puppet-wechat4u
-    puppetOptions: {
-      uos: true,
-    },
+    ...puppet
   })
 
   bot

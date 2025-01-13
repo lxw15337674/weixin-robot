@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@wechatferry/puppet": "^0.0.24",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "decimal.js": "^10.4.3",
@@ -33,6 +34,7 @@
     "qrcode": "^1.5.4",
     "typescript": "^5.7.2",
     "vite-node": "^1.6.0",
+    "wechatferry": "^0.0.24",
     "wechaty": "^1.20.2",
     "wechaty-puppet-wechat": "^1.18.4"
   },
