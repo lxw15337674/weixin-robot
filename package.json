@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@larksuiteoapi/node-sdk": "^1.41.0",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "decimal.js": "^10.4.3",

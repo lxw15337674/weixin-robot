@@ -1,5 +1,6 @@
 import * as Lark from '@larksuiteoapi/node-sdk';
 import * as dotenv from 'dotenv';
+import { parseCommand } from '../services/command';
 
 dotenv.config();
 
@@ -31,18 +32,27 @@ export class LarkService {
       message: { chat_id, content, message_type, chat_type, message_id },
     } = data;
 
-    const responseText = this.parseMessageContent(message_type, content);
-    await this.sendResponse(chat_type, chat_id, message_id, responseText);
+    const messageText = this.parseMessageContent(message_type, content);
+    
+    if (parseCommand(messageText, 
+      (content) => this.sendResponse(chat_type, chat_id, message_id, content), 
+      chat_id)) {
+      return;
+    }
+
+    // 默认回复
+    await this.sendResponse(chat_type, chat_id, message_id, messageText);
   }
+
 
   private parseMessageContent(messageType: string, content: string): string {
     try {
       if (messageType === 'text') {
         return JSON.parse(content).text;
       }
-      return '解析消息失败，请发送文本消息 \nparse message failed, please send text message';
+      return '请发送文本消息 \nPlease send text message';
     } catch (error) {
-      return '解析消息失败，请发送文本消息 \nparse message failed, please send text message';
+      return '解析消息失败，请发送文本消息 \nParse message failed, please send text message';
     }
   }
 
@@ -53,7 +63,7 @@ export class LarkService {
     responseText: string
   ) {
     const messageContent = JSON.stringify({
-      text: `收到你发送的消息:${responseText}\nReceived message: ${responseText}`,
+      text: `${responseText}`,
     });
 
     if (chatType === 'p2p') {
