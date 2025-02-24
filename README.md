@@ -75,10 +75,7 @@ API_KEY=your_api_key
 # 安装项目依赖
 yarn
 
-# 开发环境启动
-yarn dev
-
-# 生产环境启动
+# 启动
 yarn start
 ```
 
